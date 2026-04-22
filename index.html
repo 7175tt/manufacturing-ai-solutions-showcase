@@ -118,12 +118,7 @@
       align-items: center;
       position: relative;
       overflow: hidden;
-      background-color: rgba(234, 245, 243, 0.86);
-      background-image: url("assets/kv.jpg");
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-blend-mode: screen;
+      background: var(--mint-soft) url("assets/kv.jpg") center / cover no-repeat;
       border-bottom: 1px solid var(--line);
     }
 
@@ -135,12 +130,21 @@
     }
 
     .hero::before {
-      inset: 76px 4vw 5vw 4vw;
-      border: 4px solid rgba(22, 91, 152, 0.72);
-      opacity: 0.8;
+      inset: 0;
+      background: rgba(244, 250, 249, 0.82);
+      z-index: 0;
     }
 
     .hero::after {
+      inset: 76px 4vw 5vw 4vw;
+      border: 4px solid rgba(22, 91, 152, 0.72);
+      opacity: 0.8;
+      z-index: 0;
+    }
+
+    .hero-circuit {
+      content: "";
+      position: absolute;
       width: 36vw;
       height: 2px;
       right: 6vw;
@@ -149,6 +153,8 @@
       box-shadow:
         -8vw -12vh 0 rgba(22, 91, 152, 0.58),
         -18vw 7vh 0 rgba(35, 169, 165, 0.72);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .hero-inner {
@@ -875,6 +881,7 @@
   </header>
 
   <section id="top" class="hero">
+    <span class="hero-circuit" aria-hidden="true"></span>
     <div class="hero-inner">
       <h1>解決方案展示網頁</h1>
       <p class="hero-copy">精選 8 家 AI 服務供應商，聚焦排程、製程控制、視覺檢測、戰情室、設備維護與流程自動化，協助需求端快速找到適合的導入方向。</p>
