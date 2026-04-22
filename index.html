@@ -330,17 +330,6 @@
     .solution-card:nth-child(7) { animation-delay: 360ms; }
     .solution-card:nth-child(8) { animation-delay: 420ms; }
 
-    .solution-card::before {
-      content: "";
-      position: absolute;
-      inset: auto 24px 76px auto;
-      width: 74px;
-      height: 74px;
-      border: 2px solid rgba(22, 91, 152, 0.2);
-      border-radius: 50%;
-      transition: transform 220ms ease, border-color 220ms ease;
-    }
-
     .solution-card::after {
       content: "";
       position: absolute;
@@ -359,12 +348,6 @@
       border-color: rgba(22, 91, 152, 0.45);
       box-shadow: var(--shadow);
       transform: translateY(-4px);
-    }
-
-    .solution-card:hover::before,
-    .solution-card:focus-visible::before {
-      border-color: var(--teal);
-      transform: scale(1.08);
     }
 
     .solution-card:hover::after,
@@ -905,7 +888,7 @@
     <section id="solutions" class="section">
       <div class="section-heading">
         <h2>8 家入選解決方案</h2>
-        <p class="lead">每張卡片整理方案定位、主要技術、成熟度與導入情境。點擊卡片可查看完整問卷重點。</p>
+        <p class="lead">每張卡片整理方案定位、主要技術與導入情境。點擊卡片可查看完整問卷重點。</p>
       </div>
       <div class="solution-grid" id="solutionGrid" aria-live="polite"></div>
     </section>
@@ -1192,7 +1175,7 @@
             </span>
           </span>
           <span class="card-foot">
-            <span>成熟度 ${escapeHTML(item.maturity)}</span>
+            <span>查看詳細</span>
             <span class="arrow" aria-hidden="true">›</span>
           </span>
         </button>
@@ -1226,7 +1209,6 @@
       modalFacts.innerHTML = [
         fact("供應商", item.supplier),
         fact("AI 技術/模型", item.tech),
-        fact("成熟度", item.maturity),
         fact("部署模式", item.deployment),
         fact("收費/計價", item.pricing),
         fact("預估上線時間", item.timeline),
