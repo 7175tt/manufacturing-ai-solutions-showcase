@@ -1,0 +1,1279 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>製造業生產製程 AI 解決方案展示</title>
+  <style>
+    :root {
+      --mint: #c8e4e1;
+      --mint-soft: #eaf5f3;
+      --paper: #fbfcfb;
+      --ink: #101820;
+      --muted: #5b6973;
+      --blue: #165b98;
+      --blue-dark: #0f355f;
+      --teal: #23a9a5;
+      --yellow: #f4d41e;
+      --line: rgba(15, 53, 95, 0.18);
+      --shadow: 0 22px 60px rgba(15, 53, 95, 0.13);
+      --radius: 8px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(22, 91, 152, 0.04) 1px, transparent 1px) 0 0 / 84px 84px,
+        linear-gradient(0deg, rgba(22, 91, 152, 0.035) 1px, transparent 1px) 0 0 / 84px 84px,
+        var(--mint-soft);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+      line-height: 1.65;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      padding: 14px 22px;
+      pointer-events: none;
+    }
+
+    .nav {
+      width: min(var(--max), 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--blue-dark);
+      pointer-events: auto;
+    }
+
+    .mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 15px;
+      color: var(--blue-dark);
+      text-decoration: none;
+    }
+
+    .mark-icon {
+      width: 34px;
+      height: 34px;
+      border: 4px solid var(--blue);
+      border-right-color: var(--yellow);
+      border-radius: 50%;
+      position: relative;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .mark-icon::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      right: -7px;
+      top: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 13px 10px 0 var(--yellow);
+    }
+
+    .nav a:not(.mark) {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid rgba(15, 53, 95, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.66);
+      color: var(--blue-dark);
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero {
+      min-height: 94svh;
+      display: grid;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(200, 228, 225, 0.98) 0%, rgba(247, 251, 250, 0.92) 42%, rgba(247, 251, 250, 0.44) 100%),
+        url("assets/kv.jpg") center / cover no-repeat;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .hero::before {
+      inset: 76px 4vw 5vw 4vw;
+      border: 4px solid rgba(22, 91, 152, 0.72);
+      opacity: 0.8;
+    }
+
+    .hero::after {
+      width: 36vw;
+      height: 2px;
+      right: 6vw;
+      bottom: 16vh;
+      background: linear-gradient(90deg, transparent, rgba(93, 101, 105, 0.72), var(--yellow));
+      box-shadow:
+        -8vw -12vh 0 rgba(22, 91, 152, 0.58),
+        -18vw 7vh 0 rgba(35, 169, 165, 0.72);
+    }
+
+    .hero-inner {
+      width: min(var(--max), calc(100% - 44px));
+      margin: 0 auto;
+      padding: 112px 0 54px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--blue-dark);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--yellow);
+      box-shadow: 18px 0 0 var(--teal);
+    }
+
+    h1 {
+      margin: 18px 0 22px;
+      max-width: 760px;
+      color: var(--blue);
+      font-size: clamp(42px, 7vw, 94px);
+      line-height: 1.05;
+      font-weight: 950;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      color: #213744;
+      font-size: clamp(17px, 2vw, 22px);
+      font-weight: 650;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 34px;
+    }
+
+    .primary-action,
+    .secondary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 20px;
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      font-weight: 900;
+      text-decoration: none;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .primary-action {
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 12px 26px rgba(22, 91, 152, 0.24);
+    }
+
+    .secondary-action {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--blue);
+    }
+
+    .primary-action:hover,
+    .secondary-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(22, 91, 152, 0.2);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 54px;
+      color: #162f48;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding-right: 18px;
+      border-right: 1px solid rgba(15, 53, 95, 0.28);
+    }
+
+    .hero-meta span:last-child {
+      border-right: 0;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    main {
+      overflow: hidden;
+    }
+
+    .section {
+      width: min(var(--max), calc(100% - 44px));
+      margin: 0 auto;
+      padding: 86px 0;
+      position: relative;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(260px, 0.55fr);
+      gap: 34px;
+      align-items: end;
+      margin-bottom: 36px;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--blue-dark);
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.12;
+      font-weight: 950;
+    }
+
+    .lead {
+      margin: 0;
+      color: #405362;
+      font-size: 17px;
+      font-weight: 650;
+    }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .solution-card {
+      width: 100%;
+      min-height: 326px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(15, 53, 95, 0.18);
+      border-top: 5px solid var(--blue);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.82);
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 14px 38px rgba(15, 53, 95, 0.08);
+      position: relative;
+      overflow: hidden;
+      transform: translateY(18px);
+      opacity: 0;
+      animation: rise 620ms ease forwards;
+    }
+
+    .solution-card:nth-child(2) { animation-delay: 60ms; }
+    .solution-card:nth-child(3) { animation-delay: 120ms; }
+    .solution-card:nth-child(4) { animation-delay: 180ms; }
+    .solution-card:nth-child(5) { animation-delay: 240ms; }
+    .solution-card:nth-child(6) { animation-delay: 300ms; }
+    .solution-card:nth-child(7) { animation-delay: 360ms; }
+    .solution-card:nth-child(8) { animation-delay: 420ms; }
+
+    .solution-card::before {
+      content: "";
+      position: absolute;
+      inset: auto 24px 76px auto;
+      width: 74px;
+      height: 74px;
+      border: 2px solid rgba(22, 91, 152, 0.2);
+      border-radius: 50%;
+      transition: transform 220ms ease, border-color 220ms ease;
+    }
+
+    .solution-card::after {
+      content: "";
+      position: absolute;
+      right: -32px;
+      top: 90px;
+      width: 110px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--yellow), var(--teal), var(--blue));
+      transform: translateX(24px);
+      transition: transform 220ms ease;
+    }
+
+    .solution-card:hover,
+    .solution-card:focus-visible {
+      outline: 0;
+      border-color: rgba(22, 91, 152, 0.45);
+      box-shadow: var(--shadow);
+      transform: translateY(-4px);
+    }
+
+    .solution-card:hover::before,
+    .solution-card:focus-visible::before {
+      border-color: var(--teal);
+      transform: scale(1.08);
+    }
+
+    .solution-card:hover::after,
+    .solution-card:focus-visible::after {
+      transform: translateX(-26px);
+    }
+
+    .card-index {
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .card-company {
+      margin: 0 0 8px;
+      color: var(--blue-dark);
+      font-size: 21px;
+      line-height: 1.28;
+      font-weight: 950;
+    }
+
+    .card-title {
+      margin: 0;
+      color: #243746;
+      font-size: 16px;
+      line-height: 1.48;
+      font-weight: 800;
+    }
+
+    .card-summary {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 10px;
+      border: 1px solid rgba(22, 91, 152, 0.16);
+      border-radius: 999px;
+      background: rgba(232, 246, 245, 0.72);
+      color: var(--blue-dark);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .card-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(15, 53, 95, 0.12);
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .arrow {
+      width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--yellow);
+      color: var(--blue-dark);
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .compare-band {
+      width: 100%;
+      background: var(--blue-dark);
+      color: white;
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .compare-inner {
+      width: min(var(--max), calc(100% - 44px));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.13);
+    }
+
+    .metric {
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 28px;
+      background: var(--blue-dark);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--yellow);
+      font-size: 42px;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .metric span {
+      margin-top: 12px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .guide {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 46px;
+      align-items: start;
+    }
+
+    .guide-list {
+      display: grid;
+      gap: 18px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .guide-list li {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding-top: 18px;
+      border-top: 1px solid rgba(15, 53, 95, 0.18);
+    }
+
+    .guide-list b {
+      color: var(--blue-dark);
+      font-size: 18px;
+    }
+
+    .guide-list p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .step-no {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-weight: 950;
+    }
+
+    .footer {
+      padding: 58px 22px 64px;
+      background:
+        linear-gradient(90deg, rgba(22, 91, 152, 0.14) 1px, transparent 1px) 0 0 / 60px 60px,
+        var(--mint);
+      color: var(--blue-dark);
+      text-align: center;
+      border-top: 1px solid rgba(15, 53, 95, 0.14);
+    }
+
+    .footer p {
+      margin: 12px auto 0;
+      max-width: 720px;
+      color: #365060;
+      font-weight: 700;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(7, 25, 43, 0.58);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal.is-open {
+      display: flex;
+    }
+
+    .modal-panel {
+      width: min(1040px, 100%);
+      max-height: min(86svh, 900px);
+      overflow: auto;
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 34px 90px rgba(0, 0, 0, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      position: relative;
+      animation: modalIn 180ms ease both;
+    }
+
+    .modal-head {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: start;
+      padding: 28px 30px 22px;
+      background: rgba(251, 252, 251, 0.94);
+      border-bottom: 1px solid rgba(15, 53, 95, 0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .modal-kicker {
+      margin: 0 0 8px;
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .modal h3 {
+      margin: 0;
+      color: var(--blue-dark);
+      font-size: clamp(25px, 3vw, 38px);
+      line-height: 1.2;
+      font-weight: 950;
+    }
+
+    .close-btn {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(15, 53, 95, 0.22);
+      border-radius: 50%;
+      background: white;
+      color: var(--blue-dark);
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 1;
+      transition: transform 160ms ease, border-color 160ms ease;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus-visible {
+      outline: 0;
+      transform: rotate(90deg);
+      border-color: var(--blue);
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 0.78fr 1.22fr;
+      gap: 28px;
+      padding: 28px 30px 34px;
+    }
+
+    .facts {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      border-right: 1px solid rgba(15, 53, 95, 0.13);
+      padding-right: 28px;
+    }
+
+    .fact {
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(15, 53, 95, 0.12);
+    }
+
+    .fact:last-child {
+      border-bottom: 0;
+    }
+
+    .fact span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .fact strong {
+      display: block;
+      margin-top: 4px;
+      color: #1f3444;
+      font-size: 15px;
+      line-height: 1.5;
+      font-weight: 850;
+    }
+
+    .detail-content {
+      min-width: 0;
+    }
+
+    .detail-section {
+      padding-bottom: 22px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid rgba(15, 53, 95, 0.12);
+    }
+
+    .detail-section:last-child {
+      margin-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .detail-section h4 {
+      margin: 0 0 10px;
+      color: var(--blue);
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    .detail-text {
+      margin: 0;
+      color: #344754;
+      font-size: 15px;
+      font-weight: 620;
+      white-space: pre-line;
+    }
+
+    .chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .modal-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      margin-top: 14px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: white;
+      font-size: 14px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .modal-link:hover,
+    .modal-link:focus-visible {
+      outline: 3px solid rgba(244, 212, 30, 0.55);
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 1080px) {
+      .solution-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .compare-inner {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 780px) {
+      .site-header {
+        padding: 12px 16px;
+      }
+
+      .nav a:not(.mark) {
+        display: none;
+      }
+
+      .hero {
+        min-height: 92svh;
+        background:
+          linear-gradient(180deg, rgba(200, 228, 225, 0.98) 0%, rgba(247, 251, 250, 0.9) 54%, rgba(247, 251, 250, 0.35) 100%),
+          url("assets/kv.jpg") 30% center / cover no-repeat;
+      }
+
+      .hero::before {
+        inset: 72px 18px 28px;
+        border-width: 3px;
+      }
+
+      .hero-inner {
+        width: min(100% - 34px, var(--max));
+        padding-top: 104px;
+      }
+
+      .hero-meta {
+        gap: 10px;
+      }
+
+      .hero-meta span {
+        width: 100%;
+        border-right: 0;
+      }
+
+      .section {
+        width: min(100% - 34px, var(--max));
+        padding: 66px 0;
+      }
+
+      .section-heading,
+      .guide,
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+
+      .solution-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .solution-card {
+        min-height: 286px;
+      }
+
+      .facts {
+        border-right: 0;
+        padding-right: 0;
+      }
+
+      .modal {
+        padding: 12px;
+      }
+
+      .modal-head,
+      .modal-body {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      h1 {
+        font-size: 40px;
+      }
+
+      .hero-copy {
+        font-size: 16px;
+      }
+
+      .hero-actions {
+        align-items: stretch;
+      }
+
+      .primary-action,
+      .secondary-action {
+        width: 100%;
+      }
+
+      .compare-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .metric {
+        min-height: 112px;
+      }
+
+      .modal-head {
+        grid-template-columns: 1fr;
+      }
+
+      .close-btn {
+        position: absolute;
+        right: 16px;
+        top: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="主選單">
+      <a class="mark" href="#top" aria-label="回到頁首">
+        <span class="mark-icon" aria-hidden="true"></span>
+        AI 工具媒合會
+      </a>
+      <a href="#solutions">查看 8 家方案</a>
+    </nav>
+  </header>
+
+  <section id="top" class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">第一場｜生產製程</p>
+      <h1>解決方案展示網頁</h1>
+      <p class="hero-copy">精選 8 家 AI 服務供應商，聚焦排程、製程控制、視覺檢測、戰情室、設備維護與流程自動化，協助需求端快速找到適合的導入方向。</p>
+      <div class="hero-actions">
+        <a class="primary-action" href="#solutions">瀏覽方案卡片</a>
+        <a class="secondary-action" href="#decision">導入評估重點</a>
+      </div>
+      <div class="hero-meta" aria-label="活動資訊">
+        <span><i class="dot" aria-hidden="true"></i>2026 / 05 / 19</span>
+        <span><i class="dot" aria-hidden="true"></i>14:00 - 17:00</span>
+        <span><i class="dot" aria-hidden="true"></i>digiBlock C 數位創新基地</span>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section id="solutions" class="section">
+      <div class="section-heading">
+        <h2>8 家入選解決方案</h2>
+        <p class="lead">每張卡片整理方案定位、主要技術、成熟度與導入情境。點擊卡片可查看完整問卷重點。</p>
+      </div>
+      <div class="solution-grid" id="solutionGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="compare-band" aria-label="方案概覽">
+      <div class="compare-inner">
+        <div class="metric">
+          <strong>8</strong>
+          <span>家入選 AI 供應商</span>
+        </div>
+        <div class="metric">
+          <strong>6</strong>
+          <span>類生產端痛點涵蓋</span>
+        </div>
+        <div class="metric">
+          <strong>6</strong>
+          <span>家支援完整 API</span>
+        </div>
+        <div class="metric">
+          <strong>1-12</strong>
+          <span>個月常見導入週期區間</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="decision" class="section guide">
+      <div>
+        <p class="eyebrow">需求端評估</p>
+        <h2>先鎖定痛點，再比較導入條件</h2>
+      </div>
+      <ol class="guide-list">
+        <li>
+          <span class="step-no">1</span>
+          <div>
+            <b>確認主要場景</b>
+            <p>排程、品質、設備、工安、報價或資料整合，先選定一個最急迫流程。</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-no">2</span>
+          <div>
+            <b>盤點資料與設備</b>
+            <p>確認是否已有 ERP、MES、SCADA、影像、PLC、IoT 或 Excel 資料可供串接。</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-no">3</span>
+          <div>
+            <b>比對部署與預算</b>
+            <p>依雲端、本地端、混合部署、買斷或訂閱制，評估資安、時程與內部維運量。</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <strong>製造業生產製程 AI 工具媒合會</strong>
+    <p>本頁依「AI 解決方案收錄資源手冊問卷 (回覆).xlsx」整理，僅呈現方案評估資訊，未揭露個人聯絡欄位。</p>
+  </footer>
+
+  <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-panel" tabindex="-1">
+      <div class="modal-head">
+        <div>
+          <p class="modal-kicker" id="modalCompany"></p>
+          <h3 id="modalTitle"></h3>
+        </div>
+        <button class="close-btn" type="button" id="closeModal" aria-label="關閉詳細內容">×</button>
+      </div>
+      <div class="modal-body">
+        <aside class="facts" id="modalFacts" aria-label="方案摘要"></aside>
+        <div class="detail-content" id="modalDetails"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const solutions = [
+      {
+        company: "谷林運算股份有限公司",
+        supplier: "GoodLinker 谷林運算",
+        title: "企業雲端戰情室 - GenAIoT 工業數據分析模組",
+        summary: "以 IoT 邊緣採集與雲端 LLM 推論，提供全廠即時可視化、異常通報、報表自動化與自然語言數據分析。",
+        tags: ["戰情室", "LLM", "IoT", "SaaS"],
+        tech: "LLM",
+        maturity: "7 / 7",
+        deployment: "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務",
+        pricing: "訂閱制，NT 6,000/m",
+        timeline: "1 個月",
+        api: "完整 API（提供完整 API 文件，支援系統整合）",
+        data: "即時使用/自動更新（資料需即時取得）",
+        equipment: "物理訊號感測（IoT），控制器與機台訊號（PLC、CNC、SCADA 數據）",
+        fields: "品質與良率、ESG/廠務/工安、人機協作與知識、儀表板或戰情中心；非生產端包含營運管理、客戶服務、生管。",
+        industries: ["食品", "飲料", "化學材料", "橡膠塑膠", "金屬製品", "電子零組件", "汽車零件"],
+        scale: "10人~200人（中小企業）",
+        cases: "海瑞食品、所長茶葉蛋、連乙鑄造、邁特電子、如保興業。",
+        details: "【解決痛點】\n設備異常通報慢，錯過最佳應變時機；報表人工整理耗時且易出錯，主管催資料需人工對值；數據雖有收集，但缺乏分析與判讀，決策只能憑經驗。\n\n【效益描述】\n全廠即時可視化：即時與歷史儀表板整合情境輪播、能源、報表模組，一眼掌握設備與產線狀況。\n異常即時通報：警報推播跨裝置同步，縮短故障響應時間。\n報表零手工：自動生成 Excel，免人工整理與格式化。\nGenAIoT AI 智慧分析：自然語言提問即得圖表與結論，無需 BI 技術背景；自動標註異常時段並生成摘要，協助管理層快速決策，亦可作為新人培訓工具。\n管理層專屬摘要：數據電子報定期送達，決策更有依據。\n\n【實際導入成果】\n冷凍食品廠（海瑞食品）：產能提升 6%，原料損耗率降低 63%；精密鑄造廠（連乙鑄造）：製程不良率降低 30%，風扇用電降低 20%。\n\n【技術說明】\n採用 GenAIoT 混合架構（IoT 邊緣採集 + 雲端 LLM 推論），完整 REST API 支援 ERP、MES、SCADA 整合。",
+        url: "https://1drv.ms/b/c/625197c993cf0e29/IQDWUKc9vW3BTbuBtZv5mX0BAeOsPdKsVI21QEvG1bTacRI?e=aTnp7x"
+      },
+      {
+        company: "台灣耐力斯資訊有限公司",
+        supplier: "Zionex",
+        title: "T3 Smart SCM",
+        summary: "以 MIP/CP 與啟發式演算法整合智慧排程與 S&OP，協助企業處理插單、產能限制與跨部門資訊落差。",
+        tags: ["智慧排程", "SCM", "S&OP", "混合部署"],
+        tech: "MIP/CP + 啟發式（Heuristic）混合模式",
+        maturity: "7 / 7",
+        deployment: "本地端部署（On-premise），混合部署（Hybrid）",
+        pricing: "買斷制、訂閱制、專案報價皆有，300-3000 萬/年",
+        timeline: "6-12 個月",
+        api: "完整 API（提供完整 API 文件，支援系統整合）",
+        data: "手動輸入/離線更新、批次更新/定期整理、即時使用/自動更新",
+        equipment: "資訊系統與資料庫（ERP、MES、WMS），文書檔案或手動輸入（Excel、PDF、人工輸入）",
+        fields: "排程與達交、庫存與供應鏈、儀表板或戰情中心；非生產端以營運管理為主。",
+        industries: ["食品飲料", "紡織", "化學", "橡膠塑膠", "金屬製品", "電子零組件", "汽車零件"],
+        scale: "201~1000人（大型企業），1001人以上（巨型企業）",
+        cases: "聯華食品、台橡、台郡。",
+        details: "【價值主張】\nT3 Smart SCM 定位為企業的數位大腦，專注協助企業解決流程零碎化導致的知識斷層，以及市場需求波動引發的產能混亂。\n\n【智慧排程】\n透過 T3 核心引擎，將複雜產線限制與資深師傅的排程經驗數位化。即便面對頻繁插單或原物料不穩，系統也能迅速產出最佳化計畫，確保生產節奏穩定與連續。\n\n【營運流程改善】\n打破業務、生產與採購間資訊壁壘，建立透明的數位指揮中心，從源頭優化供需平衡，降低趕工風險，提升職場安全與管理效率。\n\n【專家經驗】\n導入經驗涵蓋台日韓四百家以上標竿企業，提供的不僅是軟體，也包含製造業轉型路徑與營運智慧。",
+        url: "https://zionex.com/zh-hant/t3-zhi-hui-scm/"
+      },
+      {
+        company: "ASUS",
+        supplier: "ASUS AIOT",
+        title: "AISVision、Detector、SODA、PHM、Smart City",
+        summary: "以深度學習、電腦視覺與 Gen AI 覆蓋視覺檢測、異常訊號判讀、智慧排程、設備健康監測與客製化需求。",
+        tags: ["電腦視覺", "排程", "PHM", "Gen AI"],
+        tech: "深度學習、電腦視覺，並加上 Gen AI 進行資訊生成",
+        maturity: "6 / 7",
+        deployment: "本地端部署、雲端 SaaS 部署、混合部署",
+        pricing: "有訂閱及買斷制；部分產品含客製化，需依需求報價",
+        timeline: "2 個月",
+        api: "完整 API（提供完整 API 文件，支援系統整合）",
+        data: "手動輸入/離線更新、批次更新/定期整理、即時使用/自動更新",
+        equipment: "影像/光學感測、物理訊號感測（IoT）、資訊系統與資料庫、文書檔案或手動輸入",
+        fields: "研發設計、排程達交、品質良率、設備維護、庫存供應鏈、ESG/廠務/工安、報價與營運成本、人機協作與知識。",
+        industries: ["石油煤製品", "基本金屬", "金屬製品", "電子零組件", "電腦電子產品", "機械設備", "汽車零件"],
+        scale: "小微型、中小型、大型、巨型企業皆適用",
+        cases: "所長茶葉蛋、元山風扇。",
+        details: "【AISVision】\n解決人工目視檢查效率低、疲勞易誤判，以及缺陷種類多、標準不一致難以量化等痛點。主要效益包含一致且穩定的判斷標準、快速模型訓練與部署、品質數據可追溯、降低人力成本並提高良率。\n\n【Detector】\n針對震動、電流、溫度、聲學等大量測試訊號，協助從雜訊中找出異常模式，提早發現潛在問題，降低誤判與漏判。\n\n【SODA】\n解決人工排程耗時、多機台與多工單限制難兼顧、插單或設備異常導致排程失效等問題。可自動考量交期、產能與限制條件，支援即時重排與情境模擬，提高準交率與設備、人力利用率。\n\n【PHM】\n以設備健康監測與預測性維護，提前規劃維修，降低非計畫性停機風險，提升設備稼動率並沉澱維修知識。\n\n【Smart City】\n以 Gen AI 協助客製化需求與資訊生成。",
+        url: "https://iot.asus.com/tw/solutions/manufacturing/"
+      },
+      {
+        company: "尼諾思智慧科技股份有限公司",
+        supplier: "尼諾思智慧科技股份有限公司",
+        title: "PerformX Sim2Real & Benzol IMI",
+        summary: "建立 ERP 與產線設備之間的營運智慧轉換層，將企業 KPI 轉為可執行的控制參數與機器動作語言。",
+        tags: ["Sim2Real", "強化學習", "VLA", "控制策略"],
+        tech: "約束規劃、強化學習、Vision-Language-Action（VLA）",
+        maturity: "5 / 7",
+        deployment: "本地端部署（On-premise）",
+        pricing: "基礎運行授權 20-30 萬/年；Runtime 授權每站 5-10 萬/台；安全/Deterministic 模組 5-15 萬",
+        timeline: "L1 1 個月，L2 2 個月，L3 4 個月，L4 4 個月以上",
+        api: "完整 API（提供完整 API 文件，支援系統整合）",
+        data: "批次更新/定期整理、即時使用/自動更新",
+        equipment: "影像/光學感測、物理訊號感測、控制器與機台訊號、資訊系統與資料庫",
+        fields: "研發與設計、排程與達交、ESG/廠務/工安、人機協作與知識；非生產端包含營運管理。",
+        industries: ["電子零組件", "電腦電子產品", "機械設備", "汽車零件", "產業機械維修安裝"],
+        scale: "10人~200人（中小企業）",
+        cases: "光田自動化機械有限公司，Cobot 自動化電池組裝。",
+        details: "【解決痛點】\n企業 KPI（毛利、交期、良率）無法即時影響產線機器行為；ERP/AI 決策與現場設備運作脫節，缺乏轉換層；自動化系統增加但營運績效未同步提升；機器動作不可建模、不可分析，難以優化與治理。\n\n【效益描述】\n將企業目標即時轉為產線控制策略，實現策略驅動製造。動態調整節拍、工序與負載，提升生產彈性；有效提升毛利、縮短交期、降低品質與營運風險；優化設備利用率，從事後管理升級為即時決策控制。\n\n【技術說明】\nPerformX 作為 ERP 與產線間的營運智慧引擎，將目標轉為控制參數，支援多目標運算（交期、成本、品質）與即時動態調整。Benzol IMI 將機器動作模組化與語義化，建立標準動作語言，打通企業目標、控制邏輯與機器行為。",
+        url: "http://ninox.ai"
+      },
+      {
+        company: "湧現智庫股份有限公司",
+        supplier: "Agatha AI Hub",
+        title: "Agatha AI Hub",
+        summary: "結合 Llama、OpenAI、Claude 等模型，支援 AI 虛擬業務報價與工廠生產排程優化，提升資源配置效率。",
+        tags: ["AI Hub", "報價", "排程", "多模型"],
+        tech: "Llama / OpenAI / Claude",
+        maturity: "6 / 7",
+        deployment: "本地端部署、雲端 SaaS 部署、混合部署",
+        pricing: "買斷制、訂閱制、專案報價；2 萬/account 數年費",
+        timeline: "3-6 個月",
+        api: "完整 API（提供完整 API 文件，支援系統整合）",
+        data: "批次更新/定期整理、即時使用/自動更新",
+        equipment: "資訊系統與資料庫（ERP、MES、WMS），文書檔案或手動輸入（Excel、PDF、人工輸入）",
+        fields: "排程與達交、設備與維護、庫存與供應鏈、報價與營運成本；非生產端涵蓋行銷、人力資源、營運管理、業務開拓、客服、物流倉儲、財務。",
+        industries: ["金屬製品", "電子零組件", "電腦電子產品"],
+        scale: "10人~200人（中小企業），201~1000人（大型企業）",
+        cases: "問卷未填列代表性實績。",
+        details: "透過 AI 虛擬業務員報價，快速生成精準報價；利用工廠生產排程 AI 優化，提升資源配置效率。方案可依企業需求選擇本地端、雲端 SaaS 或混合部署，並可透過完整 API 支援系統整合。",
+        url: "https://agathalab.com/"
+      },
+      {
+        company: "先構技術研發股份有限公司",
+        supplier: "先構技術研發股份有限公司",
+        title: "AI QC瑕疵檢測",
+        summary: "以 YOLO 系列與 RT-DETR 進行產線即時瑕疵檢測，結合邊緣運算提升檢測一致性與良率穩定。",
+        tags: ["瑕疵檢測", "YOLO", "Edge AI", "QC"],
+        tech: "YOLO V8/V11、YOLO X、RT-DETR",
+        maturity: "6 / 7",
+        deployment: "本地端部署（On-premise），混合部署（Hybrid）",
+        pricing: "專案報價",
+        timeline: "2 個月",
+        api: "封閉系統（不提供 API）",
+        data: "手動輸入/離線更新",
+        equipment: "影像/光學感測、識別與讀取設備、控制器與機台訊號、文書檔案或手動輸入",
+        fields: "品質與良率、人機協作與知識；非生產端包含行銷、人力資源、客戶服務、物流倉儲。",
+        industries: ["食品", "飲料", "印刷", "藥品", "電子零組件", "電腦電子產品", "電力設備", "機械設備"],
+        scale: "小微型、中小型、大型企業",
+        cases: "閎暉。",
+        details: "本方案透過 AI 視覺與深度學習技術，結合邊緣運算能力，能在產線上即時進行高精度品質檢測，有效解決傳統人工檢驗效率低、判斷不一致及易漏檢等問題。系統可自動辨識各類缺陷並即時剔除不良品，提升產品良率與品質穩定性，同時降低人力依賴與營運成本，適用於電子、製造及自動化產線等多元應用場景。",
+        url: "https://www.prefactortech.com/ai3522235258ai-vision.html"
+      },
+      {
+        company: "勤美智能科技股份有限公司",
+        supplier: "勤美智能科技",
+        title: "AI視覺辨識系統",
+        summary: "整合 3D 視覺辨識、人員動作分析與物品影像辨識，用於效率良率提升與智慧安全防護。",
+        tags: ["3D 視覺", "動作分析", "工安", "影像辨識"],
+        tech: "3D 視覺辨識、人員動作分析、物品影像辨識",
+        maturity: "7 / 7",
+        deployment: "本地端部署（On-premise），混合部署（Hybrid）",
+        pricing: "專案報價",
+        timeline: "6 個月",
+        api: "有限 API（僅支援資料查詢/資料庫撈取）",
+        data: "手動輸入/離線更新、批次更新/定期整理",
+        equipment: "影像/光學感測、識別與讀取設備、物理訊號感測、控制器與機台訊號、資訊系統與資料庫",
+        fields: "品質與良率、ESG/廠務/工安、人機協作與知識、儀表板或戰情中心；非生產端包含營運管理與物流倉儲。",
+        industries: ["食品飲料", "紡織成衣", "橡膠塑膠", "基本金屬", "金屬製品", "電子零組件", "機械設備", "汽車零件"],
+        scale: "10人~200人（中小企業）",
+        cases: "勤美股份有限公司。",
+        details: "解決勞動力短缺，透過 AI 動作分析優化提升效率與良率，並以智慧安全防護強化職業安全。方案可結合影像、識別、IoT、控制器與既有資訊系統資料，適用多類製造現場的品質、工安與戰情中心需求。",
+        url: "https://www.cmptech.com.tw"
+      },
+      {
+        company: "伊斯酷軟體科技股份有限公司",
+        supplier: "伊斯酷軟體科技股份有限公司",
+        title: "AI RPA",
+        summary: "Robotiive 工業自動化軟體以 AI 視覺辨識串接既有系統與機台，降低人工作業負擔並支援舊機台升級。",
+        tags: ["AI RPA", "OCR", "視覺辨識", "流程自動化"],
+        tech: "OCR / CNN / Computer Vision",
+        maturity: "4 / 7",
+        deployment: "本地端部署（On-premise）",
+        pricing: "訂閱制 15-30 萬/年，依安裝數量計費",
+        timeline: "1-3 個月，依流程複雜度與數量而定",
+        api: "完整 API（提供完整 API 文件，支援系統整合）",
+        data: "即時使用/自動更新（資料需即時取得）",
+        equipment: "影像/光學感測、識別與讀取設備、控制器與機台訊號、資訊系統與資料庫、文書檔案或手動輸入",
+        fields: "排程達交、品質良率、設備維護、庫存供應鏈、ESG/廠務/工安、人機協作與知識、儀表板或戰情中心。",
+        industries: ["食品", "藥品", "金屬製品", "電子零組件", "電腦電子產品", "電力設備", "機械設備", "汽車零件"],
+        scale: "小微型、中小型、大型、巨型企業皆適用",
+        cases: "問卷未填列代表性實績。",
+        details: "Robotiive 工業自動化軟體（RPA）以 AI 視覺辨識技術自動化製造與人為工作流程，全面升級老舊機台，並減低人為操作負擔。Robotiive 能夠在既有系統及機台上進行串接並自動化，確保工廠在數位轉型潮流下不落後，為智慧工廠奠定基礎。",
+        url: "https://www.iscoollab.com/product/robotiive"
+      }
+    ];
+
+    const grid = document.querySelector("#solutionGrid");
+    const modal = document.querySelector("#detailModal");
+    const modalPanel = modal.querySelector(".modal-panel");
+    const modalCompany = document.querySelector("#modalCompany");
+    const modalTitle = document.querySelector("#modalTitle");
+    const modalFacts = document.querySelector("#modalFacts");
+    const modalDetails = document.querySelector("#modalDetails");
+    const closeModal = document.querySelector("#closeModal");
+    let activeCard = null;
+
+    function escapeHTML(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function normalizeUrl(url) {
+      if (!url) return "";
+      return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+    }
+
+    function renderCards() {
+      grid.innerHTML = solutions.map((item, index) => `
+        <button class="solution-card" type="button" data-index="${index}" aria-label="查看 ${escapeHTML(item.company)} 詳細方案">
+          <span class="card-index">${String(index + 1).padStart(2, "0")} / 08</span>
+          <span>
+            <h3 class="card-company">${escapeHTML(item.company)}</h3>
+            <p class="card-title">${escapeHTML(item.title)}</p>
+            <p class="card-summary">${escapeHTML(item.summary)}</p>
+            <span class="tags" aria-label="方案標籤">
+              ${item.tags.map(tag => `<span class="tag">${escapeHTML(tag)}</span>`).join("")}
+            </span>
+          </span>
+          <span class="card-foot">
+            <span>成熟度 ${escapeHTML(item.maturity)}</span>
+            <span class="arrow" aria-hidden="true">›</span>
+          </span>
+        </button>
+      `).join("");
+    }
+
+    function fact(label, value) {
+      return `
+        <div class="fact">
+          <span>${escapeHTML(label)}</span>
+          <strong>${escapeHTML(value || "問卷未填列")}</strong>
+        </div>
+      `;
+    }
+
+    function detailSection(title, text, chips = []) {
+      return `
+        <section class="detail-section">
+          <h4>${escapeHTML(title)}</h4>
+          <p class="detail-text">${escapeHTML(text || "問卷未填列")}</p>
+          ${chips.length ? `<div class="chip-list">${chips.map(chip => `<span class="tag">${escapeHTML(chip)}</span>`).join("")}</div>` : ""}
+        </section>
+      `;
+    }
+
+    function openDetail(index, trigger) {
+      const item = solutions[index];
+      activeCard = trigger;
+      modalCompany.textContent = item.company;
+      modalTitle.textContent = item.title;
+      modalFacts.innerHTML = [
+        fact("供應商", item.supplier),
+        fact("AI 技術/模型", item.tech),
+        fact("成熟度", item.maturity),
+        fact("部署模式", item.deployment),
+        fact("收費/計價", item.pricing),
+        fact("預估上線時間", item.timeline),
+        fact("API 開放程度", item.api)
+      ].join("");
+
+      const normalizedUrl = normalizeUrl(item.url);
+      modalDetails.innerHTML = [
+        detailSection("方案效益與技術說明", item.details),
+        detailSection("適用情境", item.fields),
+        detailSection("適用產業", "", item.industries),
+        detailSection("資料需求與設備", `${item.data}\n${item.equipment}`),
+        detailSection("適用企業規模", item.scale),
+        detailSection("導入實績", item.cases),
+        normalizedUrl ? `<section class="detail-section"><h4>介紹網址</h4><a class="modal-link" href="${escapeHTML(normalizedUrl)}" target="_blank" rel="noreferrer">開啟方案連結</a></section>` : ""
+      ].join("");
+
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => modalPanel.focus());
+    }
+
+    function closeDetail() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if (activeCard) activeCard.focus();
+    }
+
+    renderCards();
+
+    grid.addEventListener("click", event => {
+      const card = event.target.closest(".solution-card");
+      if (!card) return;
+      openDetail(Number(card.dataset.index), card);
+    });
+
+    closeModal.addEventListener("click", closeDetail);
+
+    modal.addEventListener("click", event => {
+      if (event.target === modal) closeDetail();
+    });
+
+    window.addEventListener("keydown", event => {
+      if (event.key === "Escape" && modal.classList.contains("is-open")) closeDetail();
+    });
+  </script>
+</body>
+</html>
