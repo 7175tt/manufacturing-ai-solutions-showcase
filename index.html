@@ -118,9 +118,12 @@
       align-items: center;
       position: relative;
       overflow: hidden;
-      background:
-        linear-gradient(90deg, rgba(200, 228, 225, 0.98) 0%, rgba(247, 251, 250, 0.92) 42%, rgba(247, 251, 250, 0.44) 100%),
-        url("assets/kv.jpg") center / cover no-repeat;
+      background-color: rgba(234, 245, 243, 0.86);
+      background-image: url("assets/kv.jpg");
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-blend-mode: screen;
       border-bottom: 1px solid var(--line);
     }
 
@@ -330,16 +333,22 @@
     .solution-card:nth-child(7) { animation-delay: 360ms; }
     .solution-card:nth-child(8) { animation-delay: 420ms; }
 
+    .solution-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
     .solution-card::after {
       content: "";
       position: absolute;
-      right: -32px;
-      top: 90px;
-      width: 110px;
+      right: 22px;
+      top: 46px;
+      width: 96px;
       height: 2px;
       background: linear-gradient(90deg, var(--yellow), var(--teal), var(--blue));
       transform: translateX(24px);
       transition: transform 220ms ease;
+      z-index: 0;
     }
 
     .solution-card:hover,
@@ -748,9 +757,7 @@
 
       .hero {
         min-height: 92svh;
-        background:
-          linear-gradient(180deg, rgba(200, 228, 225, 0.98) 0%, rgba(247, 251, 250, 0.9) 54%, rgba(247, 251, 250, 0.35) 100%),
-          url("assets/kv.jpg") 30% center / cover no-repeat;
+        background-position: 30% center;
       }
 
       .hero::before {
@@ -869,7 +876,6 @@
 
   <section id="top" class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">第一場｜生產製程</p>
       <h1>解決方案展示網頁</h1>
       <p class="hero-copy">精選 8 家 AI 服務供應商，聚焦排程、製程控制、視覺檢測、戰情室、設備維護與流程自動化，協助需求端快速找到適合的導入方向。</p>
       <div class="hero-actions">
@@ -1041,7 +1047,7 @@
         maturity: "5 / 7",
         deployment: "本地端部署（On-premise）",
         pricing: "基礎運行授權 20-30 萬/年；Runtime 授權每站 5-10 萬/台；安全/Deterministic 模組 5-15 萬",
-        timeline: "L1 1 個月，L2 2 個月，L3 4 個月，L4 4 個月以上",
+        timeline: "L1（標準）:1月,L2（中等）:2 月,L3（複雜）:4 月,L4（高風險）:4 月以上",
         api: "完整 API（提供完整 API 文件，支援系統整合）",
         data: "批次更新/定期整理、即時使用/自動更新",
         equipment: "影像/光學感測、物理訊號感測、控制器與機台訊號、資訊系統與資料庫",
@@ -1069,7 +1075,7 @@
         fields: "排程與達交、設備與維護、庫存與供應鏈、報價與營運成本；非生產端涵蓋行銷、人力資源、營運管理、業務開拓、客服、物流倉儲、財務。",
         industries: ["金屬製品", "電子零組件", "電腦電子產品"],
         scale: "10人~200人（中小企業），201~1000人（大型企業）",
-        cases: "問卷未填列代表性實績。",
+        cases: "未提供代表性實績。",
         details: "透過 AI 虛擬業務員報價，快速生成精準報價；利用工廠生產排程 AI 優化，提升資源配置效率。方案可依企業需求選擇本地端、雲端 SaaS 或混合部署，並可透過完整 API 支援系統整合。",
         url: "https://agathalab.com/"
       },
@@ -1132,7 +1138,7 @@
         fields: "排程達交、品質良率、設備維護、庫存供應鏈、ESG/廠務/工安、人機協作與知識、儀表板或戰情中心。",
         industries: ["食品", "藥品", "金屬製品", "電子零組件", "電腦電子產品", "電力設備", "機械設備", "汽車零件"],
         scale: "小微型、中小型、大型、巨型企業皆適用",
-        cases: "問卷未填列代表性實績。",
+        cases: "未提供代表性實績。",
         details: "Robotiive 工業自動化軟體（RPA）以 AI 視覺辨識技術自動化製造與人為工作流程，全面升級老舊機台，並減低人為操作負擔。Robotiive 能夠在既有系統及機台上進行串接並自動化，確保工廠在數位轉型潮流下不落後，為智慧工廠奠定基礎。",
         url: "https://www.iscoollab.com/product/robotiive"
       }
@@ -1186,16 +1192,17 @@
       return `
         <div class="fact">
           <span>${escapeHTML(label)}</span>
-          <strong>${escapeHTML(value || "問卷未填列")}</strong>
+          <strong>${escapeHTML(value || "未提供")}</strong>
         </div>
       `;
     }
 
     function detailSection(title, text, chips = []) {
+      const detailText = text ? `<p class="detail-text">${escapeHTML(text)}</p>` : "";
       return `
         <section class="detail-section">
           <h4>${escapeHTML(title)}</h4>
-          <p class="detail-text">${escapeHTML(text || "問卷未填列")}</p>
+          ${detailText}
           ${chips.length ? `<div class="chip-list">${chips.map(chip => `<span class="tag">${escapeHTML(chip)}</span>`).join("")}</div>` : ""}
         </section>
       `;
