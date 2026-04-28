@@ -97,6 +97,12 @@
       box-shadow: 13px 10px 0 var(--yellow);
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .nav a:not(.mark) {
       display: inline-flex;
       align-items: center;
@@ -110,6 +116,13 @@
       font-weight: 800;
       text-decoration: none;
       backdrop-filter: blur(12px);
+    }
+
+    .nav .nav-register {
+      border-color: rgba(15, 53, 95, 0.34);
+      background: var(--yellow);
+      color: var(--blue-dark);
+      box-shadow: 0 10px 24px rgba(15, 53, 95, 0.14);
     }
 
     .hero {
@@ -201,7 +214,8 @@
     }
 
     .primary-action,
-    .secondary-action {
+    .secondary-action,
+    .accent-action {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -220,13 +234,21 @@
       box-shadow: 0 12px 26px rgba(22, 91, 152, 0.24);
     }
 
+    .accent-action {
+      background: var(--yellow);
+      color: var(--blue-dark);
+      border-color: var(--blue-dark);
+      box-shadow: 0 12px 26px rgba(15, 53, 95, 0.2);
+    }
+
     .secondary-action {
       background: rgba(255, 255, 255, 0.7);
       color: var(--blue);
     }
 
     .primary-action:hover,
-    .secondary-action:hover {
+    .secondary-action:hover,
+    .accent-action:hover {
       transform: translateY(-2px);
       box-shadow: 0 16px 34px rgba(22, 91, 152, 0.2);
     }
@@ -541,6 +563,11 @@
       font-weight: 700;
     }
 
+    .footer .primary-action,
+    .footer .accent-action {
+      margin-top: 22px;
+    }
+
     .modal {
       position: fixed;
       inset: 0;
@@ -712,6 +739,12 @@
       text-decoration: none;
     }
 
+    .modal-link-accent {
+      margin-left: 8px;
+      background: var(--yellow);
+      color: var(--blue-dark);
+    }
+
     .modal-link:hover,
     .modal-link:focus-visible {
       outline: 3px solid rgba(244, 212, 30, 0.55);
@@ -750,7 +783,7 @@
         padding: 12px 16px;
       }
 
-      .nav a:not(.mark) {
+      .nav a:not(.mark):not(.nav-register) {
         display: none;
       }
 
@@ -827,7 +860,8 @@
       }
 
       .primary-action,
-      .secondary-action {
+      .secondary-action,
+      .accent-action {
         width: 100%;
       }
 
@@ -869,7 +903,10 @@
         <span class="mark-icon" aria-hidden="true"></span>
         AI 工具媒合會
       </a>
-      <a href="#solutions">查看 8 家方案</a>
+      <div class="nav-links">
+        <a href="#solutions">查看 8 家方案</a>
+        <a class="nav-register" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199" target="_blank" rel="noreferrer">活動報名</a>
+      </div>
     </nav>
   </header>
 
@@ -878,6 +915,7 @@
       <h1>解決方案展示網頁</h1>
       <p class="hero-copy">精選 8 家 AI 服務供應商，聚焦排程、製程控制、視覺檢測、戰情室、設備維護與流程自動化，協助需求端快速找到適合的導入方向。</p>
       <div class="hero-actions">
+        <a class="accent-action" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199" target="_blank" rel="noreferrer">立即報名參加</a>
         <a class="primary-action" href="#solutions">瀏覽方案卡片</a>
         <a class="secondary-action" href="#decision">導入評估重點</a>
       </div>
@@ -952,6 +990,8 @@
 
   <footer class="footer">
     <strong>製造業 AI 工具媒合會</strong>
+    <p>已找到想洽談的工具商？回到活動報名頁填寫需求與希望交流的方案，主辦單位將依選擇優先安排現場媒合。</p>
+    <a class="accent-action" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199" target="_blank" rel="noreferrer">前往 iEvents 報名頁</a>
   </footer>
 
   <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
@@ -971,6 +1011,8 @@
   </div>
 
   <script>
+    const registerUrl = "https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199";
+
     const solutions = [
       {
         company: "谷林運算股份有限公司",
@@ -1228,7 +1270,7 @@
         detailSection("資料需求與設備", `${item.data}\n${item.equipment}`),
         detailSection("適用企業規模", item.scale),
         detailSection("導入實績", item.cases),
-        normalizedUrl ? `<section class="detail-section"><h4>介紹網址</h4><a class="modal-link" href="${escapeHTML(normalizedUrl)}" target="_blank" rel="noreferrer">開啟方案連結</a></section>` : ""
+        normalizedUrl ? `<section class="detail-section"><h4>介紹網址</h4><a class="modal-link" href="${escapeHTML(normalizedUrl)}" target="_blank" rel="noreferrer">開啟方案連結</a><a class="modal-link modal-link-accent" href="${registerUrl}" target="_blank" rel="noreferrer">前往活動報名</a></section>` : `<section class="detail-section"><h4>活動報名</h4><a class="modal-link modal-link-accent" href="${registerUrl}" target="_blank" rel="noreferrer">前往活動報名</a></section>`
       ].join("");
 
       modal.classList.add("is-open");
