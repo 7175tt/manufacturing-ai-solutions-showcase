@@ -397,6 +397,7 @@
       border-bottom: 1px solid var(--line);
       text-align: left;
       vertical-align: top;
+      line-height: 1.45;
       overflow-wrap: anywhere;
       word-break: break-word;
     }
@@ -409,13 +410,14 @@
       font-size: 13px;
     }
     td { font-size: 14px; }
+    .compare-link { white-space: nowrap; font-weight: 900; }
     th:nth-child(1), td:nth-child(1) { width: 12%; }
-    th:nth-child(2), td:nth-child(2) { width: 16%; }
-    th:nth-child(3), td:nth-child(3) { width: 17%; }
-    th:nth-child(4), td:nth-child(4) { width: 21%; }
-    th:nth-child(5), td:nth-child(5) { width: 12%; }
-    th:nth-child(6), td:nth-child(6) { width: 14%; }
-    th:nth-child(7), td:nth-child(7) { width: 8%; }
+    th:nth-child(2), td:nth-child(2) { width: 17%; }
+    th:nth-child(3), td:nth-child(3) { width: 15%; }
+    th:nth-child(4), td:nth-child(4) { width: 18%; }
+    th:nth-child(5), td:nth-child(5) { width: 20%; }
+    th:nth-child(6), td:nth-child(6) { width: 13%; }
+    th:nth-child(7), td:nth-child(7) { width: 5%; }
     @media (max-width: 1040px) {
       .cover-inner { grid-template-columns: 1fr; align-items: center; }
       .topnav { display: none; }
@@ -716,12 +718,29 @@
       const list = (items || []).slice(0, limit).map(item => `<span class="tag">${esc(item)}</span>`).join("");
       return list || '<span class="tag">未填</span>';
     }
+    function compactLabel(value) {
+      let text = String(value || "").replace(/（.*$/g, "").replace(/\(.*$/g, "").replace(/：.*$/g, "").trim();
+      text = text.replace("雲端 SaaS 部署", "雲端 SaaS");
+      return text;
+    }
+    function truncateLabel(value, limit = 0) {
+      const text = String(value || "").trim();
+      return limit && text.length > limit ? `${text.slice(0, limit - 1)}…` : text;
+    }
+    function compactList(items, fallback = "未填", limit = 4, charLimit = 0) {
+      const list = (items || []).slice(0, limit).map(compactLabel).filter(Boolean).map(item => truncateLabel(item, charLimit));
+      return list.length ? list.join("、") : fallback;
+    }
     function clickableTag(text, field) {
       return `<button type="button" class="tag" data-filter="${field}" data-value="${esc(text)}">${esc(text)}</button>`;
     }
     function link(url) {
       if (!url) return "未提供";
       return `<a href="${esc(url)}" target="_blank" rel="noopener">開啟連結</a>`;
+    }
+    function compareLink(url) {
+      if (!url) return "未提供";
+      return `<a class="compare-link" href="${esc(url)}" target="_blank" rel="noopener">開啟</a>`;
     }
     function mail(value) {
       if (!value) return "未提供";
@@ -828,11 +847,11 @@
         <tr>
           <td data-label="供應商">${esc(record.display_supplier)}</td>
           <td data-label="解決方案">${esc(record.solution)}</td>
-          <td data-label="主要 AI 技術">${esc((record.tech_tags || []).slice(0, 4).join("、") || record.tech || "未填")}</td>
-          <td data-label="可對應痛點">${esc((record.pain_tags || []).slice(0, 4).join("、") || "未填")}</td>
-          <td data-label="部署環境">${esc(record.deployment || "未填")}</td>
+          <td data-label="主要 AI 技術">${esc(compactList(record.tech_tags, truncateLabel(record.tech || "未填", 22), 3, 22))}</td>
+          <td data-label="可對應痛點">${esc(compactList(record.pain_tags, "未填", 4))}</td>
+          <td data-label="部署環境">${esc(compactList(record.deployment_tags, compactLabel(record.deployment) || "未填", 3))}</td>
           <td data-label="聯絡窗口">${esc(record.contact_name || "未提供")}<br>${mail(record.contact_email)}</td>
-          <td data-label="連結">${link(record.url)}</td>
+          <td data-label="連結">${compareLink(record.url)}</td>
         </tr>
       `).join("");
     }
