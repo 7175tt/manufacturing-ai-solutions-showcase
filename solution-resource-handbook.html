@@ -60,10 +60,37 @@
       background: var(--accent);
       box-shadow: 5px 0 0 var(--gold);
     }
-    .topnav { display: flex; flex-wrap: wrap; gap: 14px; font-size: 14px; }
-    .topnav a { color: var(--muted); font-weight: 800; text-decoration: none; }
-    .topnav a:hover { color: var(--accent-dark); }
+    .topnav {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      width: min(680px, 100%);
+      font-size: 14px;
+    }
+    .view-tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      font-weight: 900;
+      line-height: 1.25;
+      text-align: center;
+      text-decoration: none;
+    }
+    .view-tab:hover,
+    .view-tab.is-active {
+      border-color: var(--accent-dark);
+      background: var(--accent-dark);
+      color: #fff;
+    }
     .mobile-toc { display: none; }
+    .mobile-toc.is-hidden { display: none !important; }
+    .view-panel.is-hidden,
+    .sidebar.is-hidden { display: none !important; }
     .cover {
       background: var(--paper);
       border-bottom: 1px solid var(--line);
@@ -459,7 +486,7 @@
     }
     .tool-filters {
       display: grid;
-      grid-template-columns: minmax(260px, 2fr) minmax(180px, 1fr) 150px;
+      grid-template-columns: minmax(260px, 2fr) minmax(160px, 1fr) minmax(160px, 1fr) 150px;
       gap: 10px;
       padding: 18px;
       border-bottom: 1px solid var(--line);
@@ -530,7 +557,8 @@
     .tool-detail summary { margin-top: 12px; }
     @media (max-width: 1040px) {
       .cover-inner { grid-template-columns: 1fr; align-items: center; }
-      .topnav { display: none; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .topnav { width: 100%; }
       .mobile-toc {
         position: sticky;
         top: 58px;
@@ -632,54 +660,61 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">製造業 AI 解決方案資源手冊</div>
-    <nav class="topnav">
-      <a href="#guide">使用方式</a>
-      <a href="#category">分類導覽</a>
-      <a href="#solutions">方案索引</a>
-      <a href="#compare">比較表</a>
-      <a href="#industry-tools">AI工具庫</a>
+    <div class="brand">製造業 AI 解決方案資料平台</div>
+    <nav class="topnav" aria-label="資料群組切換">
+      <a href="#handbook" class="view-tab is-active" data-view-target="handbook">製造業 AI 解決方案資源手冊</a>
+      <a href="#industry-tools" class="view-tab" data-view-target="industry-tools">產業競爭力輔導團AI工具庫</a>
     </nav>
   </header>
 
   <section class="cover">
     <div class="cover-inner">
       <div>
-        <p class="kicker">Manufacturing AI Solution Handbook</p>
-        <h1>製造業 AI 解決方案資源手冊</h1>
-        <p class="lead">協助製造業需求端從痛點、導入條件與聯絡窗口快速盤點可洽詢方案。</p>
+        <p class="kicker">Manufacturing AI Solution Platform</p>
+        <h1>製造業 AI 解決方案資料平台</h1>
+        <p class="lead">並列呈現「製造業 AI 解決方案資源手冊」與「產業競爭力輔導團AI工具庫」，可依查詢目的切換資料群組。</p>
       </div>
-      <aside class="cover-panel" aria-label="手冊摘要">
-        <strong>收錄範圍</strong>
+      <aside class="cover-panel" aria-label="資料平台摘要">
+        <strong>資料群組</strong>
         <dl>
-          <div><dt>供應商</dt><dd>16 家</dd></div>
-          <div><dt>解決方案</dt><dd>16 項</dd></div>
+          <div><dt>資源手冊</dt><dd>16 項</dd></div>
+          <div><dt>AI工具庫</dt><dd id="coverToolTotal">動態載入</dd></div>
         </dl>
       </aside>
     </div>
   </section>
 
-  <nav class="mobile-toc" aria-label="手機章節導覽">
+  <nav class="mobile-toc" data-subnav="handbook" aria-label="製造業 AI 解決方案資源手冊章節導覽">
     <a href="#guide">使用方式</a>
     <a href="#category">分類導覽</a>
     <a href="#solutions">解決方案索引</a>
     <a href="#compare">快速比較表</a>
-    <a href="#industry-tools">AI工具庫</a>
+  </nav>
+  <nav class="mobile-toc is-hidden" data-subnav="industry-tools" aria-label="產業競爭力輔導團AI工具庫章節導覽">
+    <a href="#industry-tools">工具庫首頁</a>
+    <a href="#industryToolList">工具列表</a>
   </nav>
 
   <div class="layout">
-    <aside class="sidebar">
+    <aside class="sidebar" data-sidebar="handbook">
       <p class="sidebar-title">手冊導覽</p>
       <nav class="side-links">
         <a href="#guide">如何使用</a>
         <a href="#category">分類導覽</a>
         <a href="#solutions">解決方案索引</a>
         <a href="#compare">快速比較表</a>
+      </nav>
+    </aside>
+    <aside class="sidebar is-hidden" data-sidebar="industry-tools">
+      <p class="sidebar-title">工具庫導覽</p>
+      <nav class="side-links">
         <a href="#industry-tools">產業競爭力輔導團AI工具庫</a>
+        <a href="#industryToolList">工具列表</a>
       </nav>
     </aside>
 
     <main>
+      <div id="handbook" class="view-panel" data-view-panel="handbook">
       <section id="guide" class="manual-section">
         <div class="section-head">
           <div>
@@ -792,12 +827,14 @@
           </table>
         </div>
       </section>
+      </div>
 
-      <section id="industry-tools" class="manual-section tool-library">
+      <div id="industry-tools" class="view-panel is-hidden" data-view-panel="industry-tools">
+      <section class="manual-section tool-library">
         <div class="section-head">
           <div>
             <h2>產業競爭力輔導團AI工具庫</h2>
-            <p>串接公開 AI 工具庫資料，作為精選方案之外的延伸查詢參考。</p>
+            <p>串接產業競爭力輔導團公開 AI 工具庫資料，可依工具分類、金額範圍與關鍵字查詢。</p>
           </div>
         </div>
         <div class="tool-stats" aria-label="工具庫摘要">
@@ -814,6 +851,10 @@
             <label for="toolCategory">工具分類</label>
             <select id="toolCategory"><option value="">全部分類</option></select>
           </div>
+          <div>
+            <label for="toolPrice">工具金額範圍</label>
+            <select id="toolPrice"><option value="">全部金額</option></select>
+          </div>
           <div><button id="toolReset" type="button">清除工具篩選</button></div>
         </div>
         <div class="result-note">
@@ -823,6 +864,7 @@
         <div id="industryToolList" class="tool-list"></div>
         <div id="industryToolEmpty" class="empty">沒有符合條件的 AI 工具，請調整搜尋或分類。</div>
       </section>
+      </div>
 
     </main>
   </div>
@@ -838,9 +880,17 @@
       sheets: ["人員及知識管理", "環境及設備管理", "原物料管理", "生產與品質管理", "行銷管理", "能源與碳排管理", "綜合或其他"],
       renderLimit: 80
     };
+    const industryPriceOptions = ["免費／未標價", "10萬以下", "10-50萬", "50-100萬", "100萬以上", "訂閱制", "專案報價／洽詢"];
     let industryTools = [];
+    let industryToolsLoaded = false;
+    let industryToolsLoading = false;
+    let industryFilterOptionsReady = false;
 
     const els = {
+      viewTabs: document.querySelectorAll("[data-view-target]"),
+      viewPanels: document.querySelectorAll("[data-view-panel]"),
+      sidebars: document.querySelectorAll("[data-sidebar]"),
+      subnavs: document.querySelectorAll("[data-subnav]"),
       search: document.querySelector("#search"),
       pain: document.querySelector("#pain"),
       tech: document.querySelector("#tech"),
@@ -857,11 +907,13 @@
       leadCloud: document.querySelector("#leadCloud"),
       toolSearch: document.querySelector("#toolSearch"),
       toolCategory: document.querySelector("#toolCategory"),
+      toolPrice: document.querySelector("#toolPrice"),
       toolReset: document.querySelector("#toolReset"),
       toolList: document.querySelector("#industryToolList"),
       toolEmpty: document.querySelector("#industryToolEmpty"),
       toolStatus: document.querySelector("#industryToolStatus"),
       toolTotal: document.querySelector("#industryToolTotal"),
+      coverToolTotal: document.querySelector("#coverToolTotal"),
       toolShown: document.querySelector("#industryToolShown"),
       toolMatched: document.querySelector("#industryToolMatched"),
       toolCategoryCount: document.querySelector("#industryCategoryCount")
@@ -954,6 +1006,28 @@
         return true;
       });
     }
+    function viewFromHash() {
+      const hash = window.location.hash || "#handbook";
+      return hash.startsWith("#industry-tools") || hash.startsWith("#industryToolList") || hash.startsWith("#tool-")
+        ? "industry-tools"
+        : "handbook";
+    }
+    function setActiveView(view, updateHash = false) {
+      const active = view === "industry-tools" ? "industry-tools" : "handbook";
+      els.viewTabs.forEach(tab => {
+        const isActive = tab.dataset.viewTarget === active;
+        tab.classList.toggle("is-active", isActive);
+        tab.setAttribute("aria-current", isActive ? "page" : "false");
+      });
+      els.viewPanels.forEach(panel => panel.classList.toggle("is-hidden", panel.dataset.viewPanel !== active));
+      els.sidebars.forEach(sidebar => sidebar.classList.toggle("is-hidden", sidebar.dataset.sidebar !== active));
+      els.subnavs.forEach(nav => nav.classList.toggle("is-hidden", nav.dataset.subnav !== active));
+      if (active === "industry-tools") ensureIndustryTools();
+      if (updateHash) {
+        const targetHash = active === "industry-tools" ? "#industry-tools" : "#handbook";
+        if (window.location.hash !== targetHash) history.pushState(null, "", targetHash);
+      }
+    }
     function gvizUrl(sheetName, callbackName) {
       return `https://docs.google.com/spreadsheets/d/${industryToolConfig.sheetId}/gviz/tq?tqx=responseHandler:${callbackName}&sheet=${encodeURIComponent(sheetName)}`;
     }
@@ -993,7 +1067,47 @@
         return item;
       });
     }
+    function normalizeDigits(value) {
+      return String(value || "").replace(/[０-９]/g, char => String.fromCharCode(char.charCodeAt(0) - 65248));
+    }
+    function addAmountBuckets(amounts, buckets) {
+      amounts.forEach(amount => {
+        if (!Number.isFinite(amount) || amount <= 0) return;
+        if (amount <= 100000) buckets.add("10萬以下");
+        else if (amount <= 500000) buckets.add("10-50萬");
+        else if (amount <= 1000000) buckets.add("50-100萬");
+        else buckets.add("100萬以上");
+      });
+    }
+    function priceBuckets(price) {
+      const text = normalizeDigits(price).replace(/,/g, "").trim();
+      const buckets = new Set();
+      if (!text) buckets.add("免費／未標價");
+      if (/免費|free|0元|無須|不收費|未標價|未提供/.test(text)) buckets.add("免費／未標價");
+      if (/訂閱|月費|年費|subscription|每月|每年|\/m|\/月|\/年/.test(text)) buckets.add("訂閱制");
+      if (/專案|報價|洽詢|另議|未定|tbd|依需求/i.test(text)) buckets.add("專案報價／洽詢");
+
+      const amounts = [];
+      const rangeWan = text.matchAll(/(\d+(?:\.\d+)?)\s*(?:-|~|～|至|到)\s*(\d+(?:\.\d+)?)\s*萬/g);
+      for (const match of rangeWan) {
+        amounts.push(Number(match[1]) * 10000, Number(match[2]) * 10000);
+      }
+      const individualText = text.replace(/(\d+(?:\.\d+)?)\s*(?:-|~|～|至|到)\s*(\d+(?:\.\d+)?)\s*萬/g, "");
+      const moneyMatches = individualText.matchAll(/(\d+(?:\.\d+)?)\s*(萬|千|元|nt|ntd|台幣|新台幣)?/gi);
+      for (const match of moneyMatches) {
+        const unit = (match[2] || "").toLowerCase();
+        let amount = Number(match[1]);
+        if (!Number.isFinite(amount)) continue;
+        if (unit === "萬") amount *= 10000;
+        else if (unit === "千") amount *= 1000;
+        amounts.push(amount);
+      }
+      addAmountBuckets(amounts, buckets);
+      if (!buckets.size) buckets.add("專案報價／洽詢");
+      return Array.from(buckets);
+    }
     function normalizeIndustryTool(row, category, id) {
+      const price = row["價格"] || "";
       return {
         id,
         category,
@@ -1002,7 +1116,8 @@
         supplier: row["供應商名稱"] || "",
         name: row["工具名稱"] || "",
         type: row["工具類別"] || "",
-        price: row["價格"] || "",
+        price,
+        priceBuckets: priceBuckets(price),
         summary: row["工具簡介(功能、特色、適用情境)"] || "",
         contact: row["聯絡人"] || "",
         contactInfo: row["聯絡資訊"] || ""
@@ -1014,14 +1129,16 @@
     function industryToolBlob(record) {
       return [
         record.category, record.source, record.supplier, record.name, record.type,
-        record.price, record.summary, record.contact, record.contactInfo
+        record.price, (record.priceBuckets || []).join(" "), record.summary, record.contact, record.contactInfo
       ].join(" ").toLowerCase();
     }
     function filteredIndustryTools() {
       const q = els.toolSearch.value.trim().toLowerCase();
       const category = els.toolCategory.value;
+      const price = els.toolPrice.value;
       return industryTools.filter(record => {
         if (category && record.category !== category) return false;
+        if (price && !(record.priceBuckets || []).includes(price)) return false;
         if (q && !industryToolBlob(record).includes(q)) return false;
         return true;
       });
@@ -1048,6 +1165,7 @@
           <div class="tool-meta">
             <div><strong>工具類別</strong>${esc(record.type || "未填")}</div>
             <div><strong>價格</strong>${esc(record.price || "未填")}</div>
+            <div><strong>金額範圍</strong>${esc((record.priceBuckets || []).join("、") || "未判定")}</div>
             <div><strong>來源</strong>${esc(record.source || "未填")}${record.sourceNo ? `｜原編號 ${esc(record.sourceNo)}` : ""}</div>
             <div><strong>聯絡資訊</strong>${esc(record.contact || "未提供")}${record.contactInfo ? `<br>${esc(record.contactInfo)}` : ""}</div>
           </div>
@@ -1055,7 +1173,13 @@
       `).join("");
     }
     async function loadIndustryTools() {
-      fillOptions(els.toolCategory, industryToolConfig.sheets);
+      if (industryToolsLoaded || industryToolsLoading) return;
+      industryToolsLoading = true;
+      if (!industryFilterOptionsReady) {
+        fillOptions(els.toolCategory, industryToolConfig.sheets);
+        fillOptions(els.toolPrice, industryPriceOptions);
+        industryFilterOptionsReady = true;
+      }
       els.toolCategoryCount.textContent = `${industryToolConfig.sheets.length} 類`;
       try {
         const responses = await Promise.all(industryToolConfig.sheets.map(async sheetName => {
@@ -1068,13 +1192,21 @@
             .map(row => normalizeIndustryTool(row, sheetName, id++))
         );
         els.toolTotal.textContent = `${industryTools.length} 筆`;
+        els.coverToolTotal.textContent = `${industryTools.length} 筆`;
+        industryToolsLoaded = true;
         renderIndustryTools();
       } catch (error) {
         els.toolTotal.textContent = "載入失敗";
+        els.coverToolTotal.textContent = "載入失敗";
         els.toolStatus.textContent = "工具庫資料暫時無法載入，請稍後重新整理頁面。";
         els.toolList.innerHTML = "";
         els.toolEmpty.style.display = "block";
+      } finally {
+        industryToolsLoading = false;
       }
+    }
+    function ensureIndustryTools() {
+      if (!industryToolsLoaded && !industryToolsLoading) loadIndustryTools();
     }
     function renderClouds() {
       els.painCloud.innerHTML = painOptions.slice(0, 12).map(item => clickableTag(item, "pain")).join("");
@@ -1166,15 +1298,24 @@
       render();
     });
     ["input", "change"].forEach(eventName => {
-      [els.toolSearch, els.toolCategory].forEach(el => el.addEventListener(eventName, renderIndustryTools));
+      [els.toolSearch, els.toolCategory, els.toolPrice].forEach(el => el.addEventListener(eventName, renderIndustryTools));
     });
     els.toolReset.addEventListener("click", () => {
       els.toolSearch.value = "";
       els.toolCategory.value = "";
+      els.toolPrice.value = "";
       renderIndustryTools();
     });
+    els.viewTabs.forEach(tab => {
+      tab.addEventListener("click", event => {
+        event.preventDefault();
+        setActiveView(tab.dataset.viewTarget, true);
+        document.querySelector(".layout").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+    window.addEventListener("hashchange", () => setActiveView(viewFromHash()));
     render();
-    loadIndustryTools();
+    setActiveView(viewFromHash());
   </script>
 </body>
 </html>
