@@ -879,8 +879,7 @@
     const techOptions = ["* Vision-Language-Action（VLA）動態製程調整", "* 強化學習（Reinforcement Learning）持續優化節拍速度 工序分配", "* 約束規劃（Constraint Programming）將交期", "3D視覺辨識", "AI", "AI Agent 任務代理（含語意理解", "AI生成模擬引擎", "AI生成流程圖", "AI預防維護分析", "ANN)", "AkidaNet (NPU)", "ArgusVIEW: CNN (GPU)", "AutoML (自動機器學習)", "CNN", "Claude", "Deep Learning", "Edge AI", "Embedding 模型（文本向量化）", "FastAPI", "Gemini）", "LLM", "Llama/OpenAI/Claude", "Multi-modality Agentic RAG", "Object Detection", "RAG 檢索增強生成（Retrieval-Augmented Generation）", "RT-Detr這三種模型", "google 語音辨識/ 同音字轉換 /Regex 上下文檢索演算", "「MIP/CP ＋ 啟發式 (Heuristic)」的混合模式", "人員動作分析", "企業於平台中選擇適合之 AI 模型類型（如物件偵測），啟動模型訓練流程。訓練完成後，可直接於平台進行推論測試，檢視模型於實際影像上的辨識結果，包含辨識標註位置", "使用YOLO V8/V11 ，YOLO X", "信心分數與錯誤案例回看，以驗證模型成果與實際應用之可行性。", "動態工具調用 Tool-Use）", "向量資料庫語意檢索（OpenSearch Service）", "大型語言模型（LLM，包含 OpenAI", "意圖識別", "文件解析與 NLP 自然語言處理", "會使用到深度學習以及電腦視覺的AI相關技術，並會加上Gen AI ，做更進一步的資訊生成提供", "物品影像辨識", "生成式AI", "良率", "設備限制轉為控制參數", "評估演算法（履歷與職位符合度自動評分）", "類神經網路 (Artificial Neural Networks"];
     const industryToolConfig = {
       sheetId: "18Hq6sUrweHmm_08AcFPBnQ8XypXJ7CM6",
-      sheets: ["人員及知識管理", "環境及設備管理", "原物料管理", "生產與品質管理", "行銷管理", "能源與碳排管理", "綜合或其他"],
-      renderLimit: 80
+      sheets: ["人員及知識管理", "環境及設備管理", "原物料管理", "生產與品質管理", "行銷管理", "能源與碳排管理", "綜合或其他"]
     };
     const industryPriceOptions = ["免費／未標價", "10萬以下", "10-50萬", "50-100萬", "100萬以上", "訂閱制", "專案報價／洽詢"];
     let industryTools = [];
@@ -1147,14 +1146,11 @@
     }
     function renderIndustryTools() {
       const rows = filteredIndustryTools();
-      const shown = rows.slice(0, industryToolConfig.renderLimit);
       els.toolEmpty.style.display = rows.length ? "none" : "block";
-      els.toolShown.textContent = shown.length;
+      els.toolShown.textContent = rows.length;
       els.toolMatched.textContent = rows.length;
-      els.toolStatus.textContent = rows.length > shown.length
-        ? `已載入全部資料，畫面先呈現前 ${shown.length} 筆；可用搜尋或分類縮小範圍。`
-        : "已載入全部資料，可依分類或關鍵字查詢。";
-      els.toolList.innerHTML = shown.map(record => `
+      els.toolStatus.textContent = "已載入全部資料，可依分類、金額範圍或關鍵字查詢。";
+      els.toolList.innerHTML = rows.map(record => `
         <article class="tool-card" id="tool-${record.id}">
           <div>
             <div class="tool-code">工具 ${industryToolNo(record)}</div>
