@@ -18,6 +18,7 @@
       --gold: #b99024;
       --mark: #fff1b8;
       --shadow: 0 18px 40px rgba(21, 38, 48, .10);
+      --result-sticky-top: 58px;
     }
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -214,6 +215,34 @@
       color: #15242c;
     }
     .section-head p { margin: 7px 0 0; color: var(--muted); }
+    .filter-guidance {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 100%;
+      margin-top: 13px;
+      padding: 10px 13px;
+      border: 1px solid #e6d4a0;
+      border-left: 6px solid var(--gold);
+      background: #fff8df;
+      color: #394852;
+      font-size: 15px;
+      font-weight: 850;
+    }
+    .filter-guidance strong {
+      flex: 0 0 auto;
+      padding: 3px 8px;
+      background: var(--accent-dark);
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+    .filter-guidance span { min-width: 0; }
+    .filter-guidance b {
+      color: var(--accent-dark);
+      font-size: 1.08em;
+    }
     .guide-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -254,10 +283,11 @@
       gap: 16px;
       align-items: start;
     }
+    .filter-panel > div:first-child { grid-column: auto; }
     .filter-topline {
       display: grid;
       grid-template-columns: minmax(220px, 1fr) 150px;
-      gap: 10px;
+      gap: 12px;
       align-items: end;
     }
     .filter-groups {
@@ -272,18 +302,74 @@
     }
     .filter-group.wide { grid-column: 1 / -1; }
     .filter-heading {
-      margin: 0 0 8px;
-      color: var(--muted);
-      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      color: var(--accent-dark);
+      font-size: 15px;
       font-weight: 950;
+    }
+    .filter-heading-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 10px;
+    }
+    .filter-heading::before,
+    .filter-group summary::before {
+      content: "";
+      width: 6px;
+      height: 18px;
+      flex: 0 0 auto;
+      background: var(--gold);
     }
     .filter-group details { margin: 0; }
     .filter-group summary {
-      margin-bottom: 8px;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--accent-dark);
+      font-size: 15px;
+      font-weight: 950;
+    }
+    .filter-group summary::marker { color: var(--accent); }
+    .filter-action {
+      display: grid;
+      gap: 8px;
+      align-self: end;
+    }
+    .filter-live-count {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      background: #fbfcfc;
       color: var(--muted);
       font-size: 13px;
+      font-weight: 900;
+      text-align: center;
     }
-    .filter-action { align-self: end; }
+    .filter-sticky-count {
+      position: sticky;
+      top: calc(var(--result-sticky-top) + 10px);
+      z-index: 22;
+      justify-self: end;
+      width: min(220px, 100%);
+      border-color: #9fccc7;
+      background: rgba(232, 243, 241, .97);
+      box-shadow: 0 10px 24px rgba(21, 38, 48, .12);
+      backdrop-filter: blur(10px);
+    }
+    .filter-live-count strong {
+      color: var(--accent-dark);
+      font-size: 20px;
+      line-height: 1;
+    }
     label {
       display: block;
       margin: 0 0 5px;
@@ -311,13 +397,32 @@
       cursor: pointer;
       white-space: nowrap;
     }
+    .filter-select-all {
+      width: auto;
+      min-height: 28px;
+      padding: 3px 10px;
+      border-color: #9fccc7;
+      background: #fff;
+      color: var(--accent-dark);
+      font-size: 12px;
+      line-height: 1;
+    }
+    .filter-select-all:hover {
+      border-color: var(--accent);
+      background: var(--soft);
+    }
     .result-note {
+      position: sticky;
+      top: var(--result-sticky-top);
+      z-index: 18;
       display: flex;
       justify-content: space-between;
       gap: 16px;
       padding: 16px 22px;
       border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
       background: #fbfcfc;
+      box-shadow: 0 10px 24px rgba(21, 38, 48, .08);
       color: var(--muted);
       font-weight: 800;
     }
@@ -364,11 +469,22 @@
       overflow-wrap: anywhere;
       white-space: normal;
     }
-    .tag.is-selected,
+    .filters [data-filter],
+    .tool-filters [data-tool-filter] {
+      border-color: var(--line);
+      background: #fff;
+      color: var(--muted);
+    }
+    .tag.is-selected {
+      border-color: var(--accent);
+      background: var(--soft);
+      color: var(--accent-dark);
+      box-shadow: inset 0 0 0 1px rgba(18,107,117,.18);
+    }
     .tag.is-present {
-      border-color: var(--accent-dark);
-      background: var(--accent-dark);
-      color: #fff;
+      border-color: #9fccc7;
+      background: var(--soft);
+      color: #0d5964;
     }
     .tag.is-absent {
       border-color: var(--line);
@@ -534,6 +650,13 @@
     th:nth-child(6), td:nth-child(6) { width: 19%; }
     th:nth-child(7), td:nth-child(7) { width: 12%; }
     th:nth-child(8), td:nth-child(8) { width: 5%; }
+    .tool-compare-table th:nth-child(1), .tool-compare-table td:nth-child(1) { width: 7%; }
+    .tool-compare-table th:nth-child(2), .tool-compare-table td:nth-child(2) { width: 14%; }
+    .tool-compare-table th:nth-child(3), .tool-compare-table td:nth-child(3) { width: 16%; }
+    .tool-compare-table th:nth-child(4), .tool-compare-table td:nth-child(4) { width: 18%; }
+    .tool-compare-table th:nth-child(5), .tool-compare-table td:nth-child(5) { width: 15%; }
+    .tool-compare-table th:nth-child(6), .tool-compare-table td:nth-child(6) { width: 16%; }
+    .tool-compare-table th:nth-child(7), .tool-compare-table td:nth-child(7) { width: 14%; }
     .tool-library .section-head { align-items: start; }
     .tool-stats {
       display: grid;
@@ -621,6 +744,7 @@
     }
     .tool-detail summary { margin-top: 12px; }
     @media (max-width: 1040px) {
+      :root { --result-sticky-top: 108px; }
       .cover-inner { grid-template-columns: 1fr; align-items: center; }
       .topbar { align-items: flex-start; flex-direction: column; }
       .topnav { width: 100%; }
@@ -693,6 +817,7 @@
       }
     }
     @media (max-width: 640px) {
+      :root { --result-sticky-top: 48px; }
       .topbar { position: static; align-items: flex-start; flex-direction: column; }
       .mobile-toc {
         top: 0;
@@ -705,9 +830,11 @@
       .tag-row { grid-template-columns: 1fr; gap: 4px; }
       .cover-inner { min-height: auto; padding-top: 38px; padding-bottom: 38px; }
       .section-head, .result-note { grid-template-columns: 1fr; display: block; }
+      .filter-guidance { align-items: flex-start; flex-direction: column; }
       .filters { grid-template-columns: 1fr; }
       .filters > div:first-child { grid-column: auto; }
       .filter-topline { grid-template-columns: 1fr; }
+      .filter-sticky-count { justify-self: stretch; width: 100%; }
       .tool-filters { grid-template-columns: 1fr; }
       .meta-grid, .detail-grid { grid-template-columns: 1fr; }
     }
@@ -755,13 +882,13 @@
 
   <nav class="mobile-toc" data-subnav="handbook" aria-label="製造業 AI 解決方案資源手冊章節導覽">
     <a href="#guide">使用方式</a>
-    <a href="#category">分類導覽</a>
-    <a href="#solutions">解決方案索引</a>
+    <a href="#solutions">分類導覽</a>
     <a href="#compare">快速比較表</a>
   </nav>
   <nav class="mobile-toc is-hidden" data-subnav="industry-tools" aria-label="產業競爭力輔導團AI工具庫章節導覽">
     <a href="#industry-tools">工具庫首頁</a>
-    <a href="#industryToolList">工具列表</a>
+    <a href="#industryToolList">分類導覽</a>
+    <a href="#industryToolCompare">快速比較表</a>
   </nav>
 
   <div class="layout">
@@ -769,8 +896,7 @@
       <p class="sidebar-title">手冊導覽</p>
       <nav class="side-links">
         <a href="#guide">如何使用</a>
-        <a href="#category">分類導覽</a>
-        <a href="#solutions">解決方案索引</a>
+        <a href="#solutions">分類導覽</a>
         <a href="#compare">快速比較表</a>
       </nav>
     </aside>
@@ -778,7 +904,8 @@
       <p class="sidebar-title">工具庫導覽</p>
       <nav class="side-links">
         <a href="#industry-tools">產業競爭力輔導團AI工具庫</a>
-        <a href="#industryToolList">工具列表</a>
+        <a href="#industryToolList">分類導覽</a>
+        <a href="#industryToolCompare">快速比較表</a>
       </nav>
     </aside>
 
@@ -810,34 +937,11 @@
         </div>
       </section>
 
-      <section id="category" class="manual-section">
-        <div class="section-head">
-          <div>
-            <h2>分類導覽</h2>
-            <p>手冊同時提供分類閱讀與條件篩選，適合會前盤點與內部討論。</p>
-          </div>
-        </div>
-        <div class="category-map">
-          <div class="category-block">
-            <h3>生產端痛點</h3>
-            <div id="painCloud" class="tags"></div>
-          </div>
-          <div class="category-block">
-            <h3>部署模式</h3>
-            <div id="deploymentCloud" class="tags"></div>
-          </div>
-          <div class="category-block">
-            <h3>導入預估時間</h3>
-            <div id="leadCloud" class="tags"></div>
-          </div>
-        </div>
-      </section>
-
       <section id="solutions" class="manual-section">
         <div class="section-head">
           <div>
-            <h2>解決方案索引</h2>
-            <p>目前顯示 <strong id="resultCount">95</strong> 項。可搜尋供應商、方案、技術、痛點、應用實績或聯絡人資訊。</p>
+            <h2>分類導覽</h2>
+            <div class="filter-guidance"><strong>可多選篩選</strong><span>這裡是可多選的篩選系統：同一主題可選多個條件，跨主題會共同縮小結果；目前顯示 <b id="resultCount">95</b> 項。</span></div>
           </div>
         </div>
         <div class="filters filter-panel" aria-label="篩選工具">
@@ -848,41 +952,56 @@
             </div>
             <div class="filter-action"><button id="reset" type="button">清除篩選</button></div>
           </div>
+          <div class="filter-live-count filter-sticky-count" aria-live="polite">
+            <span>目前顯示</span><strong id="filterLiveCount">95</strong><span>/ 95 項</span>
+          </div>
           <div class="filter-groups">
             <div class="filter-group">
-              <p class="filter-heading">生產端痛點</p>
+              <div class="filter-heading-row">
+                <p class="filter-heading">生產端痛點</p>
+                <button class="filter-select-all" type="button" data-filter-all="pain">全選</button>
+              </div>
               <div id="painFilter" class="tags"></div>
             </div>
             <div class="filter-group">
-              <p class="filter-heading">部署模式</p>
+              <div class="filter-heading-row">
+                <p class="filter-heading">部署模式</p>
+                <button class="filter-select-all" type="button" data-filter-all="deployment">全選</button>
+              </div>
               <div id="deploymentFilter" class="tags"></div>
             </div>
             <div class="filter-group">
-              <p class="filter-heading">導入預估時間</p>
+              <div class="filter-heading-row">
+                <p class="filter-heading">導入預估時間</p>
+                <button class="filter-select-all" type="button" data-filter-all="lead">全選</button>
+              </div>
               <div id="leadFilter" class="tags"></div>
             </div>
             <div class="filter-group">
-              <p class="filter-heading">所需資料</p>
+              <div class="filter-heading-row">
+                <p class="filter-heading">所需資料</p>
+                <button class="filter-select-all" type="button" data-filter-all="data">全選</button>
+              </div>
               <div id="dataNeedFilter" class="tags"></div>
             </div>
             <div class="filter-group wide">
-              <p class="filter-heading">製造業次產業</p>
+              <div class="filter-heading-row">
+                <p class="filter-heading">製造業次產業</p>
+                <button class="filter-select-all" type="button" data-filter-all="industry">全選</button>
+              </div>
               <div id="industryFilter" class="tags"></div>
             </div>
             <div class="filter-group wide">
-              <p class="filter-heading">搭配設備</p>
+              <div class="filter-heading-row">
+                <p class="filter-heading">搭配設備</p>
+                <button class="filter-select-all" type="button" data-filter-all="equipment">全選</button>
+              </div>
               <div id="equipmentFilter" class="tags"></div>
-            </div>
-            <div class="filter-group wide">
-              <details>
-                <summary>AI 技術</summary>
-                <div id="techFilter" class="tags"></div>
-              </details>
             </div>
           </div>
         </div>
         <div class="result-note">
-          <span>結果會同步更新下方索引與比較表。</span>
+          <span>多選組合會即時更新下方方案列表與比較表。</span>
           <span>顯示 <strong id="resultCountSub">95</strong> / 95 項</span>
         </div>
         <div id="solutionList" class="solution-list"></div>
@@ -929,14 +1048,13 @@
           <div class="tool-stat"><span>分類數</span><strong id="industryCategoryCount">7 類</strong></div>
           <div class="tool-stat"><span>工具數</span><strong id="industryToolTotal">載入中</strong></div>
         </div>
-        <div class="category-map two-up">
-          <div class="category-block">
-            <h3>工具分類</h3>
-            <div id="toolCategoryCloud" class="tags"></div>
-          </div>
-          <div class="category-block">
-            <h3>金額範圍</h3>
-            <div id="toolPriceCloud" class="tags"></div>
+      </section>
+
+      <section id="industryToolList" class="manual-section tool-library">
+        <div class="section-head">
+          <div>
+            <h2>分類導覽</h2>
+            <div class="filter-guidance"><strong>可多選篩選</strong><span>這裡也是可多選的篩選系統：工具分類與金額範圍可同時複選，跨主題會共同縮小結果。</span></div>
           </div>
         </div>
         <div class="tool-filters filter-panel" aria-label="產業競爭力輔導團AI工具庫篩選">
@@ -945,15 +1063,24 @@
               <label for="toolSearch">工具關鍵字搜尋</label>
               <input id="toolSearch" type="search" placeholder="搜尋供應商、工具名稱、類別、簡介、聯絡資訊">
             </div>
-            <div><button id="toolReset" type="button">清除工具篩選</button></div>
+            <div class="filter-action"><button id="toolReset" type="button">清除工具篩選</button></div>
+          </div>
+          <div class="filter-live-count filter-sticky-count" aria-live="polite">
+            <span>目前顯示</span><strong id="toolLiveCount">0</strong><span>/</span><strong id="toolLiveTotal">0</strong><span>筆</span>
           </div>
           <div class="filter-groups">
             <div class="filter-group">
-              <p class="filter-heading">工具分類</p>
+              <div class="filter-heading-row">
+                <p class="filter-heading">工具分類</p>
+                <button class="filter-select-all" type="button" data-tool-filter-all="category">全選</button>
+              </div>
               <div id="toolCategoryFilter" class="tags"></div>
             </div>
             <div class="filter-group">
-              <p class="filter-heading">工具金額範圍</p>
+              <div class="filter-heading-row">
+                <p class="filter-heading">工具金額範圍</p>
+                <button class="filter-select-all" type="button" data-tool-filter-all="price">全選</button>
+              </div>
               <div id="toolPriceFilter" class="tags"></div>
             </div>
           </div>
@@ -962,8 +1089,33 @@
           <span id="industryToolStatus">資料載入中，請稍候。</span>
           <span>顯示 <strong id="industryToolShown">0</strong> / <strong id="industryToolMatched">0</strong> 筆</span>
         </div>
-        <div id="industryToolList" class="tool-list"></div>
+        <div id="industryToolCards" class="tool-list"></div>
         <div id="industryToolEmpty" class="empty">沒有符合條件的 AI 工具，請調整搜尋或分類。</div>
+      </section>
+
+      <section id="industryToolCompare" class="manual-section tool-library">
+        <div class="section-head">
+          <div>
+            <h2>快速比較表</h2>
+            <p>用於快速比對目前篩選結果中的工具分類、供應商、價格與聯絡資訊。</p>
+          </div>
+        </div>
+        <div class="compare-wrap">
+          <table class="tool-compare-table">
+            <thead>
+              <tr>
+                <th>編號</th>
+                <th>工具分類</th>
+                <th>供應商</th>
+                <th>工具名稱</th>
+                <th>金額範圍</th>
+                <th>價格</th>
+                <th>聯絡資訊</th>
+              </tr>
+            </thead>
+            <tbody id="industryToolCompareBody"></tbody>
+          </table>
+        </div>
       </section>
       </div>
 
@@ -975,8 +1127,8 @@
     const painOptions = ["1. 排程與達交類（插單頻繁、換線效率低、交期不準...）", "2. 品質與良率類（肉眼漏檢、參數難調、良率不穩...）", "3. 設備與維護類（無預警停機、找不到故障點...）", "4. 庫存與供應鏈類（呆滯料、缺料、預測失準...）", "5. ESG、廠務與工安類（能耗高、碳盤查難、工安意外...）", "6. 研發與設計類（開發週期長、試誤成本高、客製設計慢...）", "7. 人機協作與知識類（經驗斷層、操作複雜...）", "8. 儀表板或戰情中心（協助跨部門溝通）", "9. 其他／未分類"];
     const deploymentOptions = ["本地端部署", "雲端部署", "混合部署"];
     const leadOptions = ["1週內", "1個月內", "1-3個月", "3-6個月", "6個月以上", "待確認"];
-    const techOptions = ["(1) AI 行銷文案產生器 (2) AI 虛擬客服", "(1)LLM-透過Azure OpenAI 進行對話生成", "* Vision-Language-Action（VLA）動態製程調整", "* 強化學習（Reinforcement Learning）持續優化節拍速度 工序分配", "* 約束規劃（Constraint Programming）將交期", "1.Expert System 2.Classification：AutoML", "1.classification：YOLOv8-cls", "3D視覺辨識", "ABOD", "AI", "AI Agen", "AI Agent", "AI Agent 任務代理（含語意理解", "AI Agent 推理模型", "AI Agent 智能體", "AI Agent（代理人）架構", "AI Agent（企業數位員工）", "AI SPAM過濾技術", "AI xWare 智慧製造整合平台 在不同的應用場景中運用了多種人工智慧演算法與模型，主要可歸納為以下幾類：1. 機器學習模型 (Machine Learning)在處理結構化數據（如生產參數", "AI 電腦視覺（AI Computer Vision）", "AIRA 智慧工廠運用了深度學習影像辨識", "AI分析預測", "AI排程最佳化", "AI生成模擬引擎", "AI生成流程圖", "AI虛擬量測", "AI視覺辨識", "AI試模調機)", "AI資料前處理", "AI資料標註", "AI電腦視覺", "AI預防維護分析", "ANN)", "AOAI", "APS", "APS最佳化排程演算法", "ARIMA", "ARIMA(統計式時間序列模型)", "ARIMA分析", "Agent", "Agent Skills", "Agentic", "Agentic AI", "AkidaNet (NPU)", "AnomalyTransformer", "Apriori Algorithm", "ArgusVIEW: CNN (GPU)", "AutoML (自動機器學習)", "AzureOpenAI", "BERT演算法", "BIS", "CNN", "CNN (Convolutional Neural Network)，AutoEncoder，生成式 AI / Generative AI，VLM (Vision-Language Model)，SigLIP，LLM (Language Model)，回歸模型 (AI/ML)，GPT，Gemini", "CNN捲積模型 + 餘弦相似度與歐氏距離法", "COUTA", "ChatGPT-OSS-20B", "Chatgpt/AI 品牌文案自動生成", "Claude", "Claude 等大型語言模型，並支援多模型切換與多代理人協作架構。", "Claudeg", "DBSCAN", "DCdetector", "DL", "DRF", "Deep Learning", "DeepIsolationForestTS", "DeepSADTS", "DeepSVDDTS", "DevNetTS", "ERP", "ERP MES APS BIS", "Edge AI", "Embedding Model...等其他相關模型", "Embedding 模型（文本向量化）", "Embedding模型", "FastAPI", "GBM", "GLM 3.Regression：AutoML", "GLM 4.Time Series：RNN", "GLM 5.Regression：AutoML", "GLM 6.Time Series：RNN", "GMM", "GPT", "GPT Gemini in house model", "GPT-4.1", "GPT-4o", "GPU/資安", "GRU", "Gemini", "Gemini 3 系列 (Pro / Flash / Ultra)： 具備百萬級長上下文視窗 (Context Window) 的多模態 Transformer 模型。  Nano Banana： 專為高保真圖像生成與編輯開發的視覺模型。  Veo 3.1： 領先的視訊生成模型，可用於模擬生產流程或員工教育訓練視訊。  Med-Gemini (選配)： 若涉及廠區醫護，則有醫療專用微調模型。", "Gemini-2.5-flash", "Gemini... 都有", "Gemini）", "Gemma", "Google", "HDBSCAN", "Hook", "ISOLATION FOREST", "ISOLATION FOREST等等", "Isolation Forest", "KNN", "KNN。", "LLM", "LLM : openai chatgpt", "LLM Gemini", "LLM大型語言模型", "LLaMA3", "LMM等", "LSTM", "LSTM (深度學習時間序列模型)", "Limited-memory Broyden–Fletcher–Goldfarb–Shanno (lbfgs)", "Llama", "Llama/OpenAI/Claude", "MCP", "MCP SERVE", "MCP Server", "MES", "ML", "MTSCNN", "MobilNet v2物體偵測", "MobilNet v2開源模型", "Moldex3D (數位雙生)，iSLM資料庫 (AI形狀辨識", "Multi-modality Agentic RAG", "NC 加工優化及影像辨識。大型語言模型 (LLM)：部署地端開源模型，作為智慧助理的核心 。RAG (檢索增強生成)：用於建立規範知識庫，讓 AI 助理能準確檢索公司程序文件與品質規範 。ReAct Loop (推理-行動迴圈)：用於 AI Agent (代理人) 架構，使 AI 具備思考", "NLP", "OCR", "Object Detection", "One-Class SVM", "Open AI/ Gemini", "Open WebUI", "OpenAI", "OpenAI Gemini", "OpenAI.Claude Code.Microsoft GCP", "PCA", "PReNetT 6.Clustering：K-means", "Pose Estimation", "Prompt Engineering", "Prophet", "Prophet 5.Time Series Anomaly Detection", "Prophet(Facebook時間序列模型)", "Qwen2-7B-Instruct-GPTQ-Int4", "RAG", "RAG (Retrieval-Augmented Generation)", "RAG 檢索增強生成（Retrieval-Augmented Generation）", "RAG(Reranker)", "RAG檢索生成架構", "RAG（檢索增強生成）", "RNN", "RPA", "RPA流程自動化", "RT-Detr這三種模型", "Rag", "Regression Analysis", "ResNet", "SAM", "SHAP", "SVM", "SWIN Unet", "Skill", "TeamSync AI 結合「大型語言模型 + 多代理人架構 + RAG知識引擎 + AI自動化流程」，打造企業級 AI 作業系統（AI OS），實現跨系統", "TimesNet", "TranAD", "Transformer", "Transformer Encoder (BERT-Base)", "UNet", "USAD", "VIBE Coding", "VLM", "VLM影像即時推論", "VideCoding", "VoAI 超擬真台灣聲音大模型", "Whisper", "WinEdge 為慧穩科技推出之融合式邊緣運算 AI 推論系統，整合影像型與數據型 AI 推論能力，並可搭配影像型 AI 模型訓練平台 AIWinOps 與數據型 AI 模型訓練平台 NumOps，共同構成完整的 WinHub.AI 人工智慧落地解決方案。 平台採用先進的量化模型推論技術，在不犧牲精準度的前提下，能於本地端裝置實現極致的運算效能，無須仰賴雲端資源即可進行即時處理。WinEdge 支援多裝置集中監控與模型一鍵更新，能針對工地安全", "X 光檢查影像分析", "XG-Boost", "XGBoost", "XGBoost / LightGBM / RandomForest/Linear / Ridge / Lasso Regression /SVM（Support Vector Machine）/Bayesian Optimization（Optuna）/Vision Transformer/CLIP / BLIP/addleOCR / Tesseract/YOLO/Faster R-CNN/RetinaNet/GPT / Gemini / LLaMA / Qwen", "XRT", "YOLO", "YOLO v8", "YOLO11 3.segmentation：YOLOv8-seg", "YOLO11-cls 2.object detection：YOLOv4", "YOLO11-seg 4.Classification：AutoML", "YOLO11-seg 4.anomaly detection：PaDiM 5.defect generation：Stable Diffusion 6.auto labeling：Segment Anything", "YOLOv8", "YOLO與其他自有", "browser use", "chatGPT 4o", "claude code", "gemini", "gemini /copilot", "gemini 3", "github copilot", "google gemini", "google 語音辨識/ 同音字轉換 /Regex 上下文檢索演算", "gpt-oss", "llama", "n8n", "nomic-embed-text", "oT多感測器資料融合（Sensor Fusion）", "rPPG辨識演算", "skill", "tool", "「MIP/CP ＋ 啟發式 (Heuristic)」的混合模式", "人員動作分析", "代理式 AI (Agentic AI) 與決策智能", "代理標籤法", "以生成式AI為主", "企業於平台中選擇適合之 AI 模型類型（如物件偵測），啟動模型訓練流程。訓練完成後，可直接於平台進行推論測試，檢視模型於實際影像上的辨識結果，包含辨識標註位置", "使用YOLO V8/V11 ，YOLO X", "依客戶需求訂製", "係以AI大語言模型（LLM）為核心，結合深度文件理解與檢索增強生成技術（RAG）之對話式問答平台。 平台可於理解使用者問題後，自大量非結構化文件中精準擷取相關內容，並提供具引用來源之回覆結果。 WinChat 支援私有環境部署，無須外部雲端運算與儲存資源，適用於多元產業情境，可有效協助組織整合內部知識文件", "係以機器學習與深度學習為核心，整合 AutoML 自動化建模與最佳化演算法之智慧數據分析平台。  平台運用先進的離群值偵測技術，僅需正樣本即可建立高精準度模型，針對製程異常達成 97.5% 的檢出率，並將判斷速度從 30 分鐘大幅優化至 30 秒。透過量化參數關聯分析與智能控制策略，NumOps 能自動推導最佳營運路徑並預測未來趨勢，有效協助組織穩定生產品質", "係以深度學習與電腦視覺演算法為核心，整合自動標註技術與生成式模型之全方位影像 AI 運維平台。 平台能快速擴充訓練樣本並大幅縮短標註時程，同時導入 VLM 技術強化視覺理解力與決策輔助。透過 AIWinOps，企業可輕鬆實現從模型訓練到邊緣端部署的標準化流程，有效克服技術轉型門檻，推動產線自動化並極致化營運效能。", "信心分數與錯誤案例回看，以驗證模型成果與實際應用之可行性。", "分析預測", "動態工具調用 Tool-Use）", "可自由串接一般常見之AI模型，例如：Gemini", "向量資料庫Embedding模型", "向量資料庫語意檢索（OpenSearch Service）", "向量資料庫（Vector DB）", "品牌一致性與可用性。", "品質監測及加工異常警示 。   深度學習 (Deep Learning)： * 製程優化： 用於 NC 加工智慧優化及刀具磨耗改善 。   主軸熱變位補償： 建立熱補償模型以確保加工精度 。   經典機器學習算法： 在塑膠射出等案例中，透過 多變量線性模型", "圖像識別", "圖形識別", "地點等實體", "均可支援", "多模態AI", "多模態理解 (Multimodal Understanding)： 同時處理工廠影像", "多目標追蹤", "多種演算模型", "大型語言模型(LLM)", "大型語言模型（LLM）", "大型語言模型（LLM，包含 OpenAI", "大數據蒐集", "大數據資料處理", "大語言模型", "大語言模型(LLM) GPT", "寄件內文演算法", "射膠壓力） 。   電腦視覺 (Computer Vision)： 包含影像辨識", "工業影像處理技術", "平均移動", "強化作業效率並提升對外服務品質。", "強化學習 大語言模型 自然語言處理 電腦視覺 大數據分析 Other: 多模態模型", "強化學習｜大語言模型｜自然語言處理", "影像識別", "影像辨識", "影像辨識 / 特徵提取，多模態理解 (影像 + 文字)，生成式 AI / 內容生成，語言理解 / 文字數值化，物理特性預測 / 回歸分析", "影片生成", "微軟", "思維鏈", "意圖識別", "感測器數據與維修紀錄。  生成式 AI (Generative AI)： 自動生成維修手冊", "我們使用的自行發展技術", "我們是作Ai電腦的系統维護", "我們的系統品牌運用大型語言模型（LLM）與自然語言處理（NLP）等AI核心技術，透過高資安通訊平台，讓使用者以Chat/語音方式輕鬆存取翻譯", "排程最佳化演算法", "採用大型語言模型（LLM）與Transformer架構作為核心演算法模型，透過注意力機制實現精準語意理解", "採用機器學習與深度學習混合式模型架構，建構水質預測與風險評估模型。", "推論", "摘要", "摘要生成及語音會議記錄處理 。這些模型共同構成了 AI xWare 的智慧中樞，實現了從數據感知", "整合 GPT-4/5", "文件生成", "文件解析與 NLP 自然語言處理", "文字識別", "文本生成及即時翻譯，同時整合**自然語言處理（NLP）**技術支持會議摘要", "文案生成技術", "時間", "時間序列分析", "智慧調撥補貨", "智能推薦", "最佳化演算法", "會使用到深度學習以及電腦視覺的AI相關技術，並會加上Gen AI ，做更進一步的資訊生成提供", "會議語音摘要", "本案所開發之 AI 文案產生器，核心技術採用大型語言模型 LLM 之自然語言處理 NLP 技術，主要基於 Transformer 架構之生成式 AI 模型。  系統核心模型以 GPT 系列語言模型為基礎，並結合本公司自行建置之行銷資料庫結合各產業行業特性與提示工程技術，以提升文案生成在行銷情境下之準確度", "核心技術採用大型語言模型 LLM 之自然語言處理 NLP 技術，主要基於 Transformer 架構之生成式 AI 模型。", "核心架構：Transformer Encoder (BERT-Base) 具備深層雙向語意理解能力，解決傳統 Log 分析缺乏語意關聯的問題 。", "模型生成", "機台異常監測等場域提供低延遲", "機器學習", "機器學習 / 深度學習（ML/DL）", "機器學習(ML)", "機器學習/深度學習", "機器學習及AI生成", "機器學習預測模型", "機器視覺應用及 AOI+AI 整合，用於零件辨識與品質瑕疵檢測 。   預測分析技術 (Predictive Analytics)： * 設備預知保養： 監測設備子系統（如加熱器", "機械學習/RAG", "檢索增強生成(RAG)", "決策樹 (Decision Trees) 與隨機森林 (Random Forest)", "深度學習", "深度學習(DL)", "深度學習瑕疵辨識", "混合式偵測模型 (Hybrid Detection)", "潤稿及CRM名片管理等功能，結合軍規加密與零信任架構，安全支援製造業跨國協作與數位轉型。", "物品影像辨識", "物料價格）時，平台採用了多種經典模型：多變量線性模型 (Multivariate Linear Model)：用於參數分析與預測 。隨機森林模型 (Random Forest Model)：用於處理複雜的調機因子篩選 。類神經網路模型 (Neural Network Model)：應用於非線性數據的擬合與預測 。迴歸與樹狀模型：在物料估價系統中，實驗測試了 30 種不同 的迴歸與樹狀模型以選出最佳者 。AutoML (自動機器學習)：利用 ProphetAI AutoML 進行概念驗證 (PoC) 與建模 。2. 深度學習與生成式 AI (Deep Learning & Generative AI)針對更複雜的感知與認知任務，平台導入了深度學習 (Deep Learning)：用於建立熱補償模型", "特徵向量比對", "特徵工程", "生成式AI", "生成式AI(RAG)", "生成式人工智慧（Generative AI）", "產銷協同", "異常偵測", "異常偵測（Anomaly Detection）", "異常行為分析以及 IoT 數據整合技術，將即時影像分析與設備數據結合，形成主動式安全與營運管理系統，而非傳統被動監控。", "皮爾森相關係數 + 回歸分析 + 決策樹。", "監督式學習 (Supervised Learning)：應用於機台監測", "知識問答", "知識庫建構與檢索技術（RAG ）", "知識生成", "程式產生器", "程式碼與品質分析報告。  電腦視覺 (Computer Vision)： 用於即時瑕疵檢測與工安影像辨識。  自然語言處理 (NLP)： 語音操作指令", "等60種統計演算模型", "組織", "聲音生成", "自動回應", "自動回應與潤稿功能，所有技術在高資安環境下運行，全面提升企業溝通效率。", "自有品牌", "自然語言", "自然語言處理", "自然語言處理(NLP)", "自然語言處理（NLP）", "自行建立詢價單媒合模型", "良率", "落地型 Llama 3.3 70B", "虛擬量測", "行為決策到行動執行的完整迴路", "製程參數P&Q關聯", "複合模型( 多模型組合 )", "規劃並執行複雜任務（如使用工具或下達指令）的能力 。知識圖譜 (Knowledge Graph)：協助進行深度的知識檢索與關聯分析 。3. 領域特定演算法與邏輯結合專業製造知識 (Know-how) 的專門演算法：物理與電學邏輯：結合歐姆定律 ($V=IR$) 與功率公式進行加熱器子系統的電流反應分析 。SCR 邏輯判斷演算法：研發專門的演算法進行設備異常燈號的邏輯判斷 。NLP (自然語言處理) 與語意分析：應用於翻譯", "記事類別推薦等情境 (2)Hybrid Search-結合關鍵字檢索 (BM25) 與向量檢索(embedding) (3)text to sql- 透過LLM來生成SQL進行資料檢索 (3)NER(命名實體識別)-利用 LLM 從使用者問句中提取人名", "設備限制轉為控制參數", "評估演算法（履歷與職位符合度自動評分）", "語意向量模型（Embedding Models）", "語意搜尋（Semantic Search）", "語者分段模型", "語言理解", "語言生成模型：gpt-4o-mini 向量模型：text-embedding-3-small 關鍵字檢索：BM25", "語音轉文字", "語音轉文字ASR模型", "語音辨識（Whisper）", "資料探索", "跨語言技術文件翻譯與檢索。  預測分析 (Predictive Analytics)： 結合歷史數據進行設備維修預測。", "跨部門的智慧協作與決策能力。", "輝達等", "邊緣AI即時判定", "邊緣運算 AI 推論技術", "銷售預測", "開源的地端 LLM 服務", "降低營運成本並極致化資源利用率。", "隨機森林 及 類神經網路，從數十萬筆調機參數中找出關鍵因子（如冷卻時間", "雲端資料建模與決策引擎", "電腦視覺檢測", "需求預測", "非監督與半監督機械學習。", "預測OOC", "預測分析", "類神經網路", "類神經網路 (Artificial Neural Networks", "風扇馬達）的電流作動，預測失效風險 。   成本與物料預測： 針對航太物料進行價格與工時的趨勢預測 。", "高隱私的即時預警，有效協助企業將 AI 模型從開發階段快速導入至生產現場的實際應用。"];
-    const industryOptions = ["1.食品製造業", "10.石油及煤製品製造業", "11.化學原材料、肥料、氮化合物、塑橡膠原料及人造纖維製造業", "12.其他化學製品製造業", "13.藥品及醫用化學製品製造業", "14.橡膠製品製造業", "15.塑膠製品製造業", "16.非金屬礦物製品製造業", "17.基本金屬製造業", "18.金屬製品製造業", "19.電子零組件製造業", "2.飲料製造業", "20.電腦、電子產品及光學製品製造業", "21.電力設備及配備製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "24.其他運輸工具及其零件製造業", "25.家具製造業", "26.其他製造業", "27.產業用機械設備維修及安裝業", "3.菸草製造業", "4.紡織業", "5.成衣及服飾品製造業", "6.皮革、毛皮及其製品製造業", "7.木竹製品製造業", "8.紙漿、紙及紙製品製造業", "9.印刷及資料儲存媒體複製業"];
+    const apiOptions = ["完整 API", "有限 API", "封閉系統"];
+    const industryOptions = ["1.食品製造業", "2.飲料製造業", "3.菸草製造業", "4.紡織業", "5.成衣及服飾品製造業", "6.皮革、毛皮及其製品製造業", "7.木竹製品製造業", "8.紙漿、紙及紙製品製造業", "9.印刷及資料儲存媒體複製業", "10.石油及煤製品製造業", "11.化學原材料、肥料、氮化合物、塑橡膠原料及人造纖維製造業", "12.其他化學製品製造業", "13.藥品及醫用化學製品製造業", "14.橡膠製品製造業", "15.塑膠製品製造業", "16.非金屬礦物製品製造業", "17.基本金屬製造業", "18.金屬製品製造業", "19.電子零組件製造業", "20.電腦、電子產品及光學製品製造業", "21.電力設備及配備製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "24.其他運輸工具及其零件製造業", "25.家具製造業", "26.其他製造業", "27.產業用機械設備維修及安裝業"];
     const equipmentOptions = ["影像／光學感測", "識別與讀取設備", "物理訊號感測（IoT）", "控制器與機台訊號", "系統資料／知識庫", "其他資料或設備"];
     const dataNeedOptions = ["即時資料／自動更新", "批次資料／定期匯入", "手動輸入／離線更新"];
     const industryToolConfig = {
@@ -1000,6 +1152,7 @@
       compare: document.querySelector("#compareBody"),
       count: document.querySelector("#resultCount"),
       countSub: document.querySelector("#resultCountSub"),
+      filterLiveCount: document.querySelector("#filterLiveCount"),
       empty: document.querySelector("#empty"),
       painCloud: document.querySelector("#painCloud"),
       deploymentCloud: document.querySelector("#deploymentCloud"),
@@ -1010,26 +1163,25 @@
       dataNeedFilter: document.querySelector("#dataNeedFilter"),
       industryFilter: document.querySelector("#industryFilter"),
       equipmentFilter: document.querySelector("#equipmentFilter"),
-      techFilter: document.querySelector("#techFilter"),
       toolSearch: document.querySelector("#toolSearch"),
       toolReset: document.querySelector("#toolReset"),
-      toolList: document.querySelector("#industryToolList"),
+      toolList: document.querySelector("#industryToolCards"),
+      toolCompare: document.querySelector("#industryToolCompareBody"),
       toolEmpty: document.querySelector("#industryToolEmpty"),
       toolStatus: document.querySelector("#industryToolStatus"),
       toolTotal: document.querySelector("#industryToolTotal"),
       coverToolTotal: document.querySelector("#coverToolTotal"),
       toolShown: document.querySelector("#industryToolShown"),
       toolMatched: document.querySelector("#industryToolMatched"),
+      toolLiveCount: document.querySelector("#toolLiveCount"),
+      toolLiveTotal: document.querySelector("#toolLiveTotal"),
       toolCategoryCount: document.querySelector("#industryCategoryCount"),
-      toolCategoryCloud: document.querySelector("#toolCategoryCloud"),
-      toolPriceCloud: document.querySelector("#toolPriceCloud"),
       toolCategoryFilter: document.querySelector("#toolCategoryFilter"),
       toolPriceFilter: document.querySelector("#toolPriceFilter")
     };
 
     const activeFilters = {
       pain: new Set(),
-      tech: new Set(),
       deployment: new Set(),
       lead: new Set(),
       industry: new Set(),
@@ -1039,6 +1191,18 @@
     const activeToolFilters = {
       category: new Set(),
       price: new Set()
+    };
+    const filterOptions = {
+      pain: painOptions,
+      deployment: deploymentOptions,
+      lead: leadOptions,
+      industry: industryOptions,
+      equipment: equipmentOptions,
+      data: dataNeedOptions
+    };
+    const toolFilterOptions = {
+      category: industryToolConfig.sheets,
+      price: industryPriceOptions
     };
 
     function esc(value) {
@@ -1080,13 +1244,25 @@
     function clickableToolTag(text, field, active = false) {
       return `<button type="button" class="tag${active ? " is-selected" : ""}" data-tool-filter="${field}" data-value="${esc(text)}" aria-pressed="${active ? "true" : "false"}">${esc(text)}</button>`;
     }
-    function hasAny(values, selected) {
+    function hasAny(values, selected, options = []) {
       if (!selected || !selected.size) return true;
+      if (options.length && options.every(option => selected.has(option))) return true;
       return (values || []).some(value => selected.has(value));
     }
     function toggleSet(set, value) {
       if (set.has(value)) set.delete(value);
       else set.add(value);
+    }
+    function allSelected(set, options) {
+      return Boolean(options && options.length && options.every(item => set.has(item)));
+    }
+    function selectAll(set, options) {
+      set.clear();
+      (options || []).forEach(item => set.add(item));
+    }
+    function toggleAll(set, options) {
+      if (allSelected(set, options)) set.clear();
+      else selectAll(set, options);
     }
     function renderTagSet(el, options, field) {
       if (!el) return;
@@ -1157,19 +1333,18 @@
       const q = els.search.value.trim().toLowerCase();
       return solutions.filter(record => {
         if (q && !textBlob(record).includes(q)) return false;
-        if (!hasAny(record.pain_tags, activeFilters.pain)) return false;
-        if (!hasAny(record.tech_tags, activeFilters.tech)) return false;
-        if (!hasAny(record.deployment_tags, activeFilters.deployment)) return false;
-        if (!hasAny(record.lead_time_tags, activeFilters.lead)) return false;
-        if (!hasAny(record.industry_tags, activeFilters.industry)) return false;
-        if (!hasAny(record.equipment_tags, activeFilters.equipment)) return false;
-        if (!hasAny(record.data_need_tags, activeFilters.data)) return false;
+        if (!hasAny(record.pain_tags, activeFilters.pain, painOptions)) return false;
+        if (!hasAny(record.deployment_tags, activeFilters.deployment, deploymentOptions)) return false;
+        if (!hasAny(record.lead_time_tags, activeFilters.lead, leadOptions)) return false;
+        if (!hasAny(record.industry_tags, activeFilters.industry, industryOptions)) return false;
+        if (!hasAny(record.equipment_tags, activeFilters.equipment, equipmentOptions)) return false;
+        if (!hasAny(record.data_need_tags, activeFilters.data, dataNeedOptions)) return false;
         return true;
       });
     }
     function viewFromHash() {
       const hash = window.location.hash || "#handbook";
-      return hash.startsWith("#industry-tools") || hash.startsWith("#industryToolList") || hash.startsWith("#tool-")
+      return hash.startsWith("#industry-tools") || hash.startsWith("#industryToolList") || hash.startsWith("#industryToolCompare") || hash.startsWith("#tool-")
         ? "industry-tools"
         : "handbook";
     }
@@ -1240,29 +1415,75 @@
         else buckets.add("100萬以上");
       });
     }
+    function parseMoneyNumber(value) {
+      return Number(String(value || "").replace(/,/g, ""));
+    }
+    function pushMoneyAmount(amounts, value, multiplier = 1) {
+      const amount = parseMoneyNumber(value) * multiplier;
+      if (Number.isFinite(amount)) amounts.push(amount);
+    }
+    function moneyMultiplier(unit) {
+      if (unit === "萬") return 10000;
+      if (unit === "千") return 1000;
+      return 1;
+    }
     function priceBuckets(price) {
-      const text = normalizeDigits(price).replace(/,/g, "").trim();
+      const text = normalizeDigits(price).trim();
       const buckets = new Set();
       if (!text) buckets.add("免費／未標價");
-      if (/免費|free|0元|無須|不收費|未標價|未提供/.test(text)) buckets.add("免費／未標價");
+      if (/免費|free|無須|不收費|未標價|未提供|(?:^|[^\d,])0\s*元|(?:^|[^\d,])(?:NTD?|TWD|[$＄])\s*0(?![\d,])/i.test(text)) buckets.add("免費／未標價");
       if (/訂閱|月費|年費|subscription|每月|每年|\/m|\/月|\/年/.test(text)) buckets.add("訂閱制");
       if (/專案|報價|洽詢|另議|未定|tbd|依需求/i.test(text)) buckets.add("專案報價／洽詢");
 
       const amounts = [];
-      const rangeWan = text.matchAll(/(\d+(?:\.\d+)?)\s*(?:-|~|～|至|到)\s*(\d+(?:\.\d+)?)\s*萬/g);
-      for (const match of rangeWan) {
-        amounts.push(Number(match[1]) * 10000, Number(match[2]) * 10000);
-      }
-      const individualText = text.replace(/(\d+(?:\.\d+)?)\s*(?:-|~|～|至|到)\s*(\d+(?:\.\d+)?)\s*萬/g, "");
-      const moneyMatches = individualText.matchAll(/(\d+(?:\.\d+)?)\s*(萬|千|元|nt|ntd|台幣|新台幣)?/gi);
-      for (const match of moneyMatches) {
-        const unit = (match[2] || "").toLowerCase();
-        let amount = Number(match[1]);
-        if (!Number.isFinite(amount)) continue;
-        if (unit === "萬") amount *= 10000;
-        else if (unit === "千") amount *= 1000;
-        amounts.push(amount);
-      }
+      const durationLabel = /(軟體使用月數|使用月數|方案期程|服務期程|期程|月數|授權期間|導入時間|導入期程)/;
+      const moneyContext = /(價格|金額|費用|定價|售價|報價|NTD?|TWD|新台幣|台幣|[$＄]|元|萬|千)/i;
+      const moneyValue = String.raw`\d[\d,]*(?:\.\d+)?`;
+      const lines = text
+        .replace(/\r/g, "\n")
+        .split(/\n|；|;/)
+        .map(line => line.trim())
+        .filter(Boolean);
+
+      lines.forEach(line => {
+        if (durationLabel.test(line)) return;
+        let scan = line;
+
+        const rangeWanPattern = new RegExp(`(${moneyValue})\\s*(?:-|~|～|至|到)\\s*(${moneyValue})\\s*萬`, "g");
+        scan = scan.replace(rangeWanPattern, (_, low, high) => {
+          pushMoneyAmount(amounts, low, 10000);
+          pushMoneyAmount(amounts, high, 10000);
+          return " ";
+        });
+
+        const rangeUnitPattern = new RegExp(`(${moneyValue})\\s*(?:-|~|～|至|到)\\s*(${moneyValue})\\s*(元|nt|ntd|twd|台幣|新台幣)`, "gi");
+        scan = scan.replace(rangeUnitPattern, (_, low, high) => {
+          pushMoneyAmount(amounts, low);
+          pushMoneyAmount(amounts, high);
+          return " ";
+        });
+
+        const unitPattern = new RegExp(`(${moneyValue})\\s*(萬|千|元)`, "g");
+        scan = scan.replace(unitPattern, (_, value, unit) => {
+          pushMoneyAmount(amounts, value, moneyMultiplier(unit));
+          return " ";
+        });
+
+        const prefixedPattern = new RegExp(`(?:NTD?|TWD|新台幣|台幣|[$＄])\\s*(${moneyValue})(?:\\s*(萬|千|元))?`, "gi");
+        scan = scan.replace(prefixedPattern, (_, value, unit = "") => {
+          pushMoneyAmount(amounts, value, moneyMultiplier(unit));
+          return " ";
+        });
+
+        if (!moneyContext.test(line)) return;
+        const standalonePattern = new RegExp(`(${moneyValue})(?!\\s*(?:個?月|天|日|年|人|組|站|台|次|套|頁|點|%))`, "g");
+        for (const match of scan.matchAll(standalonePattern)) {
+          const value = match[1];
+          const amount = parseMoneyNumber(value);
+          if (!Number.isFinite(amount)) continue;
+          if (value.includes(",") || amount >= 1000) amounts.push(amount);
+        }
+      });
       addAmountBuckets(amounts, buckets);
       if (!buckets.size) buckets.add("專案報價／洽詢");
       return Array.from(buckets);
@@ -1276,7 +1497,6 @@
         source: row["來源"] || "",
         supplier: row["供應商名稱"] || "",
         name: row["工具名稱"] || "",
-        type: row["工具類別"] || "",
         price,
         priceBuckets: priceBuckets(price),
         summary: row["工具簡介(功能、特色、適用情境)"] || "",
@@ -1289,15 +1509,15 @@
     }
     function industryToolBlob(record) {
       return [
-        record.category, record.source, record.supplier, record.name, record.type,
+        record.category, record.source, record.supplier, record.name,
         record.price, (record.priceBuckets || []).join(" "), record.summary, record.contact, record.contactInfo
       ].join(" ").toLowerCase();
     }
     function filteredIndustryTools() {
       const q = els.toolSearch.value.trim().toLowerCase();
       return industryTools.filter(record => {
-        if (!hasAny([record.category], activeToolFilters.category)) return false;
-        if (!hasAny(record.priceBuckets, activeToolFilters.price)) return false;
+        if (!hasAny([record.category], activeToolFilters.category, industryToolConfig.sheets)) return false;
+        if (!hasAny(record.priceBuckets, activeToolFilters.price, industryPriceOptions)) return false;
         if (q && !industryToolBlob(record).includes(q)) return false;
         return true;
       });
@@ -1307,7 +1527,9 @@
       els.toolEmpty.style.display = rows.length ? "none" : "block";
       els.toolShown.textContent = rows.length;
       els.toolMatched.textContent = rows.length;
-      els.toolStatus.textContent = "已載入全部資料，可依分類、金額範圍或關鍵字查詢。";
+      els.toolLiveCount.textContent = rows.length;
+      els.toolLiveTotal.textContent = industryTools.length;
+      els.toolStatus.textContent = "已載入全部資料；可多選分類、金額範圍並搭配關鍵字查詢。";
       els.toolList.innerHTML = rows.map(record => `
         <article class="tool-card" id="tool-${record.id}">
           <div>
@@ -1319,9 +1541,8 @@
           <div>
             <p class="tool-summary">${esc(record.summary || "")}</p>
             <div class="tag-groups">
-              ${tagGroup("分類", [record.category], 1)}
-              ${tagGroup("工具類別", [record.type], 1)}
-              ${tagGroup("金額範圍", record.priceBuckets || [], 4)}
+              ${statusTagGroup("分類", industryToolConfig.sheets, [record.category])}
+              ${statusTagGroup("金額範圍", industryPriceOptions, record.priceBuckets || [])}
             </div>
             <div class="meta-grid">
               <div><strong>價格</strong>${esc(record.price || "")}</div>
@@ -1329,6 +1550,19 @@
           </div>
         </article>
       `).join("");
+      if (els.toolCompare) {
+        els.toolCompare.innerHTML = rows.map(record => `
+          <tr>
+            <td data-label="編號">${industryToolNo(record)}</td>
+            <td data-label="工具分類">${esc(record.category || "")}</td>
+            <td data-label="供應商">${esc(record.supplier || "")}</td>
+            <td data-label="工具名稱">${esc(record.name || "未命名工具")}</td>
+            <td data-label="金額範圍">${esc(compactList(record.priceBuckets || [], "", 4))}</td>
+            <td data-label="價格">${esc(record.price || "")}</td>
+            <td data-label="聯絡資訊">${esc([record.contact, record.contactInfo].filter(Boolean).join("／"))}</td>
+          </tr>
+        `).join("");
+      }
     }
     async function loadIndustryTools() {
       if (industryToolsLoaded || industryToolsLoading) return;
@@ -1347,13 +1581,17 @@
         );
         els.toolTotal.textContent = `${industryTools.length} 筆`;
         els.coverToolTotal.textContent = `${industryTools.length} 筆`;
+        els.toolLiveTotal.textContent = industryTools.length;
         industryToolsLoaded = true;
         renderIndustryTools();
       } catch (error) {
         els.toolTotal.textContent = "載入失敗";
         els.coverToolTotal.textContent = "載入失敗";
+        els.toolLiveCount.textContent = "0";
+        els.toolLiveTotal.textContent = "0";
         els.toolStatus.textContent = "工具庫資料暫時無法載入，請稍後重新整理頁面。";
         els.toolList.innerHTML = "";
+        if (els.toolCompare) els.toolCompare.innerHTML = "";
         els.toolEmpty.style.display = "block";
       } finally {
         industryToolsLoading = false;
@@ -1372,39 +1610,62 @@
       renderTagSet(els.dataNeedFilter, dataNeedOptions, "data");
       renderTagSet(els.industryFilter, industryOptions, "industry");
       renderTagSet(els.equipmentFilter, equipmentOptions, "equipment");
-      renderTagSet(els.techFilter, techOptions, "tech");
       document.querySelectorAll("[data-filter]").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.onclick = () => {
           const target = activeFilters[btn.dataset.filter];
           if (!target) return;
           toggleSet(target, btn.dataset.value);
           renderClouds();
           render();
-          document.querySelector("#solutions").scrollIntoView({ behavior: "smooth", block: "start" });
-        });
+        };
+      });
+      document.querySelectorAll("[data-filter-all]").forEach(btn => {
+        const field = btn.dataset.filterAll;
+        const selected = allSelected(activeFilters[field], filterOptions[field]);
+        btn.textContent = selected ? "取消全選" : "全選";
+        btn.setAttribute("aria-pressed", selected ? "true" : "false");
+        btn.onclick = () => {
+          const target = activeFilters[field];
+          if (!target) return;
+          toggleAll(target, filterOptions[field]);
+          renderClouds();
+          render();
+        };
       });
     }
     function renderIndustryToolClouds() {
-      renderToolTagSet(els.toolCategoryCloud, industryToolConfig.sheets, "category");
-      renderToolTagSet(els.toolPriceCloud, industryPriceOptions, "price");
       renderToolTagSet(els.toolCategoryFilter, industryToolConfig.sheets, "category");
       renderToolTagSet(els.toolPriceFilter, industryPriceOptions, "price");
       document.querySelectorAll("[data-tool-filter]").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.onclick = () => {
           const target = activeToolFilters[btn.dataset.toolFilter];
           if (!target) return;
           toggleSet(target, btn.dataset.value);
           renderIndustryToolClouds();
           ensureIndustryTools();
           renderIndustryTools();
-          document.querySelector("#industry-tools").scrollIntoView({ behavior: "smooth", block: "start" });
-        });
+        };
+      });
+      document.querySelectorAll("[data-tool-filter-all]").forEach(btn => {
+        const field = btn.dataset.toolFilterAll;
+        const selected = allSelected(activeToolFilters[field], toolFilterOptions[field]);
+        btn.textContent = selected ? "取消全選" : "全選";
+        btn.setAttribute("aria-pressed", selected ? "true" : "false");
+        btn.onclick = () => {
+          const target = activeToolFilters[field];
+          if (!target) return;
+          toggleAll(target, toolFilterOptions[field]);
+          renderIndustryToolClouds();
+          ensureIndustryTools();
+          renderIndustryTools();
+        };
       });
     }
     function render() {
       const rows = filtered();
       els.count.textContent = rows.length;
       els.countSub.textContent = rows.length;
+      els.filterLiveCount.textContent = rows.length;
       els.empty.style.display = rows.length ? "none" : "block";
       els.list.innerHTML = rows.map(record => `
         <article class="solution" id="solution-${record.id}">
@@ -1418,13 +1679,13 @@
           <div>
             <p class="summary">${esc(record.benefit || "")}</p>
             <div class="tag-groups">
-              ${tagGroup("痛點", record.pain_tags, 9)}
+              ${statusTagGroup("痛點", painOptions, record.pain_tags)}
               ${tagGroup("AI 技術", record.tech_tags, 8)}
               ${statusTagGroup("部署模式", deploymentOptions, record.deployment_tags)}
-              ${tagGroup("所需資料", record.data_need_tags, 3)}
-              ${tagGroup("搭配設備", record.equipment_tags, 6)}
-              ${tagGroup("API", record.api_tags, 3)}
-              ${tagGroup("導入時間", record.lead_time_tags, 1)}
+              ${statusTagGroup("所需資料", dataNeedOptions, record.data_need_tags)}
+              ${statusTagGroup("搭配設備", equipmentOptions, record.equipment_tags)}
+              ${statusTagGroup("API", apiOptions, record.api_tags)}
+              ${statusTagGroup("導入時間", leadOptions, record.lead_time_tags)}
             </div>
             <div class="meta-grid">
               <div><strong>收費／計價模式</strong>${esc(record.pricing || "")}</div>
