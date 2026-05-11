@@ -430,6 +430,104 @@
     th:nth-child(6), td:nth-child(6) { width: 19%; }
     th:nth-child(7), td:nth-child(7) { width: 12%; }
     th:nth-child(8), td:nth-child(8) { width: 5%; }
+    .tool-library .section-head { align-items: start; }
+    .tool-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfc;
+    }
+    .tool-stat {
+      min-height: 92px;
+      padding: 18px 22px;
+      border-right: 1px solid var(--line);
+    }
+    .tool-stat:last-child { border-right: 0; }
+    .tool-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .tool-stat strong {
+      display: block;
+      margin-top: 5px;
+      color: #14232b;
+      font-size: 25px;
+      line-height: 1.25;
+      font-weight: 950;
+    }
+    .tool-filters {
+      display: grid;
+      grid-template-columns: minmax(260px, 2fr) minmax(180px, 1fr) 150px;
+      gap: 10px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+      align-items: end;
+    }
+    .tool-list { background: #fff; }
+    .tool-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(220px, .9fr);
+      gap: 24px;
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 78px;
+    }
+    .tool-card:hover { background: #fbfdfd; }
+    .tool-code {
+      display: inline-flex;
+      margin: 0 8px 9px 0;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      background: #eef7f6;
+      color: var(--accent-dark);
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .tool-category {
+      display: inline-flex;
+      margin: 0 0 9px;
+      padding: 3px 8px;
+      background: var(--mark);
+      color: #5f4908;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .tool-card h3 {
+      margin: 0 0 7px;
+      color: #14232b;
+      font-size: 21px;
+      line-height: 1.35;
+    }
+    .tool-supplier {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-weight: 950;
+    }
+    .tool-summary {
+      margin: 0;
+      color: #384852;
+      white-space: pre-line;
+    }
+    .tool-meta {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .tool-meta div {
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .tool-meta strong {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+    }
+    .tool-detail summary { margin-top: 12px; }
     @media (max-width: 1040px) {
       .cover-inner { grid-template-columns: 1fr; align-items: center; }
       .topnav { display: none; }
@@ -438,7 +536,7 @@
         top: 58px;
         z-index: 25;
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
         gap: 6px;
         overflow-x: visible;
         padding: 10px clamp(18px, 4vw, 54px);
@@ -461,6 +559,10 @@
       .sidebar { display: none; }
       .filters { grid-template-columns: 1fr 1fr; }
       .solution { grid-template-columns: 1fr; }
+      .tool-card { grid-template-columns: 1fr; }
+      .tool-stats { grid-template-columns: 1fr; }
+      .tool-stat { border-right: 0; border-bottom: 1px solid var(--line); }
+      .tool-filters { grid-template-columns: 1fr 1fr; }
       .guide-grid, .category-map { grid-template-columns: 1fr; }
       .guide, .category-block { border-right: 0; }
     }
@@ -509,11 +611,12 @@
       .section-head, .result-note { grid-template-columns: 1fr; display: block; }
       .filters { grid-template-columns: 1fr; }
       .filters > div:first-child { grid-column: auto; }
+      .tool-filters { grid-template-columns: 1fr; }
       .meta-grid, .detail-grid { grid-template-columns: 1fr; }
     }
     @media print {
       body { background: #fff; }
-      .topbar, .sidebar, .mobile-toc, .filters, details summary { display: none; }
+      .topbar, .sidebar, .mobile-toc, .filters, .tool-filters, details summary { display: none; }
       .cover { border-bottom: 2px solid #000; }
       .cover::before { display: none; }
       .cover-inner { min-height: auto; display: block; padding: 24px; }
@@ -535,6 +638,7 @@
       <a href="#category">分類導覽</a>
       <a href="#solutions">方案索引</a>
       <a href="#compare">比較表</a>
+      <a href="#industry-tools">AI工具庫</a>
     </nav>
   </header>
 
@@ -560,6 +664,7 @@
     <a href="#category">分類導覽</a>
     <a href="#solutions">解決方案索引</a>
     <a href="#compare">快速比較表</a>
+    <a href="#industry-tools">AI工具庫</a>
   </nav>
 
   <div class="layout">
@@ -570,6 +675,7 @@
         <a href="#category">分類導覽</a>
         <a href="#solutions">解決方案索引</a>
         <a href="#compare">快速比較表</a>
+        <a href="#industry-tools">產業競爭力輔導團AI工具庫</a>
       </nav>
     </aside>
 
@@ -687,6 +793,37 @@
         </div>
       </section>
 
+      <section id="industry-tools" class="manual-section tool-library">
+        <div class="section-head">
+          <div>
+            <h2>產業競爭力輔導團AI工具庫</h2>
+            <p>串接公開 AI 工具庫資料，作為精選方案之外的延伸查詢參考。</p>
+          </div>
+        </div>
+        <div class="tool-stats" aria-label="工具庫摘要">
+          <div class="tool-stat"><span>資料來源</span><strong>AI工具庫</strong></div>
+          <div class="tool-stat"><span>分類數</span><strong id="industryCategoryCount">7 類</strong></div>
+          <div class="tool-stat"><span>工具數</span><strong id="industryToolTotal">載入中</strong></div>
+        </div>
+        <div class="tool-filters" aria-label="產業競爭力輔導團AI工具庫篩選">
+          <div>
+            <label for="toolSearch">工具關鍵字搜尋</label>
+            <input id="toolSearch" type="search" placeholder="搜尋供應商、工具名稱、類別、簡介、聯絡資訊">
+          </div>
+          <div>
+            <label for="toolCategory">工具分類</label>
+            <select id="toolCategory"><option value="">全部分類</option></select>
+          </div>
+          <div><button id="toolReset" type="button">清除工具篩選</button></div>
+        </div>
+        <div class="result-note">
+          <span id="industryToolStatus">資料載入中，請稍候。</span>
+          <span>顯示 <strong id="industryToolShown">0</strong> / <strong id="industryToolMatched">0</strong> 筆</span>
+        </div>
+        <div id="industryToolList" class="tool-list"></div>
+        <div id="industryToolEmpty" class="empty">沒有符合條件的 AI 工具，請調整搜尋或分類。</div>
+      </section>
+
     </main>
   </div>
 
@@ -696,6 +833,12 @@
     const deploymentOptions = ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "混合部署（Hybrid）：部分系統在雲端，部分在本地", "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務"];
     const leadOptions = ["1週內", "1個月內", "1-3個月", "3-6個月", "6個月以上", "待確認"];
     const techOptions = ["* Vision-Language-Action（VLA）動態製程調整", "* 強化學習（Reinforcement Learning）持續優化節拍速度 工序分配", "* 約束規劃（Constraint Programming）將交期", "3D視覺辨識", "AI", "AI Agent 任務代理（含語意理解", "AI生成模擬引擎", "AI生成流程圖", "AI預防維護分析", "ANN)", "AkidaNet (NPU)", "ArgusVIEW: CNN (GPU)", "AutoML (自動機器學習)", "CNN", "Claude", "Deep Learning", "Edge AI", "Embedding 模型（文本向量化）", "FastAPI", "Gemini）", "LLM", "Llama/OpenAI/Claude", "Multi-modality Agentic RAG", "Object Detection", "RAG 檢索增強生成（Retrieval-Augmented Generation）", "RT-Detr這三種模型", "google 語音辨識/ 同音字轉換 /Regex 上下文檢索演算", "「MIP/CP ＋ 啟發式 (Heuristic)」的混合模式", "人員動作分析", "企業於平台中選擇適合之 AI 模型類型（如物件偵測），啟動模型訓練流程。訓練完成後，可直接於平台進行推論測試，檢視模型於實際影像上的辨識結果，包含辨識標註位置", "使用YOLO V8/V11 ，YOLO X", "信心分數與錯誤案例回看，以驗證模型成果與實際應用之可行性。", "動態工具調用 Tool-Use）", "向量資料庫語意檢索（OpenSearch Service）", "大型語言模型（LLM，包含 OpenAI", "意圖識別", "文件解析與 NLP 自然語言處理", "會使用到深度學習以及電腦視覺的AI相關技術，並會加上Gen AI ，做更進一步的資訊生成提供", "物品影像辨識", "生成式AI", "良率", "設備限制轉為控制參數", "評估演算法（履歷與職位符合度自動評分）", "類神經網路 (Artificial Neural Networks"];
+    const industryToolConfig = {
+      sheetId: "18Hq6sUrweHmm_08AcFPBnQ8XypXJ7CM6",
+      sheets: ["人員及知識管理", "環境及設備管理", "原物料管理", "生產與品質管理", "行銷管理", "能源與碳排管理", "綜合或其他"],
+      renderLimit: 80
+    };
+    let industryTools = [];
 
     const els = {
       search: document.querySelector("#search"),
@@ -711,7 +854,17 @@
       empty: document.querySelector("#empty"),
       painCloud: document.querySelector("#painCloud"),
       deploymentCloud: document.querySelector("#deploymentCloud"),
-      leadCloud: document.querySelector("#leadCloud")
+      leadCloud: document.querySelector("#leadCloud"),
+      toolSearch: document.querySelector("#toolSearch"),
+      toolCategory: document.querySelector("#toolCategory"),
+      toolReset: document.querySelector("#toolReset"),
+      toolList: document.querySelector("#industryToolList"),
+      toolEmpty: document.querySelector("#industryToolEmpty"),
+      toolStatus: document.querySelector("#industryToolStatus"),
+      toolTotal: document.querySelector("#industryToolTotal"),
+      toolShown: document.querySelector("#industryToolShown"),
+      toolMatched: document.querySelector("#industryToolMatched"),
+      toolCategoryCount: document.querySelector("#industryCategoryCount")
     };
 
     function esc(value) {
@@ -800,6 +953,107 @@
         if (lead && !(record.lead_time_tags || []).includes(lead)) return false;
         return true;
       });
+    }
+    function gvizUrl(sheetName) {
+      return `https://docs.google.com/spreadsheets/d/${industryToolConfig.sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}`;
+    }
+    function parseGvizResponse(rawData) {
+      const jsonString = rawData.substring(rawData.indexOf("(") + 1, rawData.lastIndexOf(")"));
+      const json = JSON.parse(jsonString);
+      const columns = (json.table.cols || []).map(col => col.label || "");
+      return (json.table.rows || []).map(row => {
+        const item = {};
+        (row.c || []).forEach((cell, index) => {
+          if (!columns[index]) return;
+          item[columns[index]] = cell ? (cell.f || cell.v || "") : "";
+        });
+        return item;
+      });
+    }
+    function normalizeIndustryTool(row, category, id) {
+      return {
+        id,
+        category,
+        sourceNo: row["編號"] || "",
+        source: row["來源"] || "",
+        supplier: row["供應商名稱"] || "",
+        name: row["工具名稱"] || "",
+        type: row["工具類別"] || "",
+        price: row["價格"] || "",
+        summary: row["工具簡介(功能、特色、適用情境)"] || "",
+        contact: row["聯絡人"] || "",
+        contactInfo: row["聯絡資訊"] || ""
+      };
+    }
+    function industryToolNo(record) {
+      return String(record.id || "").padStart(3, "0");
+    }
+    function industryToolBlob(record) {
+      return [
+        record.category, record.source, record.supplier, record.name, record.type,
+        record.price, record.summary, record.contact, record.contactInfo
+      ].join(" ").toLowerCase();
+    }
+    function filteredIndustryTools() {
+      const q = els.toolSearch.value.trim().toLowerCase();
+      const category = els.toolCategory.value;
+      return industryTools.filter(record => {
+        if (category && record.category !== category) return false;
+        if (q && !industryToolBlob(record).includes(q)) return false;
+        return true;
+      });
+    }
+    function renderIndustryTools() {
+      const rows = filteredIndustryTools();
+      const shown = rows.slice(0, industryToolConfig.renderLimit);
+      els.toolEmpty.style.display = rows.length ? "none" : "block";
+      els.toolShown.textContent = shown.length;
+      els.toolMatched.textContent = rows.length;
+      els.toolStatus.textContent = rows.length > shown.length
+        ? `已載入全部資料，畫面先呈現前 ${shown.length} 筆；可用搜尋或分類縮小範圍。`
+        : "已載入全部資料，可依分類或關鍵字查詢。";
+      els.toolList.innerHTML = shown.map(record => `
+        <article class="tool-card" id="tool-${record.id}">
+          <div>
+            <div class="tool-code">工具 ${industryToolNo(record)}</div>
+            <div class="tool-category">${esc(record.category)}</div>
+            <h3>${esc(record.name || "未命名工具")}</h3>
+            <p class="tool-supplier">${esc(record.supplier || "未提供供應商")}</p>
+            <p class="tool-summary">${esc(truncateLabel(record.summary || "未提供工具簡介", 220))}</p>
+            ${record.summary && record.summary.length > 220 ? `<details class="tool-detail"><summary>查看完整工具說明</summary><p>${esc(record.summary)}</p></details>` : ""}
+          </div>
+          <div class="tool-meta">
+            <div><strong>工具類別</strong>${esc(record.type || "未填")}</div>
+            <div><strong>價格</strong>${esc(record.price || "未填")}</div>
+            <div><strong>來源</strong>${esc(record.source || "未填")}${record.sourceNo ? `｜原編號 ${esc(record.sourceNo)}` : ""}</div>
+            <div><strong>聯絡資訊</strong>${esc(record.contact || "未提供")}${record.contactInfo ? `<br>${esc(record.contactInfo)}` : ""}</div>
+          </div>
+        </article>
+      `).join("");
+    }
+    async function loadIndustryTools() {
+      fillOptions(els.toolCategory, industryToolConfig.sheets);
+      els.toolCategoryCount.textContent = `${industryToolConfig.sheets.length} 類`;
+      try {
+        const responses = await Promise.all(industryToolConfig.sheets.map(async sheetName => {
+          const response = await fetch(gvizUrl(sheetName));
+          if (!response.ok) throw new Error(`${sheetName} 載入失敗`);
+          return { sheetName, text: await response.text() };
+        }));
+        let id = 1;
+        industryTools = responses.flatMap(({ sheetName, text }) =>
+          parseGvizResponse(text)
+            .filter(row => row["工具名稱"] || row["供應商名稱"])
+            .map(row => normalizeIndustryTool(row, sheetName, id++))
+        );
+        els.toolTotal.textContent = `${industryTools.length} 筆`;
+        renderIndustryTools();
+      } catch (error) {
+        els.toolTotal.textContent = "載入失敗";
+        els.toolStatus.textContent = "工具庫資料暫時無法載入，請稍後重新整理頁面。";
+        els.toolList.innerHTML = "";
+        els.toolEmpty.style.display = "block";
+      }
     }
     function renderClouds() {
       els.painCloud.innerHTML = painOptions.slice(0, 12).map(item => clickableTag(item, "pain")).join("");
@@ -890,7 +1144,16 @@
       els.lead.value = "";
       render();
     });
+    ["input", "change"].forEach(eventName => {
+      [els.toolSearch, els.toolCategory].forEach(el => el.addEventListener(eventName, renderIndustryTools));
+    });
+    els.toolReset.addEventListener("click", () => {
+      els.toolSearch.value = "";
+      els.toolCategory.value = "";
+      renderIndustryTools();
+    });
     render();
+    loadIndustryTools();
   </script>
 </body>
 </html>
