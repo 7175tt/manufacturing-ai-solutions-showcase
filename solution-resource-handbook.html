@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>製造業 AI 解決方案資源手冊</title>
+  <style>
+    :root {
+      --ink: #1f2933;
+      --muted: #5d6975;
+      --line: #d8dee5;
+      --paper: #ffffff;
+      --surface: #f6f8fa;
+      --soft: #e8f3f1;
+      --accent: #126b75;
+      --accent-dark: #0f3f47;
+      --accent-light: #dfeeed;
+      --gold: #b99024;
+      --mark: #fff1b8;
+      --shadow: 0 18px 40px rgba(21, 38, 48, .10);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #eef2f3;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      line-height: 1.72;
+      letter-spacing: 0;
+    }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; overflow-wrap: anywhere; }
+    button, input, select { font: inherit; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 10px clamp(18px, 4vw, 54px);
+      border-bottom: 1px solid rgba(31, 41, 51, .12);
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(14px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      color: var(--accent-dark);
+      white-space: nowrap;
+    }
+    .brand::before {
+      content: "";
+      width: 9px;
+      height: 28px;
+      background: var(--accent);
+      box-shadow: 5px 0 0 var(--gold);
+    }
+    .topnav { display: flex; flex-wrap: wrap; gap: 14px; font-size: 14px; }
+    .topnav a { color: var(--muted); font-weight: 800; text-decoration: none; }
+    .topnav a:hover { color: var(--accent-dark); }
+    .mobile-toc { display: none; }
+    .cover {
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(18,107,117,.09) 0 1px, transparent 1px 56px),
+        linear-gradient(0deg, rgba(18,107,117,.08) 0 1px, transparent 1px 56px);
+      opacity: .55;
+      pointer-events: none;
+    }
+    .cover-inner {
+      position: relative;
+      min-height: 430px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: clamp(28px, 5vw, 76px);
+      align-items: center;
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 48px clamp(22px, 5vw, 70px) 52px;
+    }
+    .kicker {
+      width: fit-content;
+      margin: 0 0 20px;
+      padding: 5px 10px;
+      color: var(--accent-dark);
+      background: var(--mark);
+      font-size: 14px;
+      font-weight: 900;
+    }
+    h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(38px, 6vw, 76px);
+      line-height: 1.06;
+      letter-spacing: 0;
+      color: #14222a;
+      font-weight: 950;
+    }
+    .lead {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: #40515b;
+      font-size: 18px;
+    }
+    .cover-panel {
+      border-left: 4px solid var(--accent);
+      padding: 16px 0 0 22px;
+      background: rgba(255,255,255,.72);
+    }
+    .cover-panel strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--accent-dark);
+      font-size: 15px;
+    }
+    .cover-panel dl { margin: 0; }
+    .cover-panel div { padding: 12px 0; border-top: 1px solid var(--line); }
+    .cover-panel dt { color: var(--muted); font-size: 13px; font-weight: 800; }
+    .cover-panel dd { margin: 3px 0 0; font-size: 22px; font-weight: 950; color: #16242c; }
+    .layout {
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 30px;
+      max-width: 1680px;
+      margin: 0 auto;
+      padding: 34px clamp(18px, 4vw, 54px) 70px;
+    }
+    .sidebar {
+      display: block;
+      position: sticky;
+      top: 82px;
+      align-self: start;
+      padding: 4px 0;
+    }
+    .sidebar-title {
+      margin: 0 0 10px;
+      color: var(--accent-dark);
+      font-weight: 950;
+      font-size: 13px;
+    }
+    .side-links {
+      display: grid;
+      border-top: 1px solid var(--line);
+    }
+    .side-links a {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .side-links a:hover { color: var(--accent-dark); }
+    main { min-width: 0; }
+    .manual-section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      margin-bottom: 22px;
+      box-shadow: 0 1px 0 rgba(31,41,51,.03);
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      padding: 26px 28px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.25;
+      color: #15242c;
+    }
+    .section-head p { margin: 7px 0 0; color: var(--muted); }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+    }
+    .guide {
+      min-height: 160px;
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      background: #fff;
+    }
+    .guide:last-child { border-right: 0; }
+    .guide span {
+      display: inline-flex;
+      width: 28px;
+      height: 28px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      color: #fff;
+      background: var(--accent);
+      font-weight: 950;
+      font-size: 13px;
+    }
+    .guide h3 { margin: 0 0 6px; font-size: 18px; line-height: 1.35; }
+    .guide p { margin: 0; color: var(--muted); font-size: 15px; }
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 10px;
+      padding: 18px;
+      background: #fff;
+      align-items: end;
+    }
+    .filters > div:first-child { grid-column: span 2; }
+    .filter-action { align-self: end; }
+    label {
+      display: block;
+      margin: 0 0 5px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+    input, select {
+      width: 100%;
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 1px solid #b9c4cb;
+      border-radius: 0;
+      background: #fff;
+      color: var(--ink);
+    }
+    button {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--accent-dark);
+      border-radius: 0;
+      color: #fff;
+      background: var(--accent-dark);
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .result-note {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 22px;
+      border-top: 1px solid var(--line);
+      background: #fbfcfc;
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .result-note strong { color: var(--accent-dark); }
+    .category-map {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      border-top: 1px solid var(--line);
+    }
+    .category-block {
+      min-width: 0;
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .category-block:last-child { border-right: 0; }
+    .category-block h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: var(--accent-dark);
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      min-width: 0;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      width: auto;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 28px;
+      padding: 4px 9px;
+      border: 1px solid #b9d9d6;
+      background: var(--soft);
+      color: #0d5964;
+      font-size: 12px;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+    .solution-list { border-top: 1px solid var(--line); }
+    .solution {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 24px;
+      padding: 26px 28px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+      scroll-margin-top: 78px;
+    }
+    .solution:hover { background: #fbfdfd; }
+    .supplier {
+      margin-bottom: 6px;
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 950;
+    }
+    .solution h3 {
+      margin: 0 0 12px;
+      color: #14232b;
+      font-size: 24px;
+      line-height: 1.28;
+    }
+    .summary { margin: 0; color: #384852; }
+    .contact-box {
+      margin-top: 16px;
+      padding: 14px;
+      border-left: 4px solid var(--gold);
+      background: #fffaf0;
+      font-size: 14px;
+    }
+    .contact-box h4 {
+      margin: 0 0 8px;
+      color: #654d08;
+      font-size: 14px;
+    }
+    .contact-box p { margin: 4px 0; word-break: break-word; }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .meta-grid strong {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+    }
+    details { margin-top: 16px; }
+    summary {
+      display: inline-flex;
+      cursor: pointer;
+      color: var(--accent-dark);
+      font-weight: 950;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 15px;
+      padding: 18px;
+      border-left: 5px solid var(--accent);
+      background: var(--surface);
+    }
+    .detail-grid h4 {
+      margin: 0 0 6px;
+      color: var(--accent-dark);
+      font-size: 14px;
+    }
+    .detail-grid p { margin: 0; white-space: pre-line; }
+    .wide { grid-column: 1 / -1; }
+    .empty {
+      display: none;
+      padding: 26px 28px;
+      border-top: 1px solid var(--line);
+      background: #fff8df;
+      color: #5d4610;
+      font-weight: 900;
+    }
+    .compare-wrap {
+      overflow-x: visible;
+      border-top: 1px solid var(--line);
+    }
+    table {
+      width: 100%;
+      min-width: 0;
+      table-layout: fixed;
+      border-collapse: collapse;
+      background: #fff;
+    }
+    th, td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    th {
+      position: sticky;
+      top: 58px;
+      z-index: 2;
+      background: #e8f3f1;
+      color: var(--accent-dark);
+      font-size: 13px;
+    }
+    td { font-size: 14px; }
+    th:nth-child(1), td:nth-child(1) { width: 12%; }
+    th:nth-child(2), td:nth-child(2) { width: 16%; }
+    th:nth-child(3), td:nth-child(3) { width: 17%; }
+    th:nth-child(4), td:nth-child(4) { width: 21%; }
+    th:nth-child(5), td:nth-child(5) { width: 12%; }
+    th:nth-child(6), td:nth-child(6) { width: 14%; }
+    th:nth-child(7), td:nth-child(7) { width: 8%; }
+    @media (max-width: 1040px) {
+      .cover-inner { grid-template-columns: 1fr; align-items: center; }
+      .topnav { display: none; }
+      .mobile-toc {
+        position: sticky;
+        top: 58px;
+        z-index: 25;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 6px;
+        overflow-x: visible;
+        padding: 10px clamp(18px, 4vw, 54px);
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, .96);
+      }
+      .mobile-toc a {
+        min-width: 0;
+        padding: 8px 6px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--accent-dark);
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1.25;
+        text-align: center;
+        text-decoration: none;
+      }
+      .layout { display: block; padding-top: 22px; }
+      .sidebar { display: none; }
+      .filters { grid-template-columns: 1fr 1fr; }
+      .solution { grid-template-columns: 1fr; }
+      .guide-grid, .category-map { grid-template-columns: 1fr; }
+      .guide, .category-block { border-right: 0; }
+    }
+    @media (max-width: 760px) {
+      .compare-wrap { border-top: 0; }
+      .compare-wrap table,
+      .compare-wrap thead,
+      .compare-wrap tbody,
+      .compare-wrap tr,
+      .compare-wrap th,
+      .compare-wrap td {
+        display: block;
+        width: 100%;
+      }
+      .compare-wrap thead { display: none; }
+      .compare-wrap tbody tr {
+        padding: 12px 16px;
+        border-top: 1px solid var(--line);
+        background: #fff;
+      }
+      .compare-wrap tbody td {
+        display: grid;
+        grid-template-columns: 92px minmax(0, 1fr);
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 0;
+      }
+      .compare-wrap tbody td::before {
+        content: attr(data-label);
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 900;
+      }
+    }
+    @media (max-width: 640px) {
+      .topbar { position: static; align-items: flex-start; flex-direction: column; }
+      .mobile-toc {
+        top: 0;
+        padding: 8px 14px;
+      }
+      .mobile-toc a {
+        padding: 7px 4px;
+        font-size: 12px;
+      }
+      .cover-inner { min-height: auto; padding-top: 38px; padding-bottom: 38px; }
+      .section-head, .result-note { grid-template-columns: 1fr; display: block; }
+      .filters { grid-template-columns: 1fr; }
+      .filters > div:first-child { grid-column: auto; }
+      .meta-grid, .detail-grid { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      .topbar, .sidebar, .mobile-toc, .filters, details summary { display: none; }
+      .cover { border-bottom: 2px solid #000; }
+      .cover::before { display: none; }
+      .cover-inner { min-height: auto; display: block; padding: 24px; }
+      .cover-panel { margin-top: 20px; }
+      .layout { display: block; padding: 0; }
+      .manual-section { border: 0; box-shadow: none; page-break-inside: avoid; }
+      .solution { display: block; page-break-inside: avoid; padding: 18px 0; }
+      .detail-grid { display: grid; }
+      table { min-width: 0; font-size: 11px; table-layout: fixed; }
+      th { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">製造業 AI 解決方案資源手冊</div>
+    <nav class="topnav">
+      <a href="#guide">使用方式</a>
+      <a href="#category">分類導覽</a>
+      <a href="#solutions">方案索引</a>
+      <a href="#compare">比較表</a>
+    </nav>
+  </header>
+
+  <section class="cover">
+    <div class="cover-inner">
+      <div>
+        <p class="kicker">Manufacturing AI Solution Handbook</p>
+        <h1>製造業 AI 解決方案資源手冊</h1>
+        <p class="lead">依供應商問卷回覆整理，協助製造業需求端從痛點、導入條件與聯絡窗口快速盤點可洽詢方案。</p>
+      </div>
+      <aside class="cover-panel" aria-label="手冊摘要">
+        <strong>收錄範圍</strong>
+        <dl>
+          <div><dt>供應商</dt><dd>16 家</dd></div>
+          <div><dt>解決方案</dt><dd>16 項</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <nav class="mobile-toc" aria-label="手機章節導覽">
+    <a href="#guide">使用方式</a>
+    <a href="#category">分類導覽</a>
+    <a href="#solutions">解決方案索引</a>
+    <a href="#compare">快速比較表</a>
+  </nav>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <p class="sidebar-title">手冊導覽</p>
+      <nav class="side-links">
+        <a href="#guide">如何使用</a>
+        <a href="#category">分類導覽</a>
+        <a href="#solutions">解決方案索引</a>
+        <a href="#compare">快速比較表</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section id="guide" class="manual-section">
+        <div class="section-head">
+          <div>
+            <h2>如何使用本手冊</h2>
+            <p>先定位需求情境，再檢視方案條件，最後與供應商聯繫確認導入細節。</p>
+          </div>
+        </div>
+        <div class="guide-grid">
+          <div class="guide">
+            <span>01</span>
+            <h3>從痛點切入</h3>
+            <p>用排程、品質、設備、工安、知識管理等問題類型快速縮小範圍。</p>
+          </div>
+          <div class="guide">
+            <span>02</span>
+            <h3>比對導入條件</h3>
+            <p>檢視部署模式、企業規模、API、資料與設備需求。</p>
+          </div>
+          <div class="guide">
+            <span>03</span>
+            <h3>聯繫供應商</h3>
+            <p>每項方案皆列出聯絡人、電話與 Email，便於後續洽詢。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="category" class="manual-section">
+        <div class="section-head">
+          <div>
+            <h2>分類導覽</h2>
+            <p>手冊同時提供分類閱讀與條件篩選，適合會前盤點與內部討論。</p>
+          </div>
+        </div>
+        <div class="category-map">
+          <div class="category-block">
+            <h3>生產端痛點</h3>
+            <div id="painCloud" class="tags"></div>
+          </div>
+          <div class="category-block">
+            <h3>部署模式</h3>
+            <div id="deploymentCloud" class="tags"></div>
+          </div>
+          <div class="category-block">
+            <h3>導入預估時間</h3>
+            <div id="leadCloud" class="tags"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="solutions" class="manual-section">
+        <div class="section-head">
+          <div>
+            <h2>解決方案索引</h2>
+            <p>目前顯示 <strong id="resultCount">16</strong> 項。可搜尋供應商、方案、技術、痛點、應用實績或聯絡人資訊。</p>
+          </div>
+        </div>
+        <div class="filters" aria-label="篩選工具">
+          <div>
+            <label for="search">關鍵字搜尋</label>
+            <input id="search" type="search" placeholder="搜尋供應商、方案、技術、痛點、聯絡人">
+          </div>
+          <div>
+            <label for="pain">生產端痛點</label>
+            <select id="pain"><option value="">全部</option></select>
+          </div>
+          <div>
+            <label for="tech">AI 技術</label>
+            <select id="tech"><option value="">全部</option></select>
+          </div>
+          <div>
+            <label for="deployment">部署模式</label>
+            <select id="deployment"><option value="">全部</option></select>
+          </div>
+          <div>
+            <label for="lead">導入預估時間</label>
+            <select id="lead"><option value="">全部</option></select>
+          </div>
+          <div class="filter-action"><button id="reset" type="button">清除篩選</button></div>
+        </div>
+        <div class="result-note">
+          <span>結果會同步更新下方索引與比較表。</span>
+          <span>顯示 <strong id="resultCountSub">16</strong> / 16 項</span>
+        </div>
+        <div id="solutionList" class="solution-list"></div>
+        <div id="empty" class="empty">沒有符合條件的解決方案，請調整篩選條件。</div>
+      </section>
+
+      <section id="compare" class="manual-section">
+        <div class="section-head">
+          <div>
+            <h2>快速比較表</h2>
+            <p>用於初步盤點、內部評估與洽詢前比對。</p>
+          </div>
+        </div>
+        <div class="compare-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>供應商</th>
+                <th>解決方案</th>
+                <th>主要技術</th>
+                <th>適用痛點</th>
+                <th>部署模式</th>
+                <th>聯絡窗口</th>
+                <th>介紹</th>
+              </tr>
+            </thead>
+            <tbody id="compareBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const solutions = [{"id": 1, "company": "雲義科技股份有限公司", "contact_name": "陳正弘", "contact_email": "ephon@unipattern.com", "contact_phone": "0955069626", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "Unipicket 視衛通", "tech": "Deep Learning、Edge AI、Object Detection、CNN", "benefit": "Unipicket 視衛通為整合影像辨識模型及演算法的AI影像辨識即時通報系統，採用落地邊際運算架構，以通用的RTSP協定影像串流即時辨識現有監視器畫面內的多種危安事件並即時通報，例如人型、車輛、火警煙霧、人員動作、燈光變化、安全護具等，如此可在危安事件發生即時或初期就辨識通報，縮短危安事件通報時間並降低災害擴大，整合通報介面可整合其他IOT感測與VMS/CMS系統，於各種製造業場域均可節省人力並提高整體安全。", "url": "https://www.unipicket.com/#/", "supplier_name": "雲義科技股份有限公司", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 混合部署（Hybrid）：部分系統在雲端，部分在本地", "pricing": "提供買斷制，基本標準版含三種辨識功能(人員進入、煙霧火光、移動偵測)售價98,000，可專案規劃報價，並提供客製化模型訓練服務", "lead_time": "使用場域現有監視器(RTSP)與網路系統，佈署上線時間為一天", "production_pain": "設備與維護類(無預警停機、找不到故障點...), ESG、廠務與工安類(能耗高、碳盤查難、工安意外...), 儀表板或戰情中心(協助跨部門溝通)", "non_production": "營運管理, 物流倉儲", "industries": "1.食品製造業, 2.飲料製造業, 3.菸草製造業, 4.紡織業, 5.成衣及服飾品製造業, 6.皮革、毛皮及其製品製造業, 7.木竹製品製造業, 8.紙漿、紙及紙製品製造業, 9.印刷及資料儲存媒體複製業, 10.石油及煤製品製造業, 11.化學原材料、肥料、氮化合物、塑橡膠原料及人造纖維製造業, 12.其他化學製品製造業, 13.藥品及醫用化學製品製造業, 14.橡膠製品製造業, 15.塑膠製品製造業, 16.非金屬礦物製品製造業, 17.基本金屬製造業, 18.金屬製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業, 21.電力設備及配備製造業, 22.機械設備製造業, 23.汽車及其零件製造業, 24.其他運輸工具及其零件製造業, 25.家具製造業, 26.其他製造業, 27.產業用機械設備維修及安裝業", "company_size": "10人~200人（中小企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "3.即時使用/自動更新（資料需即時取得）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備), 3.物理訊號感測 (IoT)：(例：震動、溫度、壓力、聲音、電流)", "cases": "台塑新智能、欣興電子、士林電機、亞東石化、良聯工業，用於廠區安全", "best_fit": "", "display_supplier": "雲義科技股份有限公司", "tech_tags": ["Deep Learning", "Edge AI", "Object Detection", "CNN"], "pain_tags": ["設備與維護類(無預警停機、找不到故障點...)", "ESG、廠務與工安類(能耗高、碳盤查難、工安意外...)", "儀表板或戰情中心(協助跨部門溝通)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "混合部署（Hybrid）：部分系統在雲端，部分在本地"], "industry_tags": ["1.食品製造業", "2.飲料製造業", "3.菸草製造業", "4.紡織業", "5.成衣及服飾品製造業", "6.皮革", "毛皮及其製品製造業", "7.木竹製品製造業", "8.紙漿", "紙及紙製品製造業", "9.印刷及資料儲存媒體複製業", "10.石油及煤製品製造業", "11.化學原材料", "肥料", "氮化合物", "塑橡膠原料及人造纖維製造業", "12.其他化學製品製造業", "13.藥品及醫用化學製品製造業", "14.橡膠製品製造業", "15.塑膠製品製造業", "16.非金屬礦物製品製造業", "17.基本金屬製造業", "18.金屬製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業", "21.電力設備及配備製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "24.其他運輸工具及其零件製造業", "25.家具製造業", "26.其他製造業", "27.產業用機械設備維修及安裝業"], "summary": "Unipicket 視衛通為整合影像辨識模型及演算法的AI影像辨識即時通報系統，採用落地邊際運算架構，以通用的RTSP協定影像串流即時辨識現有監視器畫面內的多種危安事件並即時通報，例如人型、車輛、火警煙霧、人員動作、燈光變化、安全護具等，如此可在危安事件發生即時…", "sessions": ["生產製程", "品質檢測"], "lead_time_bucket": "1週內", "lead_time_tags": ["1週內"], "api_tags": ["完整 API"], "data_need_tags": ["即時資料／自動更新"], "integration_tags": ["完整 API", "即時資料／自動更新"]}, {"id": 2, "company": "谷林運算股份有限公司", "contact_name": "金柏樞", "contact_email": "bruce.king@goodlinker.io", "contact_phone": "0930787230", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "企業雲端戰情室 - GenAIoT 工業數據分析模組", "tech": "LLM", "benefit": "【解決痛點】\n設備異常通報慢，錯過最佳應變時機；報表人工整理耗時且易出錯，主管催資料需人工對值；數據雖有收集，但缺乏分析與判讀，決策只能憑經驗。\n\n【效益描述】\n全廠即時可視化：即時＋歷史儀表板整合情境輪播、能源、報表模組，一眼掌握設備與產線狀況\n異常即時通報：警報推播跨裝置同步，縮短故障響應時間\n報表零手工：自動生成 Excel，免人工整理與格式化\nGenAIoT AI 智慧分析：自然語言提問即得圖表與結論，無需 BI 技術背景；自動標註異常時段並生成摘要，協助管理層快速決策，亦可作為新人培訓工具\n管理層專屬摘要：數據電子報定期送達，決策更有依據\n【實際導入成果】\n冷凍食品廠（海瑞食品）：+6% 產能提升、-63% 原料損耗率；精密鑄造廠（連乙鑄造）：-30% 製程不良率、-20% 風扇用電。\n\n【技術說明】\n採用 GenAIoT 混合架構（IoT 邊緣採集 + 雲端 LLM 推論）符合資安合規；完整 REST API 支援 ERP/MES/SCADA 整合；訂閱制 SaaS", "url": "https://1drv.ms/b/c/625197c993cf0e29/IQDWUKc9vW3BTbuBtZv5mX0BAeOsPdKsVI21QEvG1bTacRI?e=aTnp7x", "supplier_name": "GoodLinker 谷林運算", "role": "自有產品開發商 (ISV/原廠)", "deployment": "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務", "pricing": "訂閱制，NT 6,000/m", "lead_time": "1", "production_pain": "品質與良率類(肉眼漏檢、參數難調、良率不穩...), ESG、廠務與工安類(能耗高、碳盤查難、工安意外...), 人機協作與知識類(經驗斷層、操作複雜...), 儀表板或戰情中心(協助跨部門溝通)", "non_production": "營運管理, 客戶服務, 生管", "industries": "1.食品製造業, 2.飲料製造業, 9.印刷及資料儲存媒體複製業, 11.化學原材料、肥料、氮化合物、塑橡膠原料及人造纖維製造業, 12.其他化學製品製造業, 14.橡膠製品製造業, 15.塑膠製品製造業, 16.非金屬礦物製品製造業, 17.基本金屬製造業, 18.金屬製品製造業, 19.電子零組件製造業, 23.汽車及其零件製造業, 24.其他運輸工具及其零件製造業, 26.其他製造業", "company_size": "10人~200人（中小企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "3.即時使用/自動更新（資料需即時取得）", "equipment": "3.物理訊號感測 (IoT)：(例：震動、溫度、壓力、聲音、電流), 4.控制器與機台訊號：(例：PLC、CNC、SCADA 數據)", "cases": "海瑞食品/所長茶葉蛋/連乙鑄造/邁特電子/如保興業", "best_fit": "", "display_supplier": "GoodLinker 谷林運算", "tech_tags": ["LLM"], "pain_tags": ["品質與良率類(肉眼漏檢、參數難調、良率不穩...)", "ESG、廠務與工安類(能耗高、碳盤查難、工安意外...)", "人機協作與知識類(經驗斷層、操作複雜...)", "儀表板或戰情中心(協助跨部門溝通)"], "deployment_tags": ["雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務"], "industry_tags": ["1.食品製造業", "2.飲料製造業", "9.印刷及資料儲存媒體複製業", "11.化學原材料", "肥料", "氮化合物", "塑橡膠原料及人造纖維製造業", "12.其他化學製品製造業", "14.橡膠製品製造業", "15.塑膠製品製造業", "16.非金屬礦物製品製造業", "17.基本金屬製造業", "18.金屬製品製造業", "19.電子零組件製造業", "23.汽車及其零件製造業", "24.其他運輸工具及其零件製造業", "26.其他製造業"], "summary": "【解決痛點】 設備異常通報慢，錯過最佳應變時機；報表人工整理耗時且易出錯，主管催資料需人工對值；數據雖有收集，但缺乏分析與判讀，決策只能憑經驗。 【效益描述】 全廠即時可視化：即時＋歷史儀表板整合情境輪播、能源、報表模組，一眼掌握設備與產線狀況 異常即時通報：警…", "sessions": ["生產製程", "品質檢測", "研發設計"], "lead_time_bucket": "1個月內", "lead_time_tags": ["1個月內"], "api_tags": ["完整 API"], "data_need_tags": ["即時資料／自動更新"], "integration_tags": ["完整 API", "即時資料／自動更新"]}, {"id": 3, "company": "ABB", "contact_name": "陳冠穎", "contact_email": "claire.chen@tw.abb.com", "contact_phone": "0963679020", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "AI & NVIDIA 整廠模擬", "tech": "AI", "benefit": "快速模擬佈線拓線", "url": "https://www.digitimes.com.tw/tech/dt/n/shwnws.asp?id=0000748391_AK72D7J8LHDQUE0RH0VKL", "supplier_name": "https://www.digitimes.com.tw/tech/dt/n/shwnws.asp?id=0000748391_AK72D7J8LHDQUE0RH0VKL", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務, 混合部署（Hybrid）：部分系統在雲端，部分在本地", "pricing": "TBD", "lead_time": "TBD", "production_pain": "研發與設計類(開發週期長、試誤成本高、客製設計慢...), 設備與維護類(無預警停機、找不到故障點...)", "non_production": "行銷, 業務開拓, 客戶服務", "industries": "20.電腦、電子產品及光學製品製造業, 27.產業用機械設備維修及安裝業", "company_size": "1001人以上（巨型企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "1.手動輸入/離線更新（資料需人工輸入）, 2.批次更新/定期整理（資料需定時匯入，如每日或每週）, 3.即時使用/自動更新（資料需即時取得）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備), 2.識別與讀取設備：(例：條碼掃描器、RFID Tag、QR Code), 4.控制器與機台訊號：(例：PLC、CNC、SCADA 數據)", "cases": "", "best_fit": "", "display_supplier": "ABB", "tech_tags": ["AI"], "pain_tags": ["研發與設計類(開發週期長、試誤成本高、客製設計慢...)", "設備與維護類(無預警停機、找不到故障點...)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務", "混合部署（Hybrid）：部分系統在雲端，部分在本地"], "industry_tags": ["20.電腦", "電子產品及光學製品製造業", "27.產業用機械設備維修及安裝業"], "summary": "快速模擬佈線拓線", "sessions": ["生產製程", "品質檢測", "研發設計"], "lead_time_bucket": "待確認", "lead_time_tags": ["待確認"], "api_tags": ["完整 API"], "data_need_tags": ["手動輸入／離線更新", "批次資料／定期匯入", "即時資料／自動更新"], "integration_tags": ["完整 API", "手動輸入／離線更新", "批次資料／定期匯入", "即時資料／自動更新"]}, {"id": 4, "company": "佐臻股份有限公司", "contact_name": "鄭育鎔", "contact_email": "appleman@jorjin.com", "contact_phone": "0935161495", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "MetaSpace ai Fusion", "tech": "Multi-modality Agentic RAG", "benefit": "解決工廠缺工, 專業知識無法傳承與新手上線工作不穩.", "url": "https://jorjin.com", "supplier_name": "佐臻", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 混合部署（Hybrid）：部分系統在雲端，部分在本地", "pricing": "帳號訂閱制 + 系統服務費", "lead_time": "2 月", "production_pain": "設備與維護類(無預警停機、找不到故障點...), ESG、廠務與工安類(能耗高、碳盤查難、工安意外...), 人機協作與知識類(經驗斷層、操作複雜...), 儀表板或戰情中心(協助跨部門溝通)", "non_production": "客戶服務, 物流倉儲", "industries": "18.金屬製品製造業, 21.電力設備及配備製造業, 22.機械設備製造業, 23.汽車及其零件製造業, 24.其他運輸工具及其零件製造業, 27.產業用機械設備維修及安裝業", "company_size": "10人~200人（中小企業）, 201~1000人（大型企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "2.批次更新/定期整理（資料需定時匯入，如每日或每週）", "equipment": "以知識庫為主, 再視需求串接專門系統", "cases": "", "best_fit": "", "display_supplier": "佐臻股份有限公司", "tech_tags": ["Multi-modality Agentic RAG"], "pain_tags": ["設備與維護類(無預警停機、找不到故障點...)", "ESG、廠務與工安類(能耗高、碳盤查難、工安意外...)", "人機協作與知識類(經驗斷層、操作複雜...)", "儀表板或戰情中心(協助跨部門溝通)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "混合部署（Hybrid）：部分系統在雲端，部分在本地"], "industry_tags": ["18.金屬製品製造業", "21.電力設備及配備製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "24.其他運輸工具及其零件製造業", "27.產業用機械設備維修及安裝業"], "summary": "解決工廠缺工, 專業知識無法傳承與新手上線工作不穩.", "sessions": ["生產製程", "品質檢測", "研發設計"], "lead_time_bucket": "1-3個月", "lead_time_tags": ["1-3個月"], "api_tags": ["完整 API"], "data_need_tags": ["批次資料／定期匯入"], "integration_tags": ["完整 API", "批次資料／定期匯入"]}, {"id": 5, "company": "台灣耐力斯資訊有限公司", "contact_name": "陳韋伶", "contact_email": "vickeychen@zionex.com", "contact_phone": "0930090118", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "T3 Smart SCM", "tech": "「MIP/CP ＋ 啟發式 (Heuristic)」的混合模式", "benefit": "【價值主張：T3 Smart SCM — 企業的數位大腦】\n我們專注於協助企業解決「流程零碎化」導致的知識斷層，以及「市場需求波動」引發的產能混亂。\n\n智慧排程 (Advanced Scheduling)： 透過 T3 核心引擎，將複雜的產線限制與資深師傅的排程經驗「數位化」。即便在面對頻繁插單或原物料不穩的情況下，系統能迅速產出最佳化計畫，確保生產節奏的穩定與連續性。\n\n營運流程改善 (S&OP 整合)： 打破業務、生產與採購間的資訊壁壘。我們協助企業建立一套透明的「數位指揮中心」，從源頭優化供需平衡，降低無謂的趕工風險，進而提升職場安全與管理效率。\n\n25 年專家經驗 (Expertise)： 每一套系統導入都承載了台日韓四百家以上標竿企業（如三菱、LG、三星、Brother 等）的成功轉型路徑。我們提供的不僅是軟體，更是確保企業在未來 25 年仍具備競爭力的經營智慧。", "url": "https://zionex.com/zh-hant/t3-zhi-hui-scm/", "supplier_name": "Zionex", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 混合部署（Hybrid）：部分系統在雲端，部分在本地", "pricing": "買斷制/訂閱制/專案報價皆有，300-3000萬/年", "lead_time": "6-12個月", "production_pain": "排程與達交類(插單頻繁、換線效率低、交期不準...), 庫存與供應鏈類(呆滯料、缺料、預測失準...), 儀表板或戰情中心(協助跨部門溝通)", "non_production": "營運管理", "industries": "1.食品製造業, 2.飲料製造業, 3.菸草製造業, 4.紡織業, 10.石油及煤製品製造業, 11.化學原材料、肥料、氮化合物、塑橡膠原料及人造纖維製造業, 12.其他化學製品製造業, 13.藥品及醫用化學製品製造業, 14.橡膠製品製造業, 15.塑膠製品製造業, 17.基本金屬製造業, 18.金屬製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業, 21.電力設備及配備製造業, 22.機械設備製造業, 23.汽車及其零件製造業, 24.其他運輸工具及其零件製造業", "company_size": "201~1000人（大型企業）, 1001人以上（巨型企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "1.手動輸入/離線更新（資料需人工輸入）, 2.批次更新/定期整理（資料需定時匯入，如每日或每週）, 3.即時使用/自動更新（資料需即時取得）", "equipment": "5.資訊系統與資料庫：(例：ERP、MES、WMS 資料庫撈取), 6.文書檔案或手動輸入：(例：Excel 報表、PDF、人工抄寫/打字)", "cases": "聯華食品、台橡、台郡", "best_fit": "", "display_supplier": "台灣耐力斯資訊有限公司（Zionex）", "tech_tags": ["「MIP/CP ＋ 啟發式 (Heuristic)」的混合模式"], "pain_tags": ["排程與達交類(插單頻繁、換線效率低、交期不準...)", "庫存與供應鏈類(呆滯料、缺料、預測失準...)", "儀表板或戰情中心(協助跨部門溝通)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "混合部署（Hybrid）：部分系統在雲端，部分在本地"], "industry_tags": ["1.食品製造業", "2.飲料製造業", "3.菸草製造業", "4.紡織業", "10.石油及煤製品製造業", "11.化學原材料", "肥料", "氮化合物", "塑橡膠原料及人造纖維製造業", "12.其他化學製品製造業", "13.藥品及醫用化學製品製造業", "14.橡膠製品製造業", "15.塑膠製品製造業", "17.基本金屬製造業", "18.金屬製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業", "21.電力設備及配備製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "24.其他運輸工具及其零件製造業"], "summary": "【價值主張：T3 Smart SCM — 企業的數位大腦】 我們專注於協助企業解決「流程零碎化」導致的知識斷層，以及「市場需求波動」引發的產能混亂。 智慧排程 (Advanced Scheduling)： 透過 T3 核心引擎，將複雜的產線限制與資深師傅的排程經…", "sessions": ["生產製程"], "lead_time_bucket": "6個月以上", "lead_time_tags": ["6個月以上"], "api_tags": ["完整 API"], "data_need_tags": ["手動輸入／離線更新", "批次資料／定期匯入", "即時資料／自動更新"], "integration_tags": ["完整 API", "手動輸入／離線更新", "批次資料／定期匯入", "即時資料／自動更新"]}, {"id": 6, "company": "動宇宙科技股份有限公司", "contact_name": "胡喬崴", "contact_email": "autoverse.ent@gmail.com", "contact_phone": "0936556810", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "自然語音操作系統", "tech": "google 語音辨識/ 同音字轉換 /Regex 上下文檢索演算", "benefit": "釋放雙手 釋放雙眼", "url": "", "supplier_name": "動宇宙科技股份有限公司", "role": "系統整合商 (SI)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "pricing": "買斷制", "lead_time": "1", "production_pain": "排程與達交類(插單頻繁、換線效率低、交期不準...), 庫存與供應鏈類(呆滯料、缺料、預測失準...), 報價與營運成本類(報價慢、成本預估誤差、利潤不明...), 儀表板或戰情中心(協助跨部門溝通)", "non_production": "行銷, 人力資源, 營運管理, 物流倉儲, 財務", "industries": "1.食品製造業, 2.飲料製造業", "company_size": "10人~200人（中小企業）", "api": "2.有限 API（僅支援資料查詢／資料庫撈取）", "data_need": "3.即時使用/自動更新（資料需即時取得）", "equipment": "2.識別與讀取設備：(例：條碼掃描器、RFID Tag、QR Code), 4.控制器與機台訊號：(例：PLC、CNC、SCADA 數據), 5.資訊系統與資料庫：(例：ERP、MES、WMS 資料庫撈取)", "cases": "奕瑪國際行銷股份有限公司", "best_fit": "", "display_supplier": "動宇宙科技股份有限公司", "tech_tags": ["google 語音辨識/ 同音字轉換 /Regex 上下文檢索演算"], "pain_tags": ["排程與達交類(插單頻繁、換線效率低、交期不準...)", "庫存與供應鏈類(呆滯料、缺料、預測失準...)", "報價與營運成本類(報價慢、成本預估誤差、利潤不明...)", "儀表板或戰情中心(協助跨部門溝通)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器"], "industry_tags": ["1.食品製造業", "2.飲料製造業"], "summary": "釋放雙手 釋放雙眼", "sessions": ["生產製程", "品質檢測", "研發設計"], "lead_time_bucket": "1個月內", "lead_time_tags": ["1個月內"], "api_tags": ["有限 API"], "data_need_tags": ["即時資料／自動更新"], "integration_tags": ["有限 API", "即時資料／自動更新"]}, {"id": 7, "company": "兆米智慧檢測股份有限公司", "contact_name": "萬億中", "contact_email": "billion.wan@orama-aoi.com", "contact_phone": "0920-711727", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "ArgusVIEW AOI Hybri Cloud", "tech": "ArgusVIEW: CNN (GPU), AkidaNet (NPU), FastAPI", "benefit": "提升產品品質、降低品檢人力負荷(品質檢測)", "url": "https://orama-aoi.com/wordpress/", "supplier_name": "兆米是原廠", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 混合部署（Hybrid）：部分系統在雲端，部分在本地", "pricing": "依使用次數計費", "lead_time": "3", "production_pain": "品質與良率類(肉眼漏檢、參數難調、良率不穩...)", "non_production": "人力資源", "industries": "4.紡織業, 9.印刷及資料儲存媒體複製業, 13.藥品及醫用化學製品製造業, 14.橡膠製品製造業, 18.金屬製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業", "company_size": "201~1000人（大型企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "3.即時使用/自動更新（資料需即時取得）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備)", "cases": "正新輪胎", "best_fit": "", "display_supplier": "兆米智慧檢測股份有限公司", "tech_tags": ["ArgusVIEW: CNN (GPU)", "AkidaNet (NPU)", "FastAPI"], "pain_tags": ["品質與良率類(肉眼漏檢、參數難調、良率不穩...)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "混合部署（Hybrid）：部分系統在雲端，部分在本地"], "industry_tags": ["4.紡織業", "9.印刷及資料儲存媒體複製業", "13.藥品及醫用化學製品製造業", "14.橡膠製品製造業", "18.金屬製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業"], "summary": "提升產品品質、降低品檢人力負荷(品質檢測)", "sessions": ["品質檢測"], "lead_time_bucket": "1-3個月", "lead_time_tags": ["1-3個月"], "api_tags": ["完整 API"], "data_need_tags": ["即時資料／自動更新"], "integration_tags": ["完整 API", "即時資料／自動更新"]}, {"id": 8, "company": "ASUS", "contact_name": "王千宜", "contact_email": "ken1_wang@asus.com", "contact_phone": "0925507032", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "AISVision、Detector、SODA、PHM、Smart City", "tech": "會使用到深度學習以及電腦視覺的AI相關技術，並會加上Gen AI ，做更進一步的資訊生成提供", "benefit": "AISVision \n解決痛點\n1. 人工目視檢查效率低、疲勞易誤判\n2. 生產線缺陷種類多、標準不一致，難以量化\n主要效益\n1. 一致且穩定的判斷標準：避免人為主觀誤差\n2. 快速模型訓練與部署：縮短新產品導入檢測時間\n3. 品質數據可追溯：支援品質分析與持續改善\n4. 降低人力成本、提高良率\n\nDetector\n解決痛點\n1. 測試訊號（震動、電流、溫度、聲學等）資料量大，人工難以即時判讀\n2. 訊號中雜訊多，異常特徵不易辨識\n主要效益\n異常訊號自動辨識：從雜訊中找出真正異常模式\n提早發現潛在問題：在故障或品質異常前即預警\n降低誤判與漏判：優於固定門檻的智慧判別\n\nSODA\n解決痛點\n1. 排程仰賴人工與經驗，調整耗時且易出錯\n2. 多機台、多工單、多限制（交期、人力、設備）難以兼顧\n3. 插單、延誤、設備異常導致原排程頻繁失效\n4. 無法快速模擬不同排程方案對產能與交期的影響\n主要效益\n1. 智慧化生產排程：自動考量交期、產能、限制條件\n2. 即時重排能力：因應插單或異常快速調整\n3. 提升準交率（OTD）：有效降低延遲與塞車\n4. 提高設備與人力利用率\n5. 情境模擬與決策支援：協助管理者選擇最佳排程方案\n\n\nPHM\n解決痛點\n1. 設備故障無法預測，只能被動維修\n2. 非計畫性停機造成重大產能損失\n3. 過度保養或保養不足，成本失衡\n4. 經驗依賴資深人員，知識難以傳承\n主要效益\n1. 設備健康監測：即時掌握運轉狀態\n2. 故障預測（Predictive Maintenance）：提前規劃維修\n3. 降低停機風險：提升設備稼動率（OEE）\n4. 知識數位化：減少對個人經驗依賴\n\nSmart City\n主要效益\n以Gen AI 協助客製化需求", "url": "https://iot.asus.com/tw/solutions/manufacturing/", "supplier_name": "ASUS AIOT", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務, 混合部署（Hybrid）：部分系統在雲端，部分在本地", "pricing": "有訂閱以及買斷制，因部分產品會有客制化，價格須與客戶確認需求後才可提供報價", "lead_time": "2", "production_pain": "研發與設計類(開發週期長、試誤成本高、客製設計慢...), 排程與達交類(插單頻繁、換線效率低、交期不準...), 品質與良率類(肉眼漏檢、參數難調、良率不穩...), 設備與維護類(無預警停機、找不到故障點...), 庫存與供應鏈類(呆滯料、缺料、預測失準...), ESG、廠務與工安類(能耗高、碳盤查難、工安意外...), 報價與營運成本類(報價慢、成本預估誤差、利潤不明...), 人機協作與知識類(經驗斷層、操作複雜...)", "non_production": "行銷, 營運管理, 業務開拓, 物流倉儲", "industries": "10.石油及煤製品製造業, 17.基本金屬製造業, 18.金屬製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業, 22.機械設備製造業, 23.汽車及其零件製造業, 24.其他運輸工具及其零件製造業, 25.家具製造業, 26.其他製造業, 27.產業用機械設備維修及安裝業", "company_size": "9人以下 （小微型企業）, 10人~200人（中小企業）, 201~1000人（大型企業）, 1001人以上（巨型企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "1.手動輸入/離線更新（資料需人工輸入）, 2.批次更新/定期整理（資料需定時匯入，如每日或每週）, 3.即時使用/自動更新（資料需即時取得）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備), 3.物理訊號感測 (IoT)：(例：震動、溫度、壓力、聲音、電流), 5.資訊系統與資料庫：(例：ERP、MES、WMS 資料庫撈取), 6.文書檔案或手動輸入：(例：Excel 報表、PDF、人工抄寫/打字)", "cases": "所長茶葉蛋, 元山風扇、", "best_fit": "", "display_supplier": "ASUS AIoT", "tech_tags": ["會使用到深度學習以及電腦視覺的AI相關技術，並會加上Gen AI ，做更進一步的資訊生成提供"], "pain_tags": ["研發與設計類(開發週期長、試誤成本高、客製設計慢...)", "排程與達交類(插單頻繁、換線效率低、交期不準...)", "品質與良率類(肉眼漏檢、參數難調、良率不穩...)", "設備與維護類(無預警停機、找不到故障點...)", "庫存與供應鏈類(呆滯料、缺料、預測失準...)", "ESG、廠務與工安類(能耗高、碳盤查難、工安意外...)", "報價與營運成本類(報價慢、成本預估誤差、利潤不明...)", "人機協作與知識類(經驗斷層、操作複雜...)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務", "混合部署（Hybrid）：部分系統在雲端，部分在本地"], "industry_tags": ["10.石油及煤製品製造業", "17.基本金屬製造業", "18.金屬製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "24.其他運輸工具及其零件製造業", "25.家具製造業", "26.其他製造業", "27.產業用機械設備維修及安裝業"], "summary": "AISVision 解決痛點 1. 人工目視檢查效率低、疲勞易誤判 2. 生產線缺陷種類多、標準不一致，難以量化 主要效益 1. 一致且穩定的判斷標準：避免人為主觀誤差 2. 快速模型訓練與部署：縮短新產品導入檢測時間 3. 品質數據可追溯：支援品質分析與持續改…", "sessions": ["生產製程", "品質檢測", "研發設計"], "lead_time_bucket": "1-3個月", "lead_time_tags": ["1-3個月"], "api_tags": ["完整 API"], "data_need_tags": ["手動輸入／離線更新", "批次資料／定期匯入", "即時資料／自動更新"], "integration_tags": ["完整 API", "手動輸入／離線更新", "批次資料／定期匯入", "即時資料／自動更新"]}, {"id": 9, "company": "尼諾思智慧科技股份有限公司", "contact_name": "游國樑", "contact_email": "sam@ninox.ai", "contact_phone": "0932045914", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "PerformX Sim2Real & Benzol IMI", "tech": "* 約束規劃（Constraint Programming）將交期、良率、設備限制轉為控制參數\n* 強化學習（Reinforcement Learning）持續優化節拍速度 工序分配\n* Vision-Language-Action（VLA）動態製程調整", "benefit": "解決痛點\n•\t企業KPI（毛利、交期、良率）無法即時影響產線機器行為 \n•\tERP/AI決策與現場設備運作脫節，缺乏轉換層 \n•\t自動化系統增加，但營運績效未同步提升 \n•\t機器動作不可建模、不可分析，難以優化與治理 \n效益描述\n•\t將企業目標即時轉為產線控制策略，實現策略驅動製造 \n•\t動態調整節拍、工序與負載，提升生產彈性 \n•\t有效提升毛利、縮短交期、降低品質與營運風險 \n•\t優化設備利用率，從「事後管理」升級為「即時決策控制」 \n技術說明\n•\tPerformX：作為ERP與產線間的運營智慧引擎，將目標轉為控制參數 \n•\t支援多目標運算（交期、成本、品質）與即時動態調整 \n•\tBenzol IMI：將機器動作模組化與語義化，建立標準動作語言 \n•\t打通「企業目標 → 控制邏輯 → 機器行為」，實現可計算與可治理的工業動作架構", "url": "http://ninox.ai", "supplier_name": "尼諾思智慧科技股份有限公司", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "pricing": "基礎運行授權: 20～30 萬 / 年,Runtime 授權（每站）:5～10 萬 / 台,安全 / Deterministic 模組:5～15 萬", "lead_time": "L1（標準）:1月,L2（中等）:2 月,L3（複雜）:4 月,L4（高風險）:4 月以上", "production_pain": "研發與設計類(開發週期長、試誤成本高、客製設計慢...), 排程與達交類(插單頻繁、換線效率低、交期不準...), ESG、廠務與工安類(能耗高、碳盤查難、工安意外...), 人機協作與知識類(經驗斷層、操作複雜...)", "non_production": "營運管理", "industries": "19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業, 22.機械設備製造業, 23.汽車及其零件製造業, 27.產業用機械設備維修及安裝業", "company_size": "10人~200人（中小企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "2.批次更新/定期整理（資料需定時匯入，如每日或每週）, 3.即時使用/自動更新（資料需即時取得）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備), 3.物理訊號感測 (IoT)：(例：震動、溫度、壓力、聲音、電流), 4.控制器與機台訊號：(例：PLC、CNC、SCADA 數據), 5.資訊系統與資料庫：(例：ERP、MES、WMS 資料庫撈取)", "cases": "光田自動化機械有限公司 Cobot 自動化電池組裝", "best_fit": "", "display_supplier": "尼諾思智慧科技股份有限公司", "tech_tags": ["* 約束規劃（Constraint Programming）將交期", "良率", "設備限制轉為控制參數", "* 強化學習（Reinforcement Learning）持續優化節拍速度 工序分配", "* Vision-Language-Action（VLA）動態製程調整"], "pain_tags": ["研發與設計類(開發週期長、試誤成本高、客製設計慢...)", "排程與達交類(插單頻繁、換線效率低、交期不準...)", "ESG、廠務與工安類(能耗高、碳盤查難、工安意外...)", "人機協作與知識類(經驗斷層、操作複雜...)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器"], "industry_tags": ["19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "27.產業用機械設備維修及安裝業"], "summary": "解決痛點 • 企業KPI（毛利、交期、良率）無法即時影響產線機器行為 • ERP/AI決策與現場設備運作脫節，缺乏轉換層 • 自動化系統增加，但營運績效未同步提升 • 機器動作不可建模、不可分析，難以優化與治理 效益描述 • 將企業目標即時轉為產線控制策略，實現…", "sessions": ["生產製程", "研發設計"], "lead_time_bucket": "3-6個月", "lead_time_tags": ["3-6個月"], "api_tags": ["完整 API"], "data_need_tags": ["批次資料／定期匯入", "即時資料／自動更新"], "integration_tags": ["完整 API", "批次資料／定期匯入", "即時資料／自動更新"]}, {"id": 10, "company": "湧現智庫股份有限公司", "contact_name": "Jade Tao", "contact_email": "jade.tao@emergence.today", "contact_phone": "091070120", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "Agatha AI Hub", "tech": "Llama/OpenAI/Claude", "benefit": "透過 AI虛擬業務員報價，快速生成精準報價；利用 工廠生產排程AI優化，提升資源配置效率", "url": "https://agathalab.com/", "supplier_name": "Agatha AI Hub", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務, 混合部署（Hybrid）：部分系統在雲端，部分在本地", "pricing": "買斷制/訂閱制/專案報價, 2萬/account數年費", "lead_time": "3~6個月", "production_pain": "排程與達交類(插單頻繁、換線效率低、交期不準...), 設備與維護類(無預警停機、找不到故障點...), 庫存與供應鏈類(呆滯料、缺料、預測失準...), 報價與營運成本類(報價慢、成本預估誤差、利潤不明...)", "non_production": "行銷, 人力資源, 營運管理, 業務開拓, 客戶服務, 物流倉儲, 財務", "industries": "18.金屬製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業", "company_size": "10人~200人（中小企業）, 201~1000人（大型企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "2.批次更新/定期整理（資料需定時匯入，如每日或每週）, 3.即時使用/自動更新（資料需即時取得）", "equipment": "5.資訊系統與資料庫：(例：ERP、MES、WMS 資料庫撈取), 6.文書檔案或手動輸入：(例：Excel 報表、PDF、人工抄寫/打字)", "cases": "", "best_fit": "", "display_supplier": "湧現智庫股份有限公司", "tech_tags": ["Llama/OpenAI/Claude"], "pain_tags": ["排程與達交類(插單頻繁、換線效率低、交期不準...)", "設備與維護類(無預警停機、找不到故障點...)", "庫存與供應鏈類(呆滯料、缺料、預測失準...)", "報價與營運成本類(報價慢、成本預估誤差、利潤不明...)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務", "混合部署（Hybrid）：部分系統在雲端，部分在本地"], "industry_tags": ["18.金屬製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業"], "summary": "透過 AI虛擬業務員報價，快速生成精準報價；利用 工廠生產排程AI優化，提升資源配置效率", "sessions": ["生產製程", "研發設計"], "lead_time_bucket": "3-6個月", "lead_time_tags": ["3-6個月"], "api_tags": ["完整 API"], "data_need_tags": ["批次資料／定期匯入", "即時資料／自動更新"], "integration_tags": ["完整 API", "批次資料／定期匯入", "即時資料／自動更新"]}, {"id": 11, "company": "先構技術研發股份有限公司", "contact_name": "曾峰倫", "contact_email": "kevinzeng@prefactortech.com", "contact_phone": "0905506377", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "AI QC瑕疵檢測", "tech": "使用YOLO V8/V11 ，YOLO X , RT-Detr這三種模型", "benefit": "本方案透過AI視覺與深度學習技術，結合邊緣運算能力，能在產線上即時進行高精度品質檢測，有效解決傳統人工檢驗效率低、判斷不一致及易漏檢等問題。系統可自動辨識各類缺陷並即時剔除不良品，提升產品良率與品質穩定性，同時降低人力依賴與營運成本，適用於電子、製造及自動化產線等多元應用場景。", "url": "https://www.prefactortech.com/ai3522235258ai-vision.html", "supplier_name": "先構技術研發股份有限公司", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 混合部署（Hybrid）：部分系統在雲端，部分在本地", "pricing": "專案報價", "lead_time": "2月", "production_pain": "品質與良率類(肉眼漏檢、參數難調、良率不穩...), 人機協作與知識類(經驗斷層、操作複雜...)", "non_production": "行銷, 人力資源, 客戶服務, 物流倉儲", "industries": "1.食品製造業, 2.飲料製造業, 9.印刷及資料儲存媒體複製業, 13.藥品及醫用化學製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業, 21.電力設備及配備製造業, 22.機械設備製造業, 23.汽車及其零件製造業, 26.其他製造業, 27.產業用機械設備維修及安裝業", "company_size": "9人以下 （小微型企業）, 10人~200人（中小企業）, 201~1000人（大型企業）", "api": "1.封閉系統（不提供 API）", "data_need": "1.手動輸入/離線更新（資料需人工輸入）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備), 2.識別與讀取設備：(例：條碼掃描器、RFID Tag、QR Code), 4.控制器與機台訊號：(例：PLC、CNC、SCADA 數據), 6.文書檔案或手動輸入：(例：Excel 報表、PDF、人工抄寫/打字)", "cases": "閎暉", "best_fit": "", "display_supplier": "先構技術研發股份有限公司", "tech_tags": ["使用YOLO V8/V11 ，YOLO X", "RT-Detr這三種模型"], "pain_tags": ["品質與良率類(肉眼漏檢、參數難調、良率不穩...)", "人機協作與知識類(經驗斷層、操作複雜...)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "混合部署（Hybrid）：部分系統在雲端，部分在本地"], "industry_tags": ["1.食品製造業", "2.飲料製造業", "9.印刷及資料儲存媒體複製業", "13.藥品及醫用化學製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業", "21.電力設備及配備製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "26.其他製造業", "27.產業用機械設備維修及安裝業"], "summary": "本方案透過AI視覺與深度學習技術，結合邊緣運算能力，能在產線上即時進行高精度品質檢測，有效解決傳統人工檢驗效率低、判斷不一致及易漏檢等問題。系統可自動辨識各類缺陷並即時剔除不良品，提升產品良率與品質穩定性，同時降低人力依賴與營運成本，適用於電子、製造及自動化產線…", "sessions": ["品質檢測"], "lead_time_bucket": "1-3個月", "lead_time_tags": ["1-3個月"], "api_tags": ["封閉系統"], "data_need_tags": ["手動輸入／離線更新"], "integration_tags": ["封閉系統", "手動輸入／離線更新"]}, {"id": 12, "company": "博星科技股份有限公司", "contact_name": "盧俊良", "contact_email": "nick@appostar.com", "contact_phone": "02-29106168 ext 215", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "智能爐溫參數系統", "tech": "類神經網路 (Artificial Neural Networks, ANN); AutoML (自動機器學習)", "benefit": "目前業界，每次的換線或是NPI的試產，皆需進行測溫。而測溫停線皆會產能損失。透過相關參數進行AI模型分析，即可模擬新產品於指定回焊爐之生產結果，無需實板測溫便可預測溫度真實profile 及各品質指標，將新產品導入快速推進到量產階段。如此一來，將大幅的協助客戶減少產能的浪費，進而提升生產的效率。從過往至少30分鐘~1小時的測溫，降低至只需幾分鐘的時間，同時也減少材料的浪費。", "url": "https://www.appostar.com", "supplier_name": "博星科技股份有限公司", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "pricing": "可採買斷制、訂閱制、專案報價", "lead_time": "1~3", "production_pain": "排程與達交類(插單頻繁、換線效率低、交期不準...), 設備與維護類(無預警停機、找不到故障點...), 人機協作與知識類(經驗斷層、操作複雜...)", "non_production": "營運管理, 物流倉儲", "industries": "18.金屬製品製造業, 19.電子零組件製造業, 24.其他運輸工具及其零件製造業, 26.其他製造業", "company_size": "10人~200人（中小企業）, 201~1000人（大型企業）", "api": "2.有限 API（僅支援資料查詢／資料庫撈取）", "data_need": "3.即時使用/自動更新（資料需即時取得）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備), 3.物理訊號感測 (IoT)：(例：震動、溫度、壓力、聲音、電流), 5.資訊系統與資料庫：(例：ERP、MES、WMS 資料庫撈取), 6.文書檔案或手動輸入：(例：Excel 報表、PDF、人工抄寫/打字)", "cases": "組弘科技股份有限公司", "best_fit": "", "display_supplier": "博星科技股份有限公司", "tech_tags": ["類神經網路 (Artificial Neural Networks", "ANN)", "AutoML (自動機器學習)"], "pain_tags": ["排程與達交類(插單頻繁、換線效率低、交期不準...)", "設備與維護類(無預警停機、找不到故障點...)", "人機協作與知識類(經驗斷層、操作複雜...)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器"], "industry_tags": ["18.金屬製品製造業", "19.電子零組件製造業", "24.其他運輸工具及其零件製造業", "26.其他製造業"], "summary": "目前業界，每次的換線或是NPI的試產，皆需進行測溫。而測溫停線皆會產能損失。透過相關參數進行AI模型分析，即可模擬新產品於指定回焊爐之生產結果，無需實板測溫便可預測溫度真實profile 及各品質指標，將新產品導入快速推進到量產階段。如此一來，將大幅的協助客戶減…", "sessions": ["生產製程", "品質檢測", "研發設計"], "lead_time_bucket": "1-3個月", "lead_time_tags": ["1-3個月"], "api_tags": ["有限 API"], "data_need_tags": ["即時資料／自動更新"], "integration_tags": ["有限 API", "即時資料／自動更新"]}, {"id": 13, "company": "恭廷實業有限公司", "contact_name": "祁子翰", "contact_email": "chishenyu@hotmail.com", "contact_phone": "0972860310", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "AI 數位孿生監測控制模擬", "tech": "AI生成流程圖、AI生成模擬引擎、AI預防維護分析", "benefit": "AIOT接收機台資料和預防維護分析。無人車、生產線、輸送帶、機械手臂等模擬優化製程。", "url": "https://front.aws.iiidevops.org/startupselect/brand/23577012-168b-4888-9aa2-d1fe90fa9ae7", "supplier_name": "DTMaker", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務", "pricing": "訂閱制/專案報價，50萬起~千萬/年", "lead_time": "1月起", "production_pain": "研發與設計類(開發週期長、試誤成本高、客製設計慢...), 排程與達交類(插單頻繁、換線效率低、交期不準...), 設備與維護類(無預警停機、找不到故障點...), 庫存與供應鏈類(呆滯料、缺料、預測失準...), 儀表板或戰情中心(協助跨部門溝通)", "non_production": "行銷, 營運管理, 業務開拓, 物流倉儲", "industries": "1.食品製造業, 2.飲料製造業, 3.菸草製造業, 4.紡織業, 5.成衣及服飾品製造業, 6.皮革、毛皮及其製品製造業, 7.木竹製品製造業, 8.紙漿、紙及紙製品製造業, 9.印刷及資料儲存媒體複製業, 10.石油及煤製品製造業, 11.化學原材料、肥料、氮化合物、塑橡膠原料及人造纖維製造業, 12.其他化學製品製造業, 13.藥品及醫用化學製品製造業, 14.橡膠製品製造業, 15.塑膠製品製造業, 16.非金屬礦物製品製造業, 17.基本金屬製造業, 18.金屬製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業, 21.電力設備及配備製造業, 22.機械設備製造業, 23.汽車及其零件製造業, 24.其他運輸工具及其零件製造業, 25.家具製造業, 26.其他製造業, 27.產業用機械設備維修及安裝業", "company_size": "9人以下 （小微型企業）, 10人~200人（中小企業）, 201~1000人（大型企業）, 1001人以上（巨型企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "3.即時使用/自動更新（資料需即時取得）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備), 3.物理訊號感測 (IoT)：(例：震動、溫度、壓力、聲音、電流), 4.控制器與機台訊號：(例：PLC、CNC、SCADA 數據), 5.資訊系統與資料庫：(例：ERP、MES、WMS 資料庫撈取)", "cases": "新呈工業數位孿生監控和CCTV上雲和MES工單串接。神通資訊無人車物流線和生產線模擬產線到輸送帶到測試區效率", "best_fit": "", "display_supplier": "恭廷實業有限公司（DTMaker）", "tech_tags": ["AI生成流程圖", "AI生成模擬引擎", "AI預防維護分析"], "pain_tags": ["研發與設計類(開發週期長、試誤成本高、客製設計慢...)", "排程與達交類(插單頻繁、換線效率低、交期不準...)", "設備與維護類(無預警停機、找不到故障點...)", "庫存與供應鏈類(呆滯料、缺料、預測失準...)", "儀表板或戰情中心(協助跨部門溝通)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務"], "industry_tags": ["1.食品製造業", "2.飲料製造業", "3.菸草製造業", "4.紡織業", "5.成衣及服飾品製造業", "6.皮革", "毛皮及其製品製造業", "7.木竹製品製造業", "8.紙漿", "紙及紙製品製造業", "9.印刷及資料儲存媒體複製業", "10.石油及煤製品製造業", "11.化學原材料", "肥料", "氮化合物", "塑橡膠原料及人造纖維製造業", "12.其他化學製品製造業", "13.藥品及醫用化學製品製造業", "14.橡膠製品製造業", "15.塑膠製品製造業", "16.非金屬礦物製品製造業", "17.基本金屬製造業", "18.金屬製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業", "21.電力設備及配備製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "24.其他運輸工具及其零件製造業", "25.家具製造業", "26.其他製造業", "27.產業用機械設備維修及安裝業"], "summary": "AIOT接收機台資料和預防維護分析。無人車、生產線、輸送帶、機械手臂等模擬優化製程。", "sessions": ["生產製程"], "lead_time_bucket": "1個月內", "lead_time_tags": ["1個月內"], "api_tags": ["完整 API"], "data_need_tags": ["即時資料／自動更新"], "integration_tags": ["完整 API", "即時資料／自動更新"]}, {"id": 14, "company": "勤美智能科技股份有限公司", "contact_name": "李登旭", "contact_email": "kenny.lee@cmp.com.tw", "contact_phone": "0979369618", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "AI視覺辨識系統", "tech": "3D視覺辨識, 人員動作分析, 物品影像辨識", "benefit": "解決勞動力短缺, 提升效率與良率(AI動作分析優化), 強化職業安全(智慧安全防護)", "url": "https://www.cmptech.com.tw", "supplier_name": "勤美智能科技", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 混合部署（Hybrid）：部分系統在雲端，部分在本地", "pricing": "專案報價", "lead_time": "6個月", "production_pain": "品質與良率類(肉眼漏檢、參數難調、良率不穩...), ESG、廠務與工安類(能耗高、碳盤查難、工安意外...), 人機協作與知識類(經驗斷層、操作複雜...), 儀表板或戰情中心(協助跨部門溝通)", "non_production": "營運管理, 物流倉儲", "industries": "1.食品製造業, 2.飲料製造業, 4.紡織業, 5.成衣及服飾品製造業, 9.印刷及資料儲存媒體複製業, 14.橡膠製品製造業, 15.塑膠製品製造業, 16.非金屬礦物製品製造業, 17.基本金屬製造業, 18.金屬製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業, 21.電力設備及配備製造業, 22.機械設備製造業, 23.汽車及其零件製造業, 24.其他運輸工具及其零件製造業, 25.家具製造業, 26.其他製造業, 27.產業用機械設備維修及安裝業", "company_size": "10人~200人（中小企業）", "api": "2.有限 API（僅支援資料查詢／資料庫撈取）", "data_need": "1.手動輸入/離線更新（資料需人工輸入）, 2.批次更新/定期整理（資料需定時匯入，如每日或每週）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備), 2.識別與讀取設備：(例：條碼掃描器、RFID Tag、QR Code), 3.物理訊號感測 (IoT)：(例：震動、溫度、壓力、聲音、電流), 4.控制器與機台訊號：(例：PLC、CNC、SCADA 數據), 5.資訊系統與資料庫：(例：ERP、MES、WMS 資料庫撈取)", "cases": "勤美股份有限公司", "best_fit": "", "display_supplier": "勤美智能科技股份有限公司", "tech_tags": ["3D視覺辨識", "人員動作分析", "物品影像辨識"], "pain_tags": ["品質與良率類(肉眼漏檢、參數難調、良率不穩...)", "ESG、廠務與工安類(能耗高、碳盤查難、工安意外...)", "人機協作與知識類(經驗斷層、操作複雜...)", "儀表板或戰情中心(協助跨部門溝通)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "混合部署（Hybrid）：部分系統在雲端，部分在本地"], "industry_tags": ["1.食品製造業", "2.飲料製造業", "4.紡織業", "5.成衣及服飾品製造業", "9.印刷及資料儲存媒體複製業", "14.橡膠製品製造業", "15.塑膠製品製造業", "16.非金屬礦物製品製造業", "17.基本金屬製造業", "18.金屬製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業", "21.電力設備及配備製造業", "22.機械設備製造業", "23.汽車及其零件製造業", "24.其他運輸工具及其零件製造業", "25.家具製造業", "26.其他製造業", "27.產業用機械設備維修及安裝業"], "summary": "解決勞動力短缺, 提升效率與良率(AI動作分析優化), 強化職業安全(智慧安全防護)", "sessions": ["生產製程", "品質檢測"], "lead_time_bucket": "3-6個月", "lead_time_tags": ["3-6個月"], "api_tags": ["有限 API"], "data_need_tags": ["手動輸入／離線更新", "批次資料／定期匯入"], "integration_tags": ["有限 API", "手動輸入／離線更新", "批次資料／定期匯入"]}, {"id": 15, "company": "果友科技有限公司", "contact_name": "許淇媛", "contact_email": "cy.hsu@goyo-tech.com", "contact_phone": "0972108311", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "果然會AI 企業知識管理平台", "tech": "生成式AI、大型語言模型（LLM，包含 OpenAI、Claude、Gemini）、RAG 檢索增強生成（Retrieval-Augmented Generation）、向量資料庫語意檢索（OpenSearch Service）、AI Agent 任務代理（含語意理解、意圖識別、動態工具調用 Tool-Use）、文件解析與 NLP 自然語言處理、Embedding 模型（文本向量化）、評估演算法（履歷與職位符合度自動評分）", "benefit": "解決痛點： 中小企業普遍面臨 AI 技術門檻高、缺乏專業技術人才、重複性工作耗時、多平台服務分散導致學習成本高且訂閱費用累積等數位轉型困境。以人資場景為例，單一HR處理100份履歷需耗時5小時以上，且仍需兼顧培訓、薪酬、績效等其他工作。\n\n效益描述： 本方案預期提升人資相關任務效率30%~50%，AI回應正確率達90%以上，系統可用性達95%以上。企業無需自建IT基礎設施，透過瀏覽器即可使用，採訂閱制降低導入門檻。具體功能包含：履歷自動篩選分析與排名、面試邀請函AI生成與自動發送、企業知識庫智慧問答（涵蓋SOP、法規、培訓資源）。\n\n技術說明： 系統用三層微服務架構，跑在AWS雲端上（ECS/EKS容器服務加Lambda）。核心是一套跨模組的AI任務代理引擎，分三層運作：先理解使用者講的業務需求，再判斷要動用哪些系統資源，最後自己編排步驟去執行。這套Agent具備自主工具調用能力，使用者用口語下指令，AI會自己決定該叫哪些工具來做事，像是發信、查行事曆、解析文件，從頭到尾一條龍跑完，不用人一步步操作。\n\n平台同時整合了多家大廠的大型語言模型，包含Google Gemini、Anthropic Claude、OpenAI ChatGPT等，使用者在同一個介面就能依任務需求切換不同模型，不用跳到不同平台分別操作，也不用各自付費訂閱。系統會根據任務類型自動調配最合適的模型，例如用推理能力強的模型做履歷分析比對，用生成品質好的模型寫邀請函，把各家模型的長處拿來搭配使用。\n知識檢索用RAG搭配向量資料庫，降低AI亂回答的機率。文件解析模組能吃各種格式的履歷（PDF、Word都行）。資安方面，用VPC做網路隔離、傳輸全程SSL加密，每家客戶的資料都獨立存放，互不干涉。", "url": "https://www.goyo-tech.com/", "supplier_name": "果友科技有限公司", "role": "自有產品開發商 (ISV/原廠)", "deployment": "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務", "pricing": "專案報價", "lead_time": "1月", "production_pain": "人機協作與知識類(經驗斷層、操作複雜...)", "non_production": "人力資源", "industries": "1.食品製造業, 18.金屬製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業, 22.機械設備製造業", "company_size": "9人以下 （小微型企業）, 10人~200人（中小企業）", "api": "3.完整 API（提供完整 API 文件，支援系統整合）", "data_need": "2.批次更新/定期整理（資料需定時匯入，如每日或每週）, 3.即時使用/自動更新（資料需即時取得）", "equipment": "5.資訊系統與資料庫：(例：ERP、MES、WMS 資料庫撈取), 6.文書檔案或手動輸入：(例：Excel 報表、PDF、人工抄寫/打字)", "cases": "", "best_fit": "", "display_supplier": "果友科技有限公司", "tech_tags": ["生成式AI", "大型語言模型（LLM，包含 OpenAI", "Claude", "Gemini）", "RAG 檢索增強生成（Retrieval-Augmented Generation）", "向量資料庫語意檢索（OpenSearch Service）", "AI Agent 任務代理（含語意理解", "意圖識別", "動態工具調用 Tool-Use）", "文件解析與 NLP 自然語言處理", "Embedding 模型（文本向量化）", "評估演算法（履歷與職位符合度自動評分）"], "pain_tags": ["人機協作與知識類(經驗斷層、操作複雜...)"], "deployment_tags": ["雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務"], "industry_tags": ["1.食品製造業", "18.金屬製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業", "22.機械設備製造業"], "summary": "解決痛點： 中小企業普遍面臨 AI 技術門檻高、缺乏專業技術人才、重複性工作耗時、多平台服務分散導致學習成本高且訂閱費用累積等數位轉型困境。以人資場景為例，單一HR處理100份履歷需耗時5小時以上，且仍需兼顧培訓、薪酬、績效等其他工作。 效益描述： 本方案預期提…", "sessions": ["生產製程"], "lead_time_bucket": "1個月內", "lead_time_tags": ["1個月內"], "api_tags": ["完整 API"], "data_need_tags": ["批次資料／定期匯入", "即時資料／自動更新"], "integration_tags": ["完整 API", "批次資料／定期匯入", "即時資料／自動更新"]}, {"id": 16, "company": "慧演智能股份有限公司", "contact_name": "劉雅雯", "contact_email": "shirley.liu@claireye.com.tw", "contact_phone": "0934083848", "model_binding": "否（方案不強制綁定或僅限使用中國模型，符合資安規範）", "solution": "BailAI影像辨識訓練管理平台", "tech": "企業於平台中選擇適合之 AI 模型類型（如物件偵測），啟動模型訓練流程。訓練完成後，可直接於平台進行推論測試，檢視模型於實際影像上的辨識結果，包含辨識標註位置、信心分數與錯誤案例回看，以驗證模型成果與實際應用之可行性。", "benefit": "BailAI 影像辨識訓練管理平台以「降低 AI 導入門檻、加速實際落地應用」為核心目標，讓每位員工都能輕鬆建立AI模型！我們的平台設計直觀、功能強大，無需撰寫程式，只需簡單操作即可完成AI模型的建立與部署，讓技術門檻不再成為阻礙創新的藉口！", "url": "https://keid.nat.gov.tw/cloud/Web/ai_solution_in.aspx?P=13031d22-edb3-62a4-c865-af61265aadbc", "supplier_name": "慧演智能股份有限公司", "role": "自有產品開發商 (ISV/原廠)", "deployment": "本地端部署（On-premise）：系統安裝於需求公司內部伺服器, 雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務", "pricing": "AI工具庫補助專案：方案金額： 100,000( 新台幣 / 含稅 ) 軟體使用月數： 2( 月 )", "lead_time": "３天", "production_pain": "研發與設計類(開發週期長、試誤成本高、客製設計慢...), 品質與良率類(肉眼漏檢、參數難調、良率不穩...)", "non_production": "研發管理", "industries": "1.食品製造業, 9.印刷及資料儲存媒體複製業, 14.橡膠製品製造業, 15.塑膠製品製造業, 19.電子零組件製造業, 20.電腦、電子產品及光學製品製造業", "company_size": "10人~200人（中小企業）", "api": "2.有限 API（僅支援資料查詢／資料庫撈取）", "data_need": "2.批次更新/定期整理（資料需定時匯入，如每日或每週）", "equipment": "1.影像/光學感測：(例：工業相機、CCTV、AOI 設備)", "cases": "財團法人食品工業發展研究所採購本平台，為食品企業降低AI導入成本與門檻。", "best_fit": "", "display_supplier": "慧演智能股份有限公司", "tech_tags": ["企業於平台中選擇適合之 AI 模型類型（如物件偵測），啟動模型訓練流程。訓練完成後，可直接於平台進行推論測試，檢視模型於實際影像上的辨識結果，包含辨識標註位置", "信心分數與錯誤案例回看，以驗證模型成果與實際應用之可行性。"], "pain_tags": ["研發與設計類(開發週期長、試誤成本高、客製設計慢...)", "品質與良率類(肉眼漏檢、參數難調、良率不穩...)"], "deployment_tags": ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務"], "industry_tags": ["1.食品製造業", "9.印刷及資料儲存媒體複製業", "14.橡膠製品製造業", "15.塑膠製品製造業", "19.電子零組件製造業", "20.電腦", "電子產品及光學製品製造業"], "summary": "BailAI 影像辨識訓練管理平台以「降低 AI 導入門檻、加速實際落地應用」為核心目標，讓每位員工都能輕鬆建立AI模型！我們的平台設計直觀、功能強大，無需撰寫程式，只需簡單操作即可完成AI模型的建立與部署，讓技術門檻不再成為阻礙創新的藉口！", "sessions": [], "lead_time_bucket": "1週內", "lead_time_tags": ["1週內"], "api_tags": ["有限 API"], "data_need_tags": ["批次資料／定期匯入"], "integration_tags": ["有限 API", "批次資料／定期匯入"]}];
+    const painOptions = ["ESG、廠務與工安類(能耗高、碳盤查難、工安意外...)", "人機協作與知識類(經驗斷層、操作複雜...)", "儀表板或戰情中心(協助跨部門溝通)", "品質與良率類(肉眼漏檢、參數難調、良率不穩...)", "報價與營運成本類(報價慢、成本預估誤差、利潤不明...)", "庫存與供應鏈類(呆滯料、缺料、預測失準...)", "排程與達交類(插單頻繁、換線效率低、交期不準...)", "研發與設計類(開發週期長、試誤成本高、客製設計慢...)", "設備與維護類(無預警停機、找不到故障點...)"];
+    const deploymentOptions = ["本地端部署（On-premise）：系統安裝於需求公司內部伺服器", "混合部署（Hybrid）：部分系統在雲端，部分在本地", "雲端 SaaS 部署（Cloud / Subscription）：透過網路直接使用服務"];
+    const leadOptions = ["1週內", "1個月內", "1-3個月", "3-6個月", "6個月以上", "待確認"];
+    const techOptions = ["* Vision-Language-Action（VLA）動態製程調整", "* 強化學習（Reinforcement Learning）持續優化節拍速度 工序分配", "* 約束規劃（Constraint Programming）將交期", "3D視覺辨識", "AI", "AI Agent 任務代理（含語意理解", "AI生成模擬引擎", "AI生成流程圖", "AI預防維護分析", "ANN)", "AkidaNet (NPU)", "ArgusVIEW: CNN (GPU)", "AutoML (自動機器學習)", "CNN", "Claude", "Deep Learning", "Edge AI", "Embedding 模型（文本向量化）", "FastAPI", "Gemini）", "LLM", "Llama/OpenAI/Claude", "Multi-modality Agentic RAG", "Object Detection", "RAG 檢索增強生成（Retrieval-Augmented Generation）", "RT-Detr這三種模型", "google 語音辨識/ 同音字轉換 /Regex 上下文檢索演算", "「MIP/CP ＋ 啟發式 (Heuristic)」的混合模式", "人員動作分析", "企業於平台中選擇適合之 AI 模型類型（如物件偵測），啟動模型訓練流程。訓練完成後，可直接於平台進行推論測試，檢視模型於實際影像上的辨識結果，包含辨識標註位置", "使用YOLO V8/V11 ，YOLO X", "信心分數與錯誤案例回看，以驗證模型成果與實際應用之可行性。", "動態工具調用 Tool-Use）", "向量資料庫語意檢索（OpenSearch Service）", "大型語言模型（LLM，包含 OpenAI", "意圖識別", "文件解析與 NLP 自然語言處理", "會使用到深度學習以及電腦視覺的AI相關技術，並會加上Gen AI ，做更進一步的資訊生成提供", "物品影像辨識", "生成式AI", "良率", "設備限制轉為控制參數", "評估演算法（履歷與職位符合度自動評分）", "類神經網路 (Artificial Neural Networks"];
+
+    const els = {
+      search: document.querySelector("#search"),
+      pain: document.querySelector("#pain"),
+      tech: document.querySelector("#tech"),
+      deployment: document.querySelector("#deployment"),
+      lead: document.querySelector("#lead"),
+      reset: document.querySelector("#reset"),
+      list: document.querySelector("#solutionList"),
+      compare: document.querySelector("#compareBody"),
+      count: document.querySelector("#resultCount"),
+      countSub: document.querySelector("#resultCountSub"),
+      empty: document.querySelector("#empty"),
+      painCloud: document.querySelector("#painCloud"),
+      deploymentCloud: document.querySelector("#deploymentCloud"),
+      leadCloud: document.querySelector("#leadCloud")
+    };
+
+    function esc(value) {
+      return String(value || "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[c]));
+    }
+    function fillOptions(select, options) {
+      options.forEach(option => {
+        const el = document.createElement("option");
+        el.value = option;
+        el.textContent = option;
+        select.appendChild(el);
+      });
+    }
+    function tags(items, limit = 5) {
+      const list = (items || []).slice(0, limit).map(item => `<span class="tag">${esc(item)}</span>`).join("");
+      return list || '<span class="tag">未填</span>';
+    }
+    function clickableTag(text, field) {
+      return `<button type="button" class="tag" data-filter="${field}" data-value="${esc(text)}">${esc(text)}</button>`;
+    }
+    function link(url) {
+      if (!url) return "未提供";
+      return `<a href="${esc(url)}" target="_blank" rel="noopener">開啟連結</a>`;
+    }
+    function mail(value) {
+      if (!value) return "未提供";
+      return `<a href="mailto:${esc(value)}">${esc(value)}</a>`;
+    }
+    function tel(value) {
+      if (!value) return "未提供";
+      const href = String(value).replace(/[^\d+]/g, "");
+      return href ? `<a href="tel:${esc(href)}">${esc(value)}</a>` : esc(value);
+    }
+    function contact(record) {
+      return `
+        <div class="contact-box">
+          <h4>聯絡窗口</h4>
+          <p><strong>姓名：</strong>${esc(record.contact_name || "未提供")}</p>
+          <p><strong>電話：</strong>${tel(record.contact_phone)}</p>
+          <p><strong>Email：</strong>${mail(record.contact_email)}</p>
+        </div>
+      `;
+    }
+    function textBlob(record) {
+      return [
+        record.display_supplier, record.company, record.supplier_name, record.solution, record.tech,
+        record.benefit, record.production_pain, record.non_production, record.industries,
+        record.deployment, record.lead_time, record.lead_time_bucket, record.api, record.data_need,
+        record.equipment, record.cases, record.best_fit, record.contact_name,
+        record.contact_email, record.contact_phone
+      ].join(" ").toLowerCase();
+    }
+    function filtered() {
+      const q = els.search.value.trim().toLowerCase();
+      const pain = els.pain.value;
+      const tech = els.tech.value;
+      const deployment = els.deployment.value;
+      const lead = els.lead.value;
+      return solutions.filter(record => {
+        if (q && !textBlob(record).includes(q)) return false;
+        if (pain && !(record.pain_tags || []).includes(pain)) return false;
+        if (tech && !(record.tech_tags || []).includes(tech)) return false;
+        if (deployment && !(record.deployment_tags || []).includes(deployment)) return false;
+        if (lead && !(record.lead_time_tags || []).includes(lead)) return false;
+        return true;
+      });
+    }
+    function renderClouds() {
+      els.painCloud.innerHTML = painOptions.slice(0, 12).map(item => clickableTag(item, "pain")).join("");
+      els.deploymentCloud.innerHTML = deploymentOptions.map(item => clickableTag(item, "deployment")).join("");
+      els.leadCloud.innerHTML = leadOptions.map(item => clickableTag(item, "lead")).join("");
+      document.querySelectorAll("[data-filter]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const target = {
+            pain: els.pain,
+            deployment: els.deployment,
+            lead: els.lead
+          }[btn.dataset.filter];
+          if (!target) return;
+          target.value = btn.dataset.value;
+          render();
+          document.querySelector("#solutions").scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    }
+    function render() {
+      const rows = filtered();
+      els.count.textContent = rows.length;
+      els.countSub.textContent = rows.length;
+      els.empty.style.display = rows.length ? "none" : "block";
+      els.list.innerHTML = rows.map(record => `
+        <article class="solution" id="solution-${record.id}">
+          <div>
+            <div class="supplier">${esc(record.display_supplier)}</div>
+            <h3>${esc(record.solution)}</h3>
+            <div class="tags">${tags(record.sessions, 3)}</div>
+            ${contact(record)}
+          </div>
+          <div>
+            <p class="summary">${esc(record.summary)}</p>
+            <div class="tags">${tags(record.pain_tags, 6)}</div>
+            <div class="meta-grid">
+              <div><strong>AI 技術</strong>${esc((record.tech_tags || []).slice(0, 3).join("、") || record.tech || "未填")}</div>
+              <div><strong>部署模式</strong>${esc(record.deployment || "未填")}</div>
+              <div><strong>導入預估時間</strong>${esc(record.lead_time_bucket || "未填")}</div>
+            </div>
+            <details>
+              <summary>查看完整方案資料</summary>
+              <div class="detail-grid">
+                <div class="wide"><h4>解決痛點與效益</h4><p>${esc(record.benefit)}</p></div>
+                <div><h4>適用產業</h4><p>${esc(record.industries || record.best_fit || "未填")}</p></div>
+                <div><h4>適用企業規模</h4><p>${esc(record.company_size || "未填")}</p></div>
+                <div><h4>收費／計價模式</h4><p>${esc(record.pricing || "未填")}</p></div>
+                <div><h4>預估上線時間</h4><p>${esc(record.lead_time || "未填")}</p></div>
+                <div><h4>API 開放程度</h4><p>${esc(record.api || "未填")}</p></div>
+                <div><h4>所需資料</h4><p>${esc(record.data_need || "未填")}</p></div>
+                <div><h4>搭配設備</h4><p>${esc(record.equipment || "未填")}</p></div>
+                <div class="wide"><h4>應用實績</h4><p>${esc(record.cases || "未填")}</p></div>
+                <div><h4>資安／模型限制</h4><p>${esc(record.model_binding || "未填")}</p></div>
+                <div><h4>介紹網址</h4><p>${link(record.url)}</p></div>
+              </div>
+            </details>
+          </div>
+        </article>
+      `).join("");
+      els.compare.innerHTML = rows.map(record => `
+        <tr>
+          <td data-label="供應商">${esc(record.display_supplier)}</td>
+          <td data-label="解決方案">${esc(record.solution)}</td>
+          <td data-label="主要 AI 技術">${esc((record.tech_tags || []).slice(0, 4).join("、") || record.tech || "未填")}</td>
+          <td data-label="可對應痛點">${esc((record.pain_tags || []).slice(0, 4).join("、") || "未填")}</td>
+          <td data-label="部署環境">${esc(record.deployment || "未填")}</td>
+          <td data-label="聯絡窗口">${esc(record.contact_name || "未提供")}<br>${mail(record.contact_email)}</td>
+          <td data-label="連結">${link(record.url)}</td>
+        </tr>
+      `).join("");
+    }
+
+    fillOptions(els.pain, painOptions);
+    fillOptions(els.tech, techOptions);
+    fillOptions(els.deployment, deploymentOptions);
+    fillOptions(els.lead, leadOptions);
+    renderClouds();
+    ["input", "change"].forEach(eventName => {
+      [els.search, els.pain, els.tech, els.deployment, els.lead].forEach(el => el.addEventListener(eventName, render));
+    });
+    els.reset.addEventListener("click", () => {
+      els.search.value = "";
+      els.pain.value = "";
+      els.tech.value = "";
+      els.deployment.value = "";
+      els.lead.value = "";
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>
