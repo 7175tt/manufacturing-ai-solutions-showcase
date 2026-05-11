@@ -954,12 +954,35 @@
         return true;
       });
     }
-    function gvizUrl(sheetName) {
-      return `https://docs.google.com/spreadsheets/d/${industryToolConfig.sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}`;
+    function gvizUrl(sheetName, callbackName) {
+      return `https://docs.google.com/spreadsheets/d/${industryToolConfig.sheetId}/gviz/tq?tqx=responseHandler:${callbackName}&sheet=${encodeURIComponent(sheetName)}`;
     }
-    function parseGvizResponse(rawData) {
-      const jsonString = rawData.substring(rawData.indexOf("(") + 1, rawData.lastIndexOf(")"));
-      const json = JSON.parse(jsonString);
+    function loadGvizSheet(sheetName) {
+      return new Promise((resolve, reject) => {
+        const callbackName = `__industryToolSheet_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        const script = document.createElement("script");
+        const timer = window.setTimeout(() => {
+          cleanup();
+          reject(new Error(`${sheetName} 載入逾時`));
+        }, 15000);
+        function cleanup() {
+          window.clearTimeout(timer);
+          delete window[callbackName];
+          script.remove();
+        }
+        window[callbackName] = data => {
+          cleanup();
+          resolve(data);
+        };
+        script.onerror = () => {
+          cleanup();
+          reject(new Error(`${sheetName} 載入失敗`));
+        };
+        script.src = gvizUrl(sheetName, callbackName);
+        document.head.appendChild(script);
+      });
+    }
+    function parseGvizTable(json) {
       const columns = (json.table.cols || []).map(col => col.label || "");
       return (json.table.rows || []).map(row => {
         const item = {};
@@ -1036,13 +1059,11 @@
       els.toolCategoryCount.textContent = `${industryToolConfig.sheets.length} 類`;
       try {
         const responses = await Promise.all(industryToolConfig.sheets.map(async sheetName => {
-          const response = await fetch(gvizUrl(sheetName));
-          if (!response.ok) throw new Error(`${sheetName} 載入失敗`);
-          return { sheetName, text: await response.text() };
+          return { sheetName, data: await loadGvizSheet(sheetName) };
         }));
         let id = 1;
-        industryTools = responses.flatMap(({ sheetName, text }) =>
-          parseGvizResponse(text)
+        industryTools = responses.flatMap(({ sheetName, data }) =>
+          parseGvizTable(data)
             .filter(row => row["工具名稱"] || row["供應商名稱"])
             .map(row => normalizeIndustryTool(row, sheetName, id++))
         );
