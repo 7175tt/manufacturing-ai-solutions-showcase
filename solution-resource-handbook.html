@@ -516,6 +516,8 @@
       border-bottom: 1px solid var(--line);
       background: #fff;
       scroll-margin-top: 78px;
+      content-visibility: auto;
+      contain-intrinsic-size: auto 900px;
     }
     .solution:hover { background: #fbfdfd; }
     .supplier,
@@ -716,6 +718,8 @@
       padding: 26px 28px;
       border-bottom: 1px solid var(--line);
       scroll-margin-top: 78px;
+      content-visibility: auto;
+      contain-intrinsic-size: auto 650px;
     }
     .tool-card:hover { background: #fbfdfd; }
     .tool-code {
@@ -1215,6 +1219,10 @@
       category: industryToolConfig.sheets,
       price: industryPriceOptions
     };
+    let currentSolutionRows = solutions;
+    let solutionCompareDirty = true;
+    let currentIndustryToolRows = [];
+    let industryToolCompareDirty = true;
 
     function esc(value) {
       return String(value || "").replace(/[&<>"']/g, c => ({
@@ -1533,6 +1541,106 @@
         return true;
       });
     }
+    function debounce(fn, delay = 140) {
+      let timer = 0;
+      return (...args) => {
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => fn(...args), delay);
+      };
+    }
+    function compareSection(body) {
+      return body ? body.closest(".manual-section") : null;
+    }
+    function isNearViewport(body, margin = 900) {
+      const section = compareSection(body);
+      if (!section || section.offsetParent === null) return false;
+      const rect = section.getBoundingClientRect();
+      return rect.top < window.innerHeight + margin && rect.bottom > -margin;
+    }
+    function shouldRenderSolutionCompare() {
+      return window.location.hash.startsWith("#compare") || isNearViewport(els.compare);
+    }
+    function shouldRenderIndustryToolCompare() {
+      return window.location.hash.startsWith("#industryToolCompare") || isNearViewport(els.toolCompare);
+    }
+    function renderSolutionCompare(force = false) {
+      if (!els.compare) return;
+      if (!force && !shouldRenderSolutionCompare()) {
+        if (els.compare.innerHTML) {
+          els.compare.innerHTML = "";
+          solutionCompareDirty = true;
+        }
+        return;
+      }
+      if (!solutionCompareDirty) return;
+      els.compare.innerHTML = currentSolutionRows.map(record => `
+        <tr>
+          <td data-label="編號">${solutionNo(record)}</td>
+          <td data-label="供應商">${esc(record.display_supplier)}</td>
+          <td data-label="解決方案">${esc(record.solution)}</td>
+          <td data-label="主要 AI 技術">${esc(compactList(record.tech_tags, truncateLabel(record.tech || "", 22), 3, 22))}</td>
+          <td data-label="可對應痛點">${esc(compactList(record.pain_tags, "", 4))}</td>
+          <td data-label="部署環境">${esc(compactList(record.deployment_tags, compactLabel(record.deployment) || "", 3))}</td>
+          <td data-label="聯絡窗口">${esc(record.contact_name || "")}<br>${mail(record.contact_email)}</td>
+          <td data-label="連結">${compareLink(record.url)}</td>
+        </tr>
+      `).join("");
+      solutionCompareDirty = false;
+    }
+    function renderIndustryToolCompare(force = false) {
+      if (!els.toolCompare) return;
+      if (!force && !shouldRenderIndustryToolCompare()) {
+        if (els.toolCompare.innerHTML) {
+          els.toolCompare.innerHTML = "";
+          industryToolCompareDirty = true;
+        }
+        return;
+      }
+      if (!industryToolCompareDirty) return;
+      els.toolCompare.innerHTML = currentIndustryToolRows.map(record => `
+        <tr>
+          <td data-label="編號">${industryToolNo(record)}</td>
+          <td data-label="工具分類">${esc(record.category || "")}</td>
+          <td data-label="供應商">${esc(record.supplier || "")}</td>
+          <td data-label="工具名稱">${esc(record.name || "未命名工具")}</td>
+          <td data-label="金額範圍">${esc(compactList(record.priceBuckets || [], "", 4))}</td>
+          <td data-label="價格">${esc(record.price || "")}</td>
+          <td data-label="聯絡資訊">${esc([record.contact, record.contactInfo].filter(Boolean).join("／"))}</td>
+        </tr>
+      `).join("");
+      industryToolCompareDirty = false;
+    }
+    function releaseOffscreenCompares() {
+      renderSolutionCompare();
+      renderIndustryToolCompare();
+    }
+    function setupCompareObservers() {
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            if (entry.target.id === "compare") renderSolutionCompare(true);
+            if (entry.target.id === "industryToolCompare") renderIndustryToolCompare(true);
+          });
+        }, { rootMargin: "900px 0px" });
+        const solutionSection = compareSection(els.compare);
+        const toolSection = compareSection(els.toolCompare);
+        if (solutionSection) observer.observe(solutionSection);
+        if (toolSection) observer.observe(toolSection);
+      }
+      const release = debounce(releaseOffscreenCompares, 160);
+      window.addEventListener("resize", release, { passive: true });
+      window.addEventListener("scroll", release, { passive: true });
+    }
+    function scrollToHashTarget() {
+      const hash = window.location.hash;
+      if (!hash || hash === "#handbook" || hash === "#industry-tools") return;
+      const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (!target) return;
+      [0, 140, 420, 900, 1500].forEach(delay => {
+        window.setTimeout(() => target.scrollIntoView({ block: "start" }), delay);
+      });
+    }
     function renderIndustryTools() {
       const rows = filteredIndustryTools();
       els.toolEmpty.style.display = rows.length ? "none" : "block";
@@ -1541,6 +1649,8 @@
       els.toolLiveCount.textContent = rows.length;
       els.toolLiveTotal.textContent = industryTools.length;
       els.toolStatus.textContent = "已載入全部資料；可多選分類、金額範圍並搭配關鍵字查詢。";
+      currentIndustryToolRows = rows;
+      industryToolCompareDirty = true;
       els.toolList.innerHTML = rows.map(record => `
         <article class="tool-card" id="tool-${record.id}">
           <div>
@@ -1561,19 +1671,7 @@
           </div>
         </article>
       `).join("");
-      if (els.toolCompare) {
-        els.toolCompare.innerHTML = rows.map(record => `
-          <tr>
-            <td data-label="編號">${industryToolNo(record)}</td>
-            <td data-label="工具分類">${esc(record.category || "")}</td>
-            <td data-label="供應商">${esc(record.supplier || "")}</td>
-            <td data-label="工具名稱">${esc(record.name || "未命名工具")}</td>
-            <td data-label="金額範圍">${esc(compactList(record.priceBuckets || [], "", 4))}</td>
-            <td data-label="價格">${esc(record.price || "")}</td>
-            <td data-label="聯絡資訊">${esc([record.contact, record.contactInfo].filter(Boolean).join("／"))}</td>
-          </tr>
-        `).join("");
-      }
+      renderIndustryToolCompare();
     }
     async function loadIndustryTools() {
       if (industryToolsLoaded || industryToolsLoading) return;
@@ -1595,6 +1693,10 @@
         els.toolLiveTotal.textContent = industryTools.length;
         industryToolsLoaded = true;
         renderIndustryTools();
+        if (window.location.hash.startsWith("#industryToolCompare")) {
+          renderIndustryToolCompare(true);
+          scrollToHashTarget();
+        }
       } catch (error) {
         els.toolTotal.textContent = "載入失敗";
         els.coverToolTotal.textContent = "載入失敗";
@@ -1674,6 +1776,8 @@
     }
     function render() {
       const rows = filtered();
+      currentSolutionRows = rows;
+      solutionCompareDirty = true;
       els.count.textContent = rows.length;
       els.countSub.textContent = rows.length;
       els.filterLiveCount.textContent = rows.length;
@@ -1718,18 +1822,7 @@
           </div>
         </article>
       `).join("");
-      els.compare.innerHTML = rows.map(record => `
-        <tr>
-          <td data-label="編號">${solutionNo(record)}</td>
-          <td data-label="供應商">${esc(record.display_supplier)}</td>
-          <td data-label="解決方案">${esc(record.solution)}</td>
-          <td data-label="主要 AI 技術">${esc(compactList(record.tech_tags, truncateLabel(record.tech || "", 22), 3, 22))}</td>
-          <td data-label="可對應痛點">${esc(compactList(record.pain_tags, "", 4))}</td>
-          <td data-label="部署環境">${esc(compactList(record.deployment_tags, compactLabel(record.deployment) || "", 3))}</td>
-          <td data-label="聯絡窗口">${esc(record.contact_name || "")}<br>${mail(record.contact_email)}</td>
-          <td data-label="連結">${compareLink(record.url)}</td>
-        </tr>
-      `).join("");
+      renderSolutionCompare();
     }
 
     renderClouds();
@@ -1755,9 +1848,17 @@
         document.querySelector(".layout").scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
-    window.addEventListener("hashchange", () => setActiveView(viewFromHash()));
+    window.addEventListener("hashchange", () => {
+      setActiveView(viewFromHash());
+      if (window.location.hash.startsWith("#compare")) renderSolutionCompare(true);
+      if (window.location.hash.startsWith("#industryToolCompare")) renderIndustryToolCompare(true);
+      scrollToHashTarget();
+    });
+    setupCompareObservers();
     render();
     setActiveView(viewFromHash());
+    if (window.location.hash.startsWith("#compare")) renderSolutionCompare(true);
+    scrollToHashTarget();
     loadIndustryTools();
   </script>
 </body>
