@@ -1523,18 +1523,21 @@
       if (unit === "千") return 1000;
       return 1;
     }
+    function hasProjectQuoteSignal(text) {
+      return /專案報價|專案估價|專案計價|另案報價|另行報價|另議|洽詢|請洽|來電洽詢|依需求(?:報價|估價|計價)?|依規格(?:報價|估價|計價)?|客製(?:報價|估價|計價)?|未定|tbd/i.test(text);
+    }
     function priceBuckets(price) {
       const text = normalizeDigits(price).trim();
       const buckets = new Set();
       if (!text) buckets.add("免費／未標價");
       if (/免費|free|無須|不收費|未標價|未提供|(?:^|[^\d,])0\s*元|(?:^|[^\d,])(?:NTD?|TWD|[$＄])\s*0(?![\d,])/i.test(text)) buckets.add("免費／未標價");
       if (/訂閱|月費|年費|subscription|每月|每年|\/m|\/月|\/年/.test(text)) buckets.add("訂閱制");
-      if (/專案|報價|洽詢|另議|未定|tbd|依需求/i.test(text)) buckets.add("專案報價／洽詢");
 
       const amounts = [];
-      const durationLabel = /(軟體使用月數|使用月數|方案期程|服務期程|期程|月數|授權期間|導入時間|導入期程)/;
       const moneyContext = /(價格|金額|費用|定價|售價|報價|NTD?|TWD|新台幣|台幣|[$＄]|元|萬|千)/i;
       const moneyValue = String.raw`\d[\d,]*(?:\.\d+)?`;
+      const durationLabelText = String.raw`(?:軟體使用月數|使用月數|方案期程|服務期程|期程|月數|授權期間|導入時間|導入期程)`;
+      const durationValuePattern = new RegExp(`${durationLabelText}\\s*[:：]?\\s*${moneyValue}\\s*(?:\\([^)]*\\)|個?月|月|天|日|年)?`, "gi");
       const lines = text
         .replace(/\r/g, "\n")
         .split(/\n|；|;/)
@@ -1542,8 +1545,7 @@
         .filter(Boolean);
 
       lines.forEach(line => {
-        if (durationLabel.test(line)) return;
-        let scan = line;
+        let scan = line.replace(durationValuePattern, " ");
 
         const rangeWanPattern = new RegExp(`(${moneyValue})\\s*(?:-|~|～|至|到)\\s*(${moneyValue})\\s*萬`, "g");
         scan = scan.replace(rangeWanPattern, (_, low, high) => {
@@ -1571,6 +1573,13 @@
           return " ";
         });
 
+        const perUnitPattern = new RegExp(`(${moneyValue})\\s*[/／]\\s*(?:套|件|組|人|帳號|使用者|user|seat|月|年|m|yr|台|站|次|點)`, "gi");
+        scan = scan.replace(perUnitPattern, (_, value) => {
+          const amount = parseMoneyNumber(value);
+          if (value.includes(",") || amount >= 1000) pushMoneyAmount(amounts, value);
+          return " ";
+        });
+
         if (!moneyContext.test(line)) return;
         const standalonePattern = new RegExp(`(${moneyValue})(?!\\s*(?:個?月|天|日|年|人|組|站|台|次|套|頁|點|%))`, "g");
         for (const match of scan.matchAll(standalonePattern)) {
@@ -1581,7 +1590,8 @@
         }
       });
       addAmountBuckets(amounts, buckets);
-      if (!buckets.size) buckets.add("專案報價／洽詢");
+      if (!amounts.length && hasProjectQuoteSignal(text)) buckets.add("專案報價／洽詢");
+      if (!buckets.size) buckets.add("免費／未標價");
       return Array.from(buckets);
     }
     function normalizeIndustryTool(row, category, id) {
