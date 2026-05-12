@@ -391,7 +391,7 @@
       font-size: 13px;
       font-weight: 900;
     }
-    input, select {
+    input:not([type="range"]), select {
       width: 100%;
       min-height: 42px;
       padding: 8px 10px;
@@ -399,6 +399,22 @@
       border-radius: 0;
       background: #fff;
       color: var(--ink);
+    }
+    .search-hint {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    .range-input-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .range-input-grid > div {
+      flex: 1 1 180px;
     }
     button {
       width: 100%;
@@ -424,6 +440,10 @@
     .filter-select-all:hover {
       border-color: var(--accent);
       background: var(--soft);
+    }
+    .filter-select-all:disabled {
+      cursor: default;
+      opacity: .55;
     }
     .result-note {
       position: sticky;
@@ -984,9 +1004,13 @@
           <div class="filter-topline">
             <div>
               <label for="search">關鍵字搜尋</label>
-              <input id="search" type="search" placeholder="搜尋供應商、方案、技術、痛點、聯絡人">
+              <input id="search" type="search" placeholder="搜尋供應商、方案、技術、痛點、聯絡人，可用空白分隔多關鍵字">
+              <p class="search-hint">可用空白分隔多個關鍵字，系統會顯示同時符合的結果。</p>
             </div>
-            <div class="filter-action"><button id="reset" type="button">清除篩選</button></div>
+            <div class="filter-action">
+              <button id="applyFilters" type="button">套用篩選</button>
+              <button id="reset" type="button">清除篩選</button>
+            </div>
           </div>
           <div class="filter-live-count filter-sticky-count" aria-live="polite">
             <span>目前顯示</span><strong id="filterLiveCount">95</strong><span>/ 95 項</span>
@@ -1037,7 +1061,7 @@
           </div>
         </div>
         <div class="result-note">
-          <span>多選組合會即時更新下方方案列表與比較表。</span>
+          <span>設定條件後按「套用篩選」再更新下方方案列表與比較表。</span>
           <span>顯示 <strong id="resultCountSub">95</strong> / 95 項</span>
         </div>
         <div id="solutionList" class="solution-list"></div>
@@ -1090,16 +1114,20 @@
         <div class="section-head">
           <div>
             <h2>分類導覽</h2>
-            <div class="filter-guidance"><strong>可多選篩選</strong><span>這裡也是可多選的篩選系統：工具分類與金額範圍可同時複選，跨主題會共同縮小結果。</span></div>
+            <div class="filter-guidance"><strong>可多條件篩選</strong><span>工具分類與金額範圍可多選，也可輸入金額上下限；設定完成後按下套用工具篩選。</span></div>
           </div>
         </div>
         <div class="tool-filters filter-panel" aria-label="產業競爭力輔導團AI工具庫篩選">
           <div class="filter-topline">
             <div>
               <label for="toolSearch">工具關鍵字搜尋</label>
-              <input id="toolSearch" type="search" placeholder="搜尋供應商、工具名稱、類別、簡介、聯絡資訊">
+              <input id="toolSearch" type="search" placeholder="搜尋供應商、工具名稱、類別、簡介、聯絡資訊，可用空白分隔多關鍵字">
+              <p class="search-hint">可用空白分隔多個關鍵字，系統會顯示同時符合的工具。</p>
             </div>
-            <div class="filter-action"><button id="toolReset" type="button">清除工具篩選</button></div>
+            <div class="filter-action">
+              <button id="applyToolFilters" type="button">套用工具篩選</button>
+              <button id="toolReset" type="button">清除工具篩選</button>
+            </div>
           </div>
           <div class="filter-live-count filter-sticky-count" aria-live="polite">
             <span>目前顯示</span><strong id="toolLiveCount">0</strong><span>/</span><strong id="toolLiveTotal">0</strong><span>筆</span>
@@ -1118,6 +1146,17 @@
                 <button class="filter-select-all" type="button" data-tool-filter-all="price">全選</button>
               </div>
               <div id="toolPriceFilter" class="tags"></div>
+              <div class="range-input-grid">
+                <div>
+                  <label for="toolPriceMinInput">金額下限</label>
+                  <input id="toolPriceMinInput" type="number" min="0" step="1000" placeholder="例如 100000">
+                </div>
+                <div>
+                  <label for="toolPriceMaxInput">金額上限</label>
+                  <input id="toolPriceMaxInput" type="number" min="0" step="1000" placeholder="例如 500000">
+                </div>
+              </div>
+              <p class="search-hint">可和上方金額選項併用；若有輸入上下限，會只保留可解析出金額且落在範圍內的工具。</p>
             </div>
           </div>
         </div>
@@ -1182,7 +1221,7 @@
       sheetId: "18Hq6sUrweHmm_08AcFPBnQ8XypXJ7CM6",
       sheets: ["人員及知識管理", "環境及設備管理", "原物料管理", "生產與品質管理", "行銷管理", "能源與碳排管理", "綜合或其他"]
     };
-    const industryPriceOptions = ["免費／未標價", "10萬以下", "10-50萬", "50-100萬", "100萬以上", "訂閱制", "專案報價／洽詢"];
+    const industryPriceOptions = ["免費／未標價", "不到10萬", "剛好10萬", "10-50萬", "50-100萬", "100萬以上", "訂閱制", "專案報價／洽詢"];
     let industryTools = [];
     let industryToolsLoaded = false;
     let industryToolsLoading = false;
@@ -1194,6 +1233,7 @@
       sidebars: document.querySelectorAll("[data-sidebar]"),
       subnavs: document.querySelectorAll("[data-subnav]"),
       search: document.querySelector("#search"),
+      applyFilters: document.querySelector("#applyFilters"),
       reset: document.querySelector("#reset"),
       list: document.querySelector("#solutionList"),
       compare: document.querySelector("#compareBody"),
@@ -1211,6 +1251,7 @@
       industryFilter: document.querySelector("#industryFilter"),
       equipmentFilter: document.querySelector("#equipmentFilter"),
       toolSearch: document.querySelector("#toolSearch"),
+      applyToolFilters: document.querySelector("#applyToolFilters"),
       toolReset: document.querySelector("#toolReset"),
       toolList: document.querySelector("#industryToolCards"),
       toolCompare: document.querySelector("#industryToolCompareBody"),
@@ -1224,7 +1265,9 @@
       toolLiveTotal: document.querySelector("#toolLiveTotal"),
       toolCategoryCount: document.querySelector("#industryCategoryCount"),
       toolCategoryFilter: document.querySelector("#toolCategoryFilter"),
-      toolPriceFilter: document.querySelector("#toolPriceFilter")
+      toolPriceFilter: document.querySelector("#toolPriceFilter"),
+      toolPriceMinInput: document.querySelector("#toolPriceMinInput"),
+      toolPriceMaxInput: document.querySelector("#toolPriceMaxInput")
     };
 
     const activeFilters = {
@@ -1264,6 +1307,31 @@
         el.textContent = option;
         select.appendChild(el);
       });
+    }
+    function keywordTerms(value) {
+      return String(value || "").trim().toLowerCase().split(/[\s\u3000]+/).filter(Boolean);
+    }
+    function matchesAllTerms(text, terms) {
+      if (!terms.length) return true;
+      const haystack = String(text || "").toLowerCase();
+      return terms.every(term => haystack.includes(term));
+    }
+    function parseOptionalPriceInput(value) {
+      const text = normalizeDigits(String(value || "")).replace(/,/g, "").trim();
+      if (!text) return null;
+      const amount = Number(text);
+      return Number.isFinite(amount) && amount >= 0 ? amount : null;
+    }
+    function currentToolPriceBounds() {
+      let lower = parseOptionalPriceInput(els.toolPriceMinInput ? els.toolPriceMinInput.value : "");
+      let upper = parseOptionalPriceInput(els.toolPriceMaxInput ? els.toolPriceMaxInput.value : "");
+      if (lower !== null && upper !== null && lower > upper) [lower, upper] = [upper, lower];
+      return { lower, upper };
+    }
+    function syncToolPriceInputs() {
+      const { lower, upper } = currentToolPriceBounds();
+      if (els.toolPriceMinInput) els.toolPriceMinInput.value = lower === null ? "" : String(lower);
+      if (els.toolPriceMaxInput) els.toolPriceMaxInput.value = upper === null ? "" : String(upper);
     }
     function tags(items, limit = 5) {
       const list = (items || []).slice(0, limit).map(item => `<span class="tag">${esc(item)}</span>`).join("");
@@ -1377,9 +1445,9 @@
       ].join(" ").toLowerCase();
     }
     function filtered() {
-      const q = els.search.value.trim().toLowerCase();
+      const terms = keywordTerms(els.search.value);
       return solutions.filter(record => {
-        if (q && !textBlob(record).includes(q)) return false;
+        if (!matchesAllTerms(textBlob(record), terms)) return false;
         if (!hasAny(record.pain_tags, activeFilters.pain, painOptions)) return false;
         if (!hasAny(record.deployment_tags, activeFilters.deployment, deploymentOptions)) return false;
         if (!hasAny(record.lead_time_tags, activeFilters.lead, leadOptions)) return false;
@@ -1516,7 +1584,8 @@
     function addAmountBuckets(amounts, buckets) {
       amounts.forEach(amount => {
         if (!Number.isFinite(amount) || amount <= 0) return;
-        if (amount <= 100000) buckets.add("10萬以下");
+        if (amount < 100000) buckets.add("不到10萬");
+        else if (amount === 100000) buckets.add("剛好10萬");
         else if (amount <= 500000) buckets.add("10-50萬");
         else if (amount <= 1000000) buckets.add("50-100萬");
         else buckets.add("100萬以上");
@@ -1537,13 +1606,9 @@
     function hasProjectQuoteSignal(text) {
       return /專案報價|專案估價|專案計價|另案報價|另行報價|另議|洽詢|請洽|來電洽詢|依需求(?:報價|估價|計價)?|依規格(?:報價|估價|計價)?|客製(?:報價|估價|計價)?|未定|tbd/i.test(text);
     }
-    function priceBuckets(price) {
+    function extractPriceAmounts(price) {
       const text = normalizeDigits(price).trim();
-      const buckets = new Set();
-      if (!text) buckets.add("免費／未標價");
-      if (/免費|free|無須|不收費|未標價|未提供|(?:^|[^\d,])0\s*元|(?:^|[^\d,])(?:NTD?|TWD|[$＄])\s*0(?![\d,])/i.test(text)) buckets.add("免費／未標價");
-      if (/訂閱|月費|年費|subscription|每月|每年|\/m|\/月|\/年/.test(text)) buckets.add("訂閱制");
-
+      if (!text) return [];
       const amounts = [];
       const moneyContext = /(價格|金額|費用|定價|售價|報價|NTD?|TWD|新台幣|台幣|[$＄]|元|萬|千)/i;
       const moneyValue = String.raw`\d[\d,]*(?:\.\d+)?`;
@@ -1600,13 +1665,31 @@
           if (value.includes(",") || amount >= 1000) amounts.push(amount);
         }
       });
+      return amounts.filter(amount => Number.isFinite(amount) && amount > 0);
+    }
+    function analyzePrice(price) {
+      const text = normalizeDigits(price).trim();
+      const buckets = new Set();
+      if (!text) buckets.add("免費／未標價");
+      if (/免費|free|無須|不收費|未標價|未提供|(?:^|[^\d,])0\s*元|(?:^|[^\d,])(?:NTD?|TWD|[$＄])\s*0(?![\d,])/i.test(text)) buckets.add("免費／未標價");
+      if (/訂閱|月費|年費|subscription|每月|每年|\/m|\/月|\/年/.test(text)) buckets.add("訂閱制");
+
+      const amounts = extractPriceAmounts(text);
       addAmountBuckets(amounts, buckets);
       if (!amounts.length && hasProjectQuoteSignal(text)) buckets.add("專案報價／洽詢");
       if (!buckets.size) buckets.add("免費／未標價");
-      return Array.from(buckets);
+      return {
+        buckets: Array.from(buckets),
+        min: amounts.length ? Math.min(...amounts) : null,
+        max: amounts.length ? Math.max(...amounts) : null
+      };
+    }
+    function priceBuckets(price) {
+      return analyzePrice(price).buckets;
     }
     function normalizeIndustryTool(row, category, id) {
       const price = row["價格"] || "";
+      const priceInfo = analyzePrice(price);
       return {
         id,
         category,
@@ -1615,7 +1698,9 @@
         supplier: row["供應商名稱"] || "",
         name: row["工具名稱"] || "",
         price,
-        priceBuckets: priceBuckets(price),
+        priceBuckets: priceInfo.buckets,
+        priceMin: priceInfo.min,
+        priceMax: priceInfo.max,
         summary: row["工具簡介(功能、特色、適用情境)"] || "",
         contact: row["聯絡人"] || "",
         contactInfo: row["聯絡資訊"] || ""
@@ -1630,12 +1715,21 @@
         record.price, (record.priceBuckets || []).join(" "), record.summary, record.contact, record.contactInfo
       ].join(" ").toLowerCase();
     }
+    function matchesToolPrice(record) {
+      const { lower, upper } = currentToolPriceBounds();
+      if (lower === null && upper === null) return true;
+      if (!Number.isFinite(record.priceMin) || !Number.isFinite(record.priceMax)) return false;
+      if (lower !== null && record.priceMax < lower) return false;
+      if (upper !== null && record.priceMin > upper) return false;
+      return true;
+    }
     function filteredIndustryTools() {
-      const q = els.toolSearch.value.trim().toLowerCase();
+      const terms = keywordTerms(els.toolSearch.value);
       return industryTools.filter(record => {
         if (!hasAny([record.category], activeToolFilters.category, industryToolConfig.sheets)) return false;
         if (!hasAny(record.priceBuckets, activeToolFilters.price, industryPriceOptions)) return false;
-        if (q && !industryToolBlob(record).includes(q)) return false;
+        if (!matchesToolPrice(record)) return false;
+        if (!matchesAllTerms(industryToolBlob(record), terms)) return false;
         return true;
       });
     }
@@ -1646,7 +1740,7 @@
       els.toolMatched.textContent = rows.length;
       els.toolLiveCount.textContent = rows.length;
       els.toolLiveTotal.textContent = industryTools.length;
-      els.toolStatus.textContent = "已載入全部資料；可多選分類、金額範圍並搭配關鍵字查詢。";
+      els.toolStatus.textContent = "已載入全部資料；設定好分類、金額與關鍵字後，按「套用工具篩選」更新結果。";
       els.toolList.innerHTML = rows.map(record => `
         <article class="tool-card" id="tool-${record.id}">
           <div>
@@ -1733,7 +1827,6 @@
           if (!target) return;
           toggleSet(target, btn.dataset.value);
           renderClouds();
-          render();
         };
       });
       document.querySelectorAll("[data-filter-all]").forEach(btn => {
@@ -1746,7 +1839,6 @@
           if (!target) return;
           toggleAll(target, filterOptions[field]);
           renderClouds();
-          render();
         };
       });
     }
@@ -1759,8 +1851,6 @@
           if (!target) return;
           toggleSet(target, btn.dataset.value);
           renderIndustryToolClouds();
-          ensureIndustryTools();
-          renderIndustryTools();
         };
       });
       document.querySelectorAll("[data-tool-filter-all]").forEach(btn => {
@@ -1773,10 +1863,16 @@
           if (!target) return;
           toggleAll(target, toolFilterOptions[field]);
           renderIndustryToolClouds();
-          ensureIndustryTools();
-          renderIndustryTools();
         };
       });
+    }
+    function applyHandbookFilters() {
+      render();
+    }
+    function applyToolFilters() {
+      syncToolPriceInputs();
+      ensureIndustryTools();
+      renderIndustryTools();
     }
     function render() {
       const rows = filtered();
@@ -1840,20 +1936,50 @@
 
     renderClouds();
     renderIndustryToolClouds();
-    els.search.addEventListener("input", render);
+    if (els.applyFilters) els.applyFilters.addEventListener("click", applyHandbookFilters);
     els.reset.addEventListener("click", () => {
       els.search.value = "";
       Object.values(activeFilters).forEach(set => set.clear());
       renderClouds();
       render();
     });
-    els.toolSearch.addEventListener("input", renderIndustryTools);
+    if (els.applyToolFilters) els.applyToolFilters.addEventListener("click", applyToolFilters);
     els.toolReset.addEventListener("click", () => {
       els.toolSearch.value = "";
       Object.values(activeToolFilters).forEach(set => set.clear());
+      if (els.toolPriceMinInput) els.toolPriceMinInput.value = "";
+      if (els.toolPriceMaxInput) els.toolPriceMaxInput.value = "";
       renderIndustryToolClouds();
       renderIndustryTools();
     });
+    if (els.search) {
+      els.search.addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        applyHandbookFilters();
+      });
+    }
+    if (els.toolSearch) {
+      els.toolSearch.addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        applyToolFilters();
+      });
+    }
+    if (els.toolPriceMinInput) {
+      els.toolPriceMinInput.addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        applyToolFilters();
+      });
+    }
+    if (els.toolPriceMaxInput) {
+      els.toolPriceMaxInput.addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        applyToolFilters();
+      });
+    }
     els.viewTabs.forEach(tab => {
       tab.addEventListener("click", event => {
         event.preventDefault();
