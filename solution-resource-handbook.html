@@ -30,9 +30,10 @@
       --mark: #fff1b8;
       --shadow: 0 18px 40px rgba(21, 38, 48, .10);
       --result-sticky-top: 58px;
+      --mobile-toc-top: 58px;
+      --anchor-offset: 86px;
     }
     *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       color: var(--ink);
@@ -105,6 +106,7 @@
     .mobile-toc.is-hidden { display: none !important; }
     .view-panel.is-hidden,
     .sidebar.is-hidden { display: none !important; }
+    .view-panel { scroll-margin-top: var(--anchor-offset); }
     .cover {
       background: var(--paper);
       border-bottom: 1px solid var(--line);
@@ -210,6 +212,7 @@
       border: 1px solid var(--line);
       margin-bottom: 22px;
       box-shadow: 0 1px 0 rgba(31,41,51,.03);
+      scroll-margin-top: var(--anchor-offset);
     }
     .section-head {
       display: grid;
@@ -515,7 +518,7 @@
       padding: 26px 28px;
       border-bottom: 1px solid var(--line);
       background: #fff;
-      scroll-margin-top: 78px;
+      scroll-margin-top: var(--anchor-offset);
     }
     .solution:hover { background: #fbfdfd; }
     .supplier,
@@ -724,7 +727,7 @@
       gap: 24px;
       padding: 26px 28px;
       border-bottom: 1px solid var(--line);
-      scroll-margin-top: 78px;
+      scroll-margin-top: var(--anchor-offset);
     }
     .tool-card:hover { background: #fbfdfd; }
     .tool-code {
@@ -764,13 +767,17 @@
     }
     .tool-detail summary { margin-top: 12px; }
     @media (max-width: 1040px) {
-      :root { --result-sticky-top: 108px; }
+      :root {
+        --result-sticky-top: 108px;
+        --mobile-toc-top: 108px;
+        --anchor-offset: 176px;
+      }
       .cover-inner { grid-template-columns: 1fr; align-items: center; }
       .topbar { align-items: flex-start; flex-direction: column; }
       .topnav { width: 100%; }
       .mobile-toc {
         position: sticky;
-        top: 58px;
+        top: var(--mobile-toc-top);
         z-index: 25;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
@@ -842,7 +849,11 @@
       }
     }
     @media (max-width: 640px) {
-      :root { --result-sticky-top: 48px; }
+      :root {
+        --result-sticky-top: 48px;
+        --mobile-toc-top: 0px;
+        --anchor-offset: 72px;
+      }
       .topbar { position: static; align-items: flex-start; flex-direction: column; }
       .mobile-toc {
         top: 0;
