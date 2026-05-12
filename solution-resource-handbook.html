@@ -1114,7 +1114,7 @@
         <div class="section-head">
           <div>
             <h2>分類導覽</h2>
-            <div class="filter-guidance"><strong>可多條件篩選</strong><span>工具分類與金額範圍可多選，也可輸入金額上下限；設定完成後按下套用工具篩選。</span></div>
+            <div class="filter-guidance"><strong>可多條件篩選</strong><span>工具分類與金額範圍可多選，也可輸入金額上下限；關鍵字輸入完成或點選條件後會自動更新。</span></div>
           </div>
         </div>
         <div class="tool-filters filter-panel" aria-label="產業競爭力輔導團AI工具庫篩選">
@@ -1122,10 +1122,9 @@
             <div>
               <label for="toolSearch">工具關鍵字搜尋</label>
               <input id="toolSearch" type="search" placeholder="搜尋供應商、工具名稱、類別、簡介、聯絡資訊，可用空白分隔多關鍵字">
-              <p class="search-hint">可用空白分隔多個關鍵字，系統會顯示同時符合的工具。</p>
+              <p class="search-hint">可用空白分隔多個關鍵字；停止輸入後會自動更新結果。</p>
             </div>
             <div class="filter-action">
-              <button id="applyToolFilters" type="button">套用工具篩選</button>
               <button id="toolReset" type="button">清除工具篩選</button>
             </div>
           </div>
@@ -1156,7 +1155,7 @@
                   <input id="toolPriceMaxInput" type="number" min="0" step="1000" placeholder="例如 500000">
                 </div>
               </div>
-              <p class="search-hint">可和上方金額選項併用；若有輸入上下限，會只保留可解析出金額且落在範圍內的工具。</p>
+              <p class="search-hint">可和上方金額選項併用；輸入後會自動更新，只保留可解析出金額且落在範圍內的工具。</p>
             </div>
           </div>
         </div>
@@ -1251,7 +1250,6 @@
       industryFilter: document.querySelector("#industryFilter"),
       equipmentFilter: document.querySelector("#equipmentFilter"),
       toolSearch: document.querySelector("#toolSearch"),
-      applyToolFilters: document.querySelector("#applyToolFilters"),
       toolReset: document.querySelector("#toolReset"),
       toolList: document.querySelector("#industryToolCards"),
       toolCompare: document.querySelector("#industryToolCompareBody"),
@@ -1332,6 +1330,11 @@
       const { lower, upper } = currentToolPriceBounds();
       if (els.toolPriceMinInput) els.toolPriceMinInput.value = lower === null ? "" : String(lower);
       if (els.toolPriceMaxInput) els.toolPriceMaxInput.value = upper === null ? "" : String(upper);
+    }
+    let toolFilterApplyTimer = 0;
+    function scheduleToolFilters(delay = 280) {
+      window.clearTimeout(toolFilterApplyTimer);
+      toolFilterApplyTimer = window.setTimeout(() => applyToolFilters(), delay);
     }
     function tags(items, limit = 5) {
       const list = (items || []).slice(0, limit).map(item => `<span class="tag">${esc(item)}</span>`).join("");
@@ -1740,7 +1743,7 @@
       els.toolMatched.textContent = rows.length;
       els.toolLiveCount.textContent = rows.length;
       els.toolLiveTotal.textContent = industryTools.length;
-      els.toolStatus.textContent = "已載入全部資料；設定好分類、金額與關鍵字後，按「套用工具篩選」更新結果。";
+      els.toolStatus.textContent = "已載入全部資料；關鍵字輸入完成或點選分類、金額條件後，結果會自動更新。";
       els.toolList.innerHTML = rows.map(record => `
         <article class="tool-card" id="tool-${record.id}">
           <div>
@@ -1851,6 +1854,7 @@
           if (!target) return;
           toggleSet(target, btn.dataset.value);
           renderIndustryToolClouds();
+          applyToolFilters();
         };
       });
       document.querySelectorAll("[data-tool-filter-all]").forEach(btn => {
@@ -1863,6 +1867,7 @@
           if (!target) return;
           toggleAll(target, toolFilterOptions[field]);
           renderIndustryToolClouds();
+          applyToolFilters();
         };
       });
     }
@@ -1943,8 +1948,8 @@
       renderClouds();
       render();
     });
-    if (els.applyToolFilters) els.applyToolFilters.addEventListener("click", applyToolFilters);
     els.toolReset.addEventListener("click", () => {
+      window.clearTimeout(toolFilterApplyTimer);
       els.toolSearch.value = "";
       Object.values(activeToolFilters).forEach(set => set.clear());
       if (els.toolPriceMinInput) els.toolPriceMinInput.value = "";
@@ -1960,6 +1965,7 @@
       });
     }
     if (els.toolSearch) {
+      els.toolSearch.addEventListener("input", () => scheduleToolFilters());
       els.toolSearch.addEventListener("keydown", event => {
         if (event.key !== "Enter") return;
         event.preventDefault();
@@ -1967,6 +1973,7 @@
       });
     }
     if (els.toolPriceMinInput) {
+      els.toolPriceMinInput.addEventListener("input", () => scheduleToolFilters());
       els.toolPriceMinInput.addEventListener("keydown", event => {
         if (event.key !== "Enter") return;
         event.preventDefault();
@@ -1974,6 +1981,7 @@
       });
     }
     if (els.toolPriceMaxInput) {
+      els.toolPriceMaxInput.addEventListener("input", () => scheduleToolFilters());
       els.toolPriceMaxInput.addEventListener("keydown", event => {
         if (event.key !== "Enter") return;
         event.preventDefault();
