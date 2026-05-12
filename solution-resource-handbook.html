@@ -668,6 +668,11 @@
     .tool-compare-table th:nth-child(5), .tool-compare-table td:nth-child(5) { width: 15%; }
     .tool-compare-table th:nth-child(6), .tool-compare-table td:nth-child(6) { width: 16%; }
     .tool-compare-table th:nth-child(7), .tool-compare-table td:nth-child(7) { width: 14%; }
+    .tool-library .compare-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tool-compare-table { min-width: 980px; }
     .tool-library .section-head { align-items: start; }
     .tool-stats {
       display: grid;
@@ -825,6 +830,11 @@
         color: var(--muted);
         font-size: 13px;
         font-weight: 900;
+      }
+      .compare-wrap .tool-compare-table { min-width: 0; }
+      .compare-wrap .tool-compare-table th:nth-child(n),
+      .compare-wrap .tool-compare-table td:nth-child(n) {
+        width: 100%;
       }
     }
     @media (max-width: 640px) {
