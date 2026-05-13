@@ -451,8 +451,9 @@
       z-index: 18;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 16px;
-      padding: 16px 22px;
+      padding: 14px 22px;
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
       background: #fbfcfc;
@@ -461,6 +462,73 @@
       font-weight: 800;
     }
     .result-note strong { color: var(--accent-dark); }
+    .result-note-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .result-note-hint { font-size: 13px; font-weight: 700; color: var(--muted); }
+    .result-note-count { font-size: 14px; }
+    .btn-export-handbook {
+      width: auto;
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 18px 8px 14px;
+      border: 1px solid var(--accent-dark);
+      background: linear-gradient(135deg, #126b75 0%, #0f3f47 100%);
+      color: #fff;
+      font-weight: 900;
+      letter-spacing: .3px;
+      box-shadow: 0 8px 20px rgba(21, 38, 48, .25);
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+      white-space: nowrap;
+    }
+    .btn-export-handbook:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(21, 38, 48, .35);
+    }
+    .btn-export-handbook:active { transform: translateY(0); }
+    .btn-export-handbook:disabled {
+      cursor: not-allowed;
+      opacity: .5;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-export-icon {
+      font-size: 26px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .25));
+    }
+    .btn-export-body {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      line-height: 1.15;
+    }
+    .btn-export-title { font-size: 15px; }
+    .btn-export-sub {
+      font-size: 11px;
+      font-weight: 700;
+      color: #c8eae6;
+      letter-spacing: 0;
+    }
+    .btn-export-sub strong { color: var(--gold); font-size: 12px; }
+    .btn-export-arrow {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--gold);
+      transition: transform .15s ease;
+    }
+    .btn-export-handbook:hover .btn-export-arrow { transform: translateX(3px); }
+    @media (max-width: 720px) {
+      .result-note { flex-direction: column; align-items: stretch; }
+      .btn-export-handbook { width: 100%; justify-content: center; }
+    }
     .category-map {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1061,8 +1129,18 @@
           </div>
         </div>
         <div class="result-note">
-          <span>設定條件後按「套用篩選」再更新下方方案列表與比較表。</span>
-          <span>顯示 <strong id="resultCountSub">95</strong> / 95 項</span>
+          <div class="result-note-text">
+            <span class="result-note-hint">設定條件後按「套用篩選」再更新下方方案列表與比較表。</span>
+            <span class="result-note-count">顯示 <strong id="resultCountSub">95</strong> / 95 項</span>
+          </div>
+          <button id="exportHandbook" class="btn-export-handbook" type="button" aria-label="匯出目前顯示的方案為 PDF 手冊">
+            <span class="btn-export-icon" aria-hidden="true">📕</span>
+            <span class="btn-export-body">
+              <span class="btn-export-title">匯出 PDF 手冊</span>
+              <span class="btn-export-sub">將目前 <strong id="exportCount">95</strong> 項方案打包成單一檔案</span>
+            </span>
+            <span class="btn-export-arrow" aria-hidden="true">→</span>
+          </button>
         </div>
         <div id="solutionList" class="solution-list"></div>
         <div id="empty" class="empty">沒有符合條件的解決方案，請調整篩選條件。</div>
@@ -1234,6 +1312,8 @@
       search: document.querySelector("#search"),
       applyFilters: document.querySelector("#applyFilters"),
       reset: document.querySelector("#reset"),
+      exportHandbook: document.querySelector("#exportHandbook"),
+      exportCount: document.querySelector("#exportCount"),
       list: document.querySelector("#solutionList"),
       compare: document.querySelector("#compareBody"),
       count: document.querySelector("#resultCount"),
@@ -1894,11 +1974,374 @@
       ensureIndustryTools();
       renderIndustryTools();
     }
+    function pdfGroupByOptions(records, options, getTagsFn) {
+      return options.map(option => ({
+        option,
+        matches: records.filter(r => {
+          const tags = getTagsFn(r) || [];
+          return tags.includes(option);
+        })
+      })).filter(g => g.matches.length > 0);
+    }
+    function pdfGroupByString(records, getFieldFn) {
+      const map = new Map();
+      records.forEach(r => {
+        const value = String(getFieldFn(r) || "").trim();
+        if (!value) return;
+        if (!map.has(value)) map.set(value, []);
+        map.get(value).push(r);
+      });
+      return Array.from(map.entries())
+        .map(([option, matches]) => ({ option, matches }))
+        .sort((a, b) => b.matches.length - a.matches.length);
+    }
+    function buildQuickRefSection(label, hint, groups) {
+      if (!groups.length) return "";
+      const blocks = groups.map(g => {
+        const items = g.matches.map(r => {
+          const supplier = r.display_supplier || r.supplier_name || r.company || "";
+          return '<li>'
+            + '<span class="qref-no">' + solutionNo(r) + '</span>'
+            + '<span class="qref-title">' + esc(r.solution || "") + '</span>'
+            + '<span class="qref-supplier">' + esc(supplier) + '</span>'
+            + '</li>';
+        }).join("");
+        return [
+          '<div class="pdf-quickref-block">',
+            '<div class="pdf-quickref-head-row">',
+              '<div class="pdf-quickref-option">' + esc(g.option) + '</div>',
+              '<div class="pdf-quickref-count">共 ' + g.matches.length + ' 項</div>',
+            '</div>',
+            '<ul class="pdf-quickref-list">' + items + '</ul>',
+          '</div>'
+        ].join("");
+      }).join("");
+      return [
+        '<section class="pdf-quickref">',
+          '<header class="pdf-quickref-head">',
+            '<div class="pdf-quickref-eyebrow">QUICK INDEX</div>',
+            '<h2>' + esc(label) + '</h2>',
+            '<p class="pdf-quickref-hint">' + esc(hint) + '</p>',
+          '</header>',
+          '<div class="pdf-quickref-body">' + blocks + '</div>',
+        '</section>'
+      ].join("");
+    }
+    function buildAllQuickRef(records) {
+      return [
+        buildQuickRefSection("依生產端痛點查找", "鎖定貴公司目前面臨的主要痛點，再翻閱對應的方案頁。",
+          pdfGroupByOptions(records, painOptions, r => r.pain_tags)),
+        buildQuickRefSection("依部署模式查找", "依資安政策、IT 環境與基礎建設條件挑選部署方式。",
+          pdfGroupByOptions(records, deploymentOptions, r => r.deployment_tags)),
+        buildQuickRefSection("依所需資料查找", "依貴公司現有資料的型態與更新頻率匹配適合的方案。",
+          pdfGroupByOptions(records, dataNeedOptions, r => r.data_need_tags)),
+        buildQuickRefSection("依搭配設備查找", "依現有或可投資的硬體類型挑選對應的方案。",
+          pdfGroupByOptions(records, equipmentOptions, r => r.equipment_tags)),
+        buildQuickRefSection("依 API 開放程度查找", "依是否需與 ERP／MES／既有系統介接挑選方案。",
+          pdfGroupByOptions(records, apiOptions, r => r.api_tags)),
+        buildQuickRefSection("依導入時間查找", "依專案緊急程度與時程選擇導入週期合適的方案。",
+          pdfGroupByOptions(records, leadOptions, r => r.lead_time_tags)),
+        buildQuickRefSection("依適用企業規模查找", "依貴公司營運規模與人力配置挑選最適合的方案。",
+          pdfGroupByString(records, r => r.company_size))
+      ].join("");
+    }
+    function pdfMetaRow(label, value) {
+      const text = String(value || "").trim();
+      if (!text) return "";
+      return '<div class="pdf-meta-row"><strong>' + esc(label) + '</strong><span>' + esc(text) + '</span></div>';
+    }
+    function pdfTagRow(label, items) {
+      const values = (items || []).filter(Boolean);
+      if (!values.length) return "";
+      const chips = values.map(v => '<span class="pdf-chip">' + esc(v) + '</span>').join("");
+      return '<div class="pdf-tag-row"><strong>' + esc(label) + '</strong><div class="pdf-tag-list">' + chips + '</div></div>';
+    }
+    function buildSolutionPage(record, index, total) {
+      const id = solutionNo(record);
+      const supplier = record.display_supplier || record.supplier_name || record.company || "";
+      const sessions = (record.sessions || []).filter(Boolean);
+      const sessionsHtml = sessions.length
+        ? '<div class="pdf-sessions">' + sessions.map(s => '<span class="pdf-chip pdf-chip-accent">' + esc(s) + '</span>').join("") + '</div>'
+        : "";
+      const benefitHtml = record.benefit
+        ? '<section class="pdf-section pdf-benefit"><h2>方案效益</h2><p>' + esc(record.benefit) + '</p></section>'
+        : "";
+      const tagsHtml = [
+        pdfTagRow("可解決痛點", record.pain_tags),
+        pdfTagRow("AI 技術", record.tech_tags),
+        pdfTagRow("部署模式", record.deployment_tags),
+        pdfTagRow("所需資料", record.data_need_tags),
+        pdfTagRow("搭配設備", record.equipment_tags),
+        pdfTagRow("API 開放程度", record.api_tags),
+        pdfTagRow("導入時間", record.lead_time_tags),
+        pdfTagRow("適用產業", record.industry_tags)
+      ].filter(Boolean).join("");
+      const tagsSection = tagsHtml ? '<section class="pdf-section pdf-tags"><h2>方案標籤</h2>' + tagsHtml + '</section>' : "";
+      const metaHtml = [
+        pdfMetaRow("收費／計價模式", record.pricing),
+        pdfMetaRow("導入預估時間", record.lead_time || record.lead_time_bucket),
+        pdfMetaRow("適用產業", record.industries || record.best_fit),
+        pdfMetaRow("適用企業規模", record.company_size),
+        pdfMetaRow("API 開放程度", record.api),
+        pdfMetaRow("所需資料", record.data_need),
+        pdfMetaRow("搭配設備", record.equipment),
+        pdfMetaRow("資安／模型限制", record.model_binding)
+      ].filter(Boolean).join("");
+      const metaSection = metaHtml ? '<section class="pdf-section pdf-meta"><h2>方案詳細資料</h2><div class="pdf-meta-grid">' + metaHtml + '</div></section>' : "";
+      const casesSection = record.cases
+        ? '<section class="pdf-section"><h2>應用實績</h2><p>' + esc(record.cases) + '</p></section>'
+        : "";
+      const urlSection = record.url
+        ? '<section class="pdf-section pdf-url"><h2>線上資料</h2><p><a href="' + esc(record.url) + '">' + esc(record.url) + '</a></p></section>'
+        : "";
+      const contactMeta = [
+        pdfMetaRow("聯絡人", record.contact_name),
+        pdfMetaRow("電話", record.contact_phone),
+        pdfMetaRow("Email", record.contact_email)
+      ].filter(Boolean).join("");
+      const contactSection = contactMeta
+        ? '<section class="pdf-section pdf-contact"><h2>聯絡窗口</h2><div class="pdf-contact-grid">' + contactMeta + '</div></section>'
+        : "";
+      return [
+        '<article class="pdf-solution">',
+          '<header class="pdf-solution-head">',
+            '<div class="pdf-head-label">製造業 AI 解決方案資源手冊　|　方案 ' + id + '</div>',
+            '<div class="pdf-head-counter">' + index + ' / ' + total + '</div>',
+          '</header>',
+          '<div class="pdf-solution-title">',
+            '<div class="pdf-supplier">' + esc(supplier) + '</div>',
+            '<h1>' + esc(record.solution || "") + '</h1>',
+            sessionsHtml,
+          '</div>',
+          benefitHtml,
+          tagsSection,
+          metaSection,
+          casesSection,
+          urlSection,
+          contactSection,
+        '</article>'
+      ].join("");
+    }
+    function buildBackCover(count, dateStr) {
+      const sourceUrl = "https://7175tt.github.io/manufacturing-ai-solutions-showcase/solution-resource-handbook.html";
+      return [
+        '<section class="pdf-backcover">',
+          '<div class="pdf-backcover-inner">',
+            '<header class="pdf-backcover-head">',
+              '<div class="pdf-backcover-eyebrow">COLOPHON ｜ 版權與聲明</div>',
+              '<h2>關於本手冊</h2>',
+              '<div class="pdf-backcover-divider"></div>',
+            '</header>',
+            '<dl class="pdf-backcover-meta">',
+              '<div><dt>編製單位</dt><dd>財團法人資訊工業策進會</dd></div>',
+              '<div><dt>手冊名稱</dt><dd>製造業 AI 解決方案資源手冊</dd></div>',
+              '<div><dt>編製日期</dt><dd>' + esc(dateStr) + '</dd></div>',
+              '<div><dt>收錄方案</dt><dd>' + count + ' 項</dd></div>',
+            '</dl>',
+            '<section class="pdf-backcover-block">',
+              '<h3>著作權聲明</h3>',
+              '<p>本手冊內容之著作權，除個別標示者外，悉歸<strong>財團法人資訊工業策進會</strong>所有。未經書面授權，不得以任何形式重製、轉載、改作、散布或公開傳輸本手冊全部或部分內容。</p>',
+            '</section>',
+            '<section class="pdf-backcover-block">',
+              '<h3>資料來源與免責聲明</h3>',
+              '<p>本手冊收錄之各項解決方案資訊，均由各供應商提供並授權使用。資訊工業策進會僅就資料進行彙整、編輯與排版，<strong>不擔保各項資訊之完整性、正確性或時效性</strong>。讀者於採用相關方案前，請逕向供應商查證最新內容、規格與報價。因採用本手冊所載資訊而衍生之任何直接或間接損失，本會概不負責。</p>',
+            '</section>',
+            '<section class="pdf-backcover-block">',
+              '<h3>聯絡與線上資源</h3>',
+              '<dl class="pdf-backcover-contact">',
+                '<div><dt>編製單位</dt><dd>財團法人資訊工業策進會</dd></div>',
+                '<div><dt>官方網站</dt><dd><a href="https://www.iii.org.tw/">https://www.iii.org.tw/</a></dd></div>',
+                '<div><dt>線上版手冊</dt><dd><a href="' + sourceUrl + '">' + sourceUrl + '</a></dd></div>',
+              '</dl>',
+              '<p class="pdf-backcover-hint">線上版手冊可依關鍵字、痛點、產業、部署模式即時篩選，並隨時匯出最新版 PDF。</p>',
+            '</section>',
+            '<footer class="pdf-backcover-foot">',
+              '<div class="pdf-backcover-logo-text">財團法人資訊工業策進會</div>',
+              '<div class="pdf-backcover-logo-sub">Institute for Information Industry</div>',
+              '<div class="pdf-backcover-copy">© ' + new Date().getFullYear() + ' 資訊工業策進會　All Rights Reserved.</div>',
+            '</footer>',
+          '</div>',
+        '</section>'
+      ].join("");
+    }
+    function buildHandbookDocument(records) {
+      const today = new Date();
+      const dateStr = today.getFullYear() + "/" + String(today.getMonth() + 1).padStart(2, "0") + "/" + String(today.getDate()).padStart(2, "0");
+      const fileDateStr = today.getFullYear() + String(today.getMonth() + 1).padStart(2, "0") + String(today.getDate()).padStart(2, "0");
+      const count = records.length;
+      const tocItems = records.map(record => {
+        const supplier = record.display_supplier || record.supplier_name || record.company || "";
+        return '<li>'
+          + '<span class="pdf-toc-no">方案 ' + solutionNo(record) + '</span>'
+          + '<span class="pdf-toc-title">' + esc(record.solution || "") + '</span>'
+          + '<span class="pdf-toc-supplier">' + esc(supplier) + '</span>'
+          + '</li>';
+      }).join("");
+      const quickRefHtml = buildAllQuickRef(records);
+      const solutionsHtml = records.map((record, i) => buildSolutionPage(record, i + 1, count)).join("");
+      const backCoverHtml = buildBackCover(count, dateStr);
+      const css = [
+        '@page { size: A4; margin: 14mm 14mm 18mm 14mm; @bottom-center { content: "— " counter(page) " —"; color: #126b75; font-size: 9pt; font-weight: 700; letter-spacing: 6px; } }',
+        '@page :first { @bottom-center { content: ""; } }',
+        '@page pdf-no-number { @bottom-center { content: ""; } }',
+        '.pdf-no-number { page: pdf-no-number; }',
+        '*, *::before, *::after { box-sizing: border-box; }',
+        'html, body { margin: 0; padding: 0; color: #1a2a32; font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "微軟正黑體", Arial, sans-serif; font-size: 10.5pt; line-height: 1.55; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }',
+        'a { color: #0f3f47; word-break: break-all; }',
+        '.pdf-toolbar { position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 8px; align-items: stretch; }',
+        '.pdf-toolbar button { padding: 8px 14px; border: 1px solid #0f3f47; background: #126b75; color: #fff; font-weight: 900; font-size: 13px; cursor: pointer; }',
+        '.pdf-toolbar button:hover { background: #0f3f47; }',
+        '.pdf-hint { position: fixed; top: 12px; left: 12px; right: 220px; z-index: 100; padding: 10px 14px; background: #fff7df; border: 1px solid #b99024; color: #5d4710; font-size: 12px; font-weight: 700; line-height: 1.45; box-shadow: 0 6px 16px rgba(0,0,0,.12); }',
+        '.pdf-hint strong { color: #8a6c1a; }',
+        '@media print { .pdf-toolbar, .pdf-hint { display: none !important; } }',
+        '.pdf-cover { display: flex; flex-direction: column; justify-content: center; min-height: 245mm; padding: 30mm 8mm 20mm; text-align: center; page-break-after: always; break-after: page; border-top: 8px solid #126b75; border-bottom: 4px solid #b99024; }',
+        '.pdf-cover .pdf-cover-kicker { margin: 0 0 14px; color: #126b75; font-size: 11pt; letter-spacing: 6px; font-weight: 700; }',
+        '.pdf-cover h1 { margin: 0 0 12px; color: #0f3f47; font-size: 32pt; line-height: 1.25; font-weight: 900; }',
+        '.pdf-cover .pdf-cover-en { margin: 0 0 18px; color: #5d6975; font-size: 13pt; font-style: italic; }',
+        '.pdf-cover .pdf-cover-divider { width: 80px; height: 4px; margin: 12px auto 24px; background: #b99024; }',
+        '.pdf-cover .pdf-cover-meta { margin: 0 auto; padding-top: 12px; color: #5d6975; font-size: 11pt; line-height: 2; }',
+        '.pdf-cover .pdf-cover-meta strong { color: #126b75; font-size: 14pt; }',
+        '.pdf-cover .pdf-cover-credit { margin: 24px auto 0; padding: 12px 22px; display: inline-block; background: #dfeeed; color: #0f3f47; font-weight: 900; font-size: 12pt; }',
+        '.pdf-toc { padding-top: 4mm; page-break-before: always; break-before: page; page-break-after: always; break-after: page; }',
+        '.pdf-toc h2 { margin: 0 0 14px; padding-bottom: 8px; border-bottom: 3px solid #126b75; color: #0f3f47; font-size: 18pt; }',
+        '.pdf-toc ol, .pdf-toc ul { list-style: none; margin: 0; padding: 0; }',
+        '.pdf-toc li { display: grid; grid-template-columns: 72px 1fr auto; gap: 10px; padding: 5px 4px; border-bottom: 1px dotted #c8cfd4; font-size: 10pt; break-inside: avoid; align-items: baseline; }',
+        '.pdf-toc .pdf-toc-no { color: #b99024; font-weight: 900; }',
+        '.pdf-toc .pdf-toc-title { color: #1a2a32; font-weight: 700; }',
+        '.pdf-toc .pdf-toc-supplier { color: #5d6975; font-size: 9.5pt; white-space: nowrap; }',
+        '.pdf-quickref { page-break-before: always; break-before: page; padding-top: 4mm; padding-bottom: 4mm; }',
+        '.pdf-quickref-head { margin: 0 0 14px; padding: 8px 10px; background: linear-gradient(90deg, #126b75 0%, #0f3f47 100%); color: #fff; border-bottom: 4px solid #b99024; }',
+        '.pdf-quickref-eyebrow { color: #ffe8a9; letter-spacing: 5px; font-size: 9pt; font-weight: 700; }',
+        '.pdf-quickref-head h2 { margin: 4px 0 2px; color: #fff; font-size: 18pt; font-weight: 900; }',
+        '.pdf-quickref-hint { margin: 0; color: #dfeeed; font-size: 9.5pt; font-weight: 700; }',
+        '.pdf-quickref-body { display: flex; flex-direction: column; gap: 8px; }',
+        '.pdf-quickref-block { break-inside: avoid; page-break-inside: avoid; border: 1px solid #d8dee2; border-left: 4px solid #126b75; background: #fbfcfc; padding: 8px 12px; }',
+        '.pdf-quickref-head-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dotted #c8cfd4; }',
+        '.pdf-quickref-option { color: #0f3f47; font-size: 11pt; font-weight: 900; line-height: 1.3; }',
+        '.pdf-quickref-count { color: #b99024; font-size: 9.5pt; font-weight: 700; white-space: nowrap; padding-left: 8px; }',
+        '.pdf-quickref-list { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 16px; column-rule: 1px dashed #e6ebee; }',
+        '.pdf-quickref-list li { padding: 3px 0; font-size: 9pt; line-height: 1.45; break-inside: avoid; page-break-inside: avoid; }',
+        '.pdf-quickref-list .qref-no { display: inline-block; min-width: 32px; color: #b99024; font-weight: 900; }',
+        '.pdf-quickref-list .qref-title { color: #1a2a32; font-weight: 700; }',
+        '.pdf-quickref-list .qref-supplier { display: block; padding-left: 32px; color: #5d6975; font-size: 8.5pt; }',
+        '.pdf-solution { page-break-before: always; break-before: page; padding-bottom: 6mm; }',
+        '.pdf-solution-head { display: flex; justify-content: space-between; align-items: center; margin: 0 0 10px; padding: 8px 14px; background: #126b75; color: #fff; font-size: 10pt; font-weight: 700; letter-spacing: 1px; }',
+        '.pdf-solution-head .pdf-head-counter { color: #ffe8a9; font-weight: 900; }',
+        '.pdf-solution-title { margin: 0 0 12px; padding: 4px 0 10px; border-bottom: 2px solid #b99024; }',
+        '.pdf-solution-title .pdf-supplier { color: #5d6975; font-size: 11pt; font-weight: 700; margin-bottom: 2px; }',
+        '.pdf-solution-title h1 { margin: 0 0 6px; color: #0f3f47; font-size: 20pt; line-height: 1.3; font-weight: 900; }',
+        '.pdf-sessions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }',
+        '.pdf-section { margin: 0 0 10px; break-inside: avoid; page-break-inside: avoid; }',
+        '.pdf-section h2 { margin: 0 0 6px; padding: 4px 8px; background: #e8f3f1; border-left: 4px solid #126b75; color: #0f3f47; font-size: 11pt; font-weight: 900; }',
+        '.pdf-section p { margin: 3px 0; }',
+        '.pdf-benefit p { padding: 8px 10px; background: #fff7df; border-left: 4px solid #b99024; line-height: 1.65; font-size: 10.5pt; }',
+        '.pdf-tag-row { display: grid; grid-template-columns: 90px 1fr; gap: 8px; padding: 2px 0; align-items: start; }',
+        '.pdf-tag-row strong { color: #5d6975; font-size: 9.5pt; padding-top: 2px; font-weight: 700; }',
+        '.pdf-tag-list { display: flex; flex-wrap: wrap; gap: 4px; }',
+        '.pdf-chip { display: inline-block; padding: 2px 8px; background: #f0f4f6; border: 1px solid #cfd6da; border-radius: 999px; color: #2a3942; font-size: 9pt; }',
+        '.pdf-chip-accent { background: #126b75; border-color: #0f3f47; color: #fff; }',
+        '.pdf-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid #d8dee2; background: #fbfcfc; }',
+        '.pdf-meta-row { display: grid; grid-template-columns: 92px 1fr; gap: 8px; padding: 6px 10px; border-bottom: 1px solid #e6ebee; border-right: 1px solid #e6ebee; font-size: 10pt; align-items: baseline; }',
+        '.pdf-meta-row strong { color: #126b75; font-size: 9.5pt; font-weight: 900; }',
+        '.pdf-meta-grid .pdf-meta-row:nth-child(2n) { border-right: none; }',
+        '.pdf-contact { margin-top: 14px; }',
+        '.pdf-contact-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 2px solid #126b75; background: #f4faf9; }',
+        '.pdf-contact-grid .pdf-meta-row { border-right: 1px solid #cfe0de; border-bottom: none; }',
+        '.pdf-contact-grid .pdf-meta-row:last-child { border-right: none; }',
+        '.pdf-url a { word-break: break-all; font-size: 9.5pt; }',
+        '.pdf-backcover { page-break-before: always; break-before: page; min-height: 260mm; padding: 18mm 4mm 12mm; border-top: 6px solid #126b75; border-bottom: 6px solid #b99024; display: flex; flex-direction: column; }',
+        '.pdf-backcover-inner { display: flex; flex-direction: column; gap: 14px; flex: 1; }',
+        '.pdf-backcover-head { text-align: center; margin-bottom: 4px; }',
+        '.pdf-backcover-eyebrow { color: #b99024; font-size: 10pt; letter-spacing: 5px; font-weight: 700; margin-bottom: 8px; }',
+        '.pdf-backcover-head h2 { margin: 0; color: #0f3f47; font-size: 22pt; font-weight: 900; }',
+        '.pdf-backcover-divider { width: 70px; height: 3px; margin: 12px auto 0; background: #b99024; }',
+        '.pdf-backcover-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 8px 0; padding: 12px 0; border-top: 1px solid #d8dee2; border-bottom: 1px solid #d8dee2; }',
+        '.pdf-backcover-meta div { display: grid; grid-template-columns: 80px 1fr; gap: 8px; padding: 4px 14px; align-items: baseline; }',
+        '.pdf-backcover-meta dt { color: #5d6975; font-size: 9.5pt; font-weight: 700; }',
+        '.pdf-backcover-meta dd { margin: 0; color: #1a2a32; font-size: 10.5pt; font-weight: 700; }',
+        '.pdf-backcover-block { break-inside: avoid; page-break-inside: avoid; }',
+        '.pdf-backcover-block h3 { margin: 0 0 6px; padding: 4px 10px; background: #e8f3f1; border-left: 4px solid #126b75; color: #0f3f47; font-size: 11.5pt; font-weight: 900; }',
+        '.pdf-backcover-block p { margin: 4px 2px 0; padding: 0 4px; font-size: 10pt; line-height: 1.7; color: #2a3942; }',
+        '.pdf-backcover-block p strong { color: #0f3f47; }',
+        '.pdf-backcover-contact { margin: 6px 0 0; }',
+        '.pdf-backcover-contact div { display: grid; grid-template-columns: 90px 1fr; gap: 8px; padding: 4px 6px; border-bottom: 1px dotted #d8dee2; align-items: baseline; }',
+        '.pdf-backcover-contact dt { color: #126b75; font-size: 9.5pt; font-weight: 900; }',
+        '.pdf-backcover-contact dd { margin: 0; font-size: 10pt; }',
+        '.pdf-backcover-hint { margin-top: 6px; padding: 6px 10px; background: #fff7df; border-left: 3px solid #b99024; color: #5d4710; font-size: 9.5pt; }',
+        '.pdf-backcover-foot { margin-top: auto; padding-top: 18px; text-align: center; border-top: 1px solid #d8dee2; }',
+        '.pdf-backcover-logo-text { color: #0f3f47; font-size: 14pt; font-weight: 900; letter-spacing: 2px; }',
+        '.pdf-backcover-logo-sub { color: #5d6975; font-size: 9.5pt; font-style: italic; margin: 2px 0 10px; letter-spacing: 1px; }',
+        '.pdf-backcover-copy { color: #5d6975; font-size: 9pt; letter-spacing: .5px; }'
+      ].join("\n");
+      const title = "製造業AI解決方案資源手冊_" + fileDateStr;
+      return '<!doctype html>\n'
+        + '<html lang="zh-Hant">\n'
+        + '<head>\n'
+        + '<meta charset="utf-8">\n'
+        + '<title>' + esc(title) + '</title>\n'
+        + '<style>\n' + css + '\n</style>\n'
+        + '</head>\n'
+        + '<body>\n'
+        + '<div class="pdf-hint">'
+        +   '💡 <strong>列印小提示：</strong>請於右側列印對話框點開「更多設定」，'
+        +   '<strong>取消勾選「頁首及頁尾」</strong>，'
+        +   '即可隱藏網址與日期等預設文字，獲得最乾淨的 PDF。本手冊已內建頁碼。'
+        + '</div>\n'
+        + '<div class="pdf-toolbar">'
+        +   '<button onclick="window.print()">🖨️ 列印 / 儲存為 PDF</button>'
+        +   '<button onclick="window.close()">關閉</button>'
+        + '</div>\n'
+        + '<section class="pdf-cover pdf-no-number">'
+        +   '<p class="pdf-cover-kicker">MANUFACTURING AI SOLUTION HANDBOOK</p>'
+        +   '<h1>製造業 AI 解決方案<br>資源手冊</h1>'
+        +   '<p class="pdf-cover-en">Manufacturing AI Solution Resource Handbook</p>'
+        +   '<div class="pdf-cover-divider"></div>'
+        +   '<div class="pdf-cover-meta">'
+        +     '<div><strong>' + count + '</strong> 項精選方案</div>'
+        +     '<div>編製日期：' + esc(dateStr) + '</div>'
+        +   '</div>'
+        +   '<div class="pdf-cover-credit">本手冊由「財團法人資訊工業策進會」整理編製</div>'
+        + '</section>\n'
+        + '<section class="pdf-toc">'
+        +   '<h2>方案目錄</h2>'
+        +   '<ol>' + tocItems + '</ol>'
+        + '</section>\n'
+        + quickRefHtml
+        + solutionsHtml
+        + backCoverHtml
+        + '</body>\n</html>';
+    }
+    function exportHandbookToPdf(records) {
+      if (!records || records.length === 0) {
+        window.alert("尚無方案資料可匯出，請調整篩選條件或等待資料載入完成。");
+        return;
+      }
+      const html = buildHandbookDocument(records);
+      const w = window.open("", "_blank");
+      if (!w) {
+        window.alert("瀏覽器封鎖了新分頁，請允許此網站開啟彈出視窗後再試一次。");
+        return;
+      }
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+      const triggerPrint = () => {
+        try { w.focus(); } catch (e) {}
+        try { w.print(); } catch (e) {}
+      };
+      if (w.document.readyState === "complete") {
+        setTimeout(triggerPrint, 700);
+      } else {
+        w.addEventListener("load", () => setTimeout(triggerPrint, 700));
+      }
+    }
     function render() {
       const rows = filtered();
       els.count.textContent = rows.length;
       els.countSub.textContent = rows.length;
       els.filterLiveCount.textContent = rows.length;
+      if (els.exportCount) els.exportCount.textContent = rows.length;
+      if (els.exportHandbook) els.exportHandbook.disabled = rows.length === 0;
       els.empty.style.display = rows.length ? "none" : "block";
       els.list.innerHTML = rows.map(record => `
         <article class="solution" id="solution-${record.id}">
@@ -1963,6 +2406,11 @@
       renderClouds();
       render();
     });
+    if (els.exportHandbook) {
+      els.exportHandbook.addEventListener("click", () => {
+        exportHandbookToPdf(filtered());
+      });
+    }
     els.toolReset.addEventListener("click", () => {
       window.clearTimeout(toolFilterApplyTimer);
       els.toolSearch.value = "";
