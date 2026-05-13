@@ -1466,6 +1466,19 @@
         ? "industry-tools"
         : "handbook";
     }
+    function isRootViewHash(hash = window.location.hash) {
+      return !hash || hash === "#handbook" || hash === "#industry-tools";
+    }
+    function scrollPageTop(behavior = "auto") {
+      window.scrollTo({ top: 0, left: 0, behavior });
+    }
+    function keepRootViewAtTop(behavior = "auto") {
+      if (!isRootViewHash()) return;
+      scrollPageTop(behavior);
+      window.setTimeout(() => scrollPageTop("auto"), 80);
+      window.setTimeout(() => scrollPageTop("auto"), 260);
+      window.setTimeout(() => scrollPageTop("auto"), 700);
+    }
     function setActiveView(view, updateHash = false) {
       const active = view === "industry-tools" ? "industry-tools" : "handbook";
       els.viewTabs.forEach(tab => {
@@ -1568,6 +1581,7 @@
         solutions = parseGvizTable(data).map(normalizeSolutionSheetRecord);
         solutionsLoaded = true;
         render();
+        keepRootViewAtTop("auto");
       } catch (error) {
         solutions = [];
         els.count.textContent = "0";
@@ -1577,6 +1591,7 @@
         els.compare.innerHTML = "";
         els.empty.style.display = "block";
         els.empty.textContent = "解決方案資料暫時無法載入，請確認 Google Sheet 是否開放讀取。";
+        keepRootViewAtTop("auto");
       } finally {
         solutionsLoading = false;
       }
@@ -1992,12 +2007,16 @@
       tab.addEventListener("click", event => {
         event.preventDefault();
         setActiveView(tab.dataset.viewTarget, true);
-        document.querySelector(".layout").scrollIntoView({ behavior: "smooth", block: "start" });
+        keepRootViewAtTop("smooth");
       });
     });
-    window.addEventListener("hashchange", () => setActiveView(viewFromHash()));
+    window.addEventListener("hashchange", () => {
+      setActiveView(viewFromHash());
+      keepRootViewAtTop("auto");
+    });
     loadSolutionsFromSheet();
     setActiveView(viewFromHash());
+    keepRootViewAtTop("auto");
     loadIndustryTools();
   </script>
 </body>
