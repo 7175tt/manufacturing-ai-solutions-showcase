@@ -1995,7 +1995,7 @@
         .map(([option, matches]) => ({ option, matches }))
         .sort((a, b) => b.matches.length - a.matches.length);
     }
-    function buildQuickRefSection(label, hint, groups) {
+    function buildQuickRefSection(key, letter, label, hint, groups) {
       if (!groups.length) return "";
       const blocks = groups.map(g => {
         const items = g.matches.map(r => {
@@ -2017,9 +2017,9 @@
         ].join("");
       }).join("");
       return [
-        '<section class="pdf-quickref">',
+        '<section class="pdf-quickref" data-pdf-section id="pdf-quickref-' + key + '">',
           '<header class="pdf-quickref-head">',
-            '<div class="pdf-quickref-eyebrow">QUICK INDEX</div>',
+            '<div class="pdf-quickref-eyebrow">APPENDIX ' + letter + '　｜　主題索引</div>',
             '<h2>' + esc(label) + '</h2>',
             '<p class="pdf-quickref-hint">' + esc(hint) + '</p>',
           '</header>',
@@ -2027,22 +2027,98 @@
         '</section>'
       ].join("");
     }
+    const appendixDefinitions = [
+      { key: "pain",         letter: "A", label: "依生產端痛點查找",        hint: "鎖定貴公司目前面臨的主要痛點，再翻閱對應的方案頁。" },
+      { key: "deployment",   letter: "B", label: "依部署模式查找",          hint: "依資安政策、IT 環境與基礎建設條件挑選部署方式。" },
+      { key: "data_need",    letter: "C", label: "依所需資料查找",          hint: "依貴公司現有資料的型態與更新頻率匹配適合的方案。" },
+      { key: "equipment",    letter: "D", label: "依搭配設備查找",          hint: "依現有或可投資的硬體類型挑選對應的方案。" },
+      { key: "api",          letter: "E", label: "依 API 開放程度查找",     hint: "依是否需與 ERP／MES／既有系統介接挑選方案。" },
+      { key: "lead_time",    letter: "F", label: "依導入時間查找",          hint: "依專案緊急程度與時程選擇導入週期合適的方案。" },
+      { key: "company_size", letter: "G", label: "依適用企業規模查找",      hint: "依貴公司營運規模與人力配置挑選最適合的方案。" }
+    ];
     function buildAllQuickRef(records) {
+      const groupGetters = {
+        pain:         () => pdfGroupByOptions(records, painOptions, r => r.pain_tags),
+        deployment:   () => pdfGroupByOptions(records, deploymentOptions, r => r.deployment_tags),
+        data_need:    () => pdfGroupByOptions(records, dataNeedOptions, r => r.data_need_tags),
+        equipment:    () => pdfGroupByOptions(records, equipmentOptions, r => r.equipment_tags),
+        api:          () => pdfGroupByOptions(records, apiOptions, r => r.api_tags),
+        lead_time:    () => pdfGroupByOptions(records, leadOptions, r => r.lead_time_tags),
+        company_size: () => pdfGroupByString(records, r => r.company_size)
+      };
+      return appendixDefinitions.map(def =>
+        buildQuickRefSection(def.key, def.letter, def.label, def.hint, groupGetters[def.key]())
+      ).join("");
+    }
+    function buildAppendixIntro() {
+      const items = appendixDefinitions.map(def =>
+        '<li class="pdf-appendix-item">'
+        + '<span class="pdf-appendix-letter">' + def.letter + '</span>'
+        + '<span class="pdf-appendix-title">' + esc(def.label) + '</span>'
+        + '<span class="pdf-appendix-desc">' + esc(def.hint) + '</span>'
+        + '</li>'
+      ).join("");
       return [
-        buildQuickRefSection("依生產端痛點查找", "鎖定貴公司目前面臨的主要痛點，再翻閱對應的方案頁。",
-          pdfGroupByOptions(records, painOptions, r => r.pain_tags)),
-        buildQuickRefSection("依部署模式查找", "依資安政策、IT 環境與基礎建設條件挑選部署方式。",
-          pdfGroupByOptions(records, deploymentOptions, r => r.deployment_tags)),
-        buildQuickRefSection("依所需資料查找", "依貴公司現有資料的型態與更新頻率匹配適合的方案。",
-          pdfGroupByOptions(records, dataNeedOptions, r => r.data_need_tags)),
-        buildQuickRefSection("依搭配設備查找", "依現有或可投資的硬體類型挑選對應的方案。",
-          pdfGroupByOptions(records, equipmentOptions, r => r.equipment_tags)),
-        buildQuickRefSection("依 API 開放程度查找", "依是否需與 ERP／MES／既有系統介接挑選方案。",
-          pdfGroupByOptions(records, apiOptions, r => r.api_tags)),
-        buildQuickRefSection("依導入時間查找", "依專案緊急程度與時程選擇導入週期合適的方案。",
-          pdfGroupByOptions(records, leadOptions, r => r.lead_time_tags)),
-        buildQuickRefSection("依適用企業規模查找", "依貴公司營運規模與人力配置挑選最適合的方案。",
-          pdfGroupByString(records, r => r.company_size))
+        '<section class="pdf-appendix-intro" data-pdf-section id="pdf-appendix">',
+          '<div class="pdf-appendix-intro-inner">',
+            '<div class="pdf-appendix-eyebrow-top">APPENDIX</div>',
+            '<h2>附錄｜主題索引</h2>',
+            '<div class="pdf-appendix-divider"></div>',
+            '<p class="pdf-appendix-lead">本附錄依以下七個主題整理快速檢索表，協助讀者依需求情境快速定位對應方案頁。</p>',
+            '<ul class="pdf-appendix-list">' + items + '</ul>',
+          '</div>',
+        '</section>'
+      ].join("");
+    }
+    function buildToc(records) {
+      const solutionRows = records.map(r => {
+        const supplier = r.display_supplier || r.supplier_name || r.company || "";
+        const id = "pdf-solution-" + solutionNo(r);
+        return '<li class="pdf-toc-row">'
+          + '<span class="pdf-toc-label">'
+          +   '<span class="pdf-toc-tag">方案 ' + solutionNo(r) + '</span>'
+          +   '<span class="pdf-toc-title-text">' + esc(r.solution || "") + '</span>'
+          +   (supplier ? '<span class="pdf-toc-supplier">／' + esc(supplier) + '</span>' : "")
+          + '</span>'
+          + '<span class="pdf-toc-leader"></span>'
+          + '<span class="pdf-toc-page" data-toc-target="' + id + '">—</span>'
+          + '</li>';
+      }).join("");
+      const appendixRows = appendixDefinitions.map(def =>
+        '<li class="pdf-toc-row">'
+        + '<span class="pdf-toc-label">'
+        +   '<span class="pdf-toc-tag pdf-toc-tag-appendix">' + def.letter + '</span>'
+        +   '<span class="pdf-toc-title-text">' + esc(def.label) + '</span>'
+        + '</span>'
+        + '<span class="pdf-toc-leader"></span>'
+        + '<span class="pdf-toc-page" data-toc-target="pdf-quickref-' + def.key + '">—</span>'
+        + '</li>'
+      ).join("");
+      return [
+        '<section class="pdf-toc" data-pdf-section id="pdf-toc-page">',
+          '<header class="pdf-toc-head">',
+            '<div class="pdf-toc-eyebrow">CONTENTS</div>',
+            '<h2>方案目錄</h2>',
+          '</header>',
+          '<div class="pdf-toc-group">',
+            '<div class="pdf-toc-grouptitle"><span class="pdf-toc-groupbar"></span>方案總覽　<span class="pdf-toc-groupcount">' + records.length + ' 項方案</span></div>',
+            '<ol class="pdf-toc-list">' + solutionRows + '</ol>',
+          '</div>',
+          '<div class="pdf-toc-group">',
+            '<div class="pdf-toc-grouptitle"><span class="pdf-toc-groupbar"></span>附錄｜主題索引</div>',
+            '<ol class="pdf-toc-list">'
+            + '<li class="pdf-toc-row pdf-toc-row-appendix-intro">'
+            +   '<span class="pdf-toc-label">'
+            +     '<span class="pdf-toc-tag pdf-toc-tag-intro">附</span>'
+            +     '<span class="pdf-toc-title-text">附錄總覽</span>'
+            +   '</span>'
+            +   '<span class="pdf-toc-leader"></span>'
+            +   '<span class="pdf-toc-page" data-toc-target="pdf-appendix">—</span>'
+            + '</li>'
+            + appendixRows
+            + '</ol>',
+          '</div>',
+        '</section>'
       ].join("");
     }
     function pdfMetaRow(label, value) {
@@ -2103,7 +2179,7 @@
         ? '<section class="pdf-section pdf-contact"><h2>聯絡窗口</h2><div class="pdf-contact-grid">' + contactMeta + '</div></section>'
         : "";
       return [
-        '<article class="pdf-solution">',
+        '<article class="pdf-solution" data-pdf-section id="pdf-solution-' + id + '">',
           '<header class="pdf-solution-head">',
             '<div class="pdf-head-label">製造業 AI 解決方案資源手冊　|　方案 ' + id + '</div>',
             '<div class="pdf-head-counter">' + index + ' / ' + total + '</div>',
@@ -2125,7 +2201,7 @@
     function buildBackCover(count, dateStr) {
       const sourceUrl = "https://7175tt.github.io/manufacturing-ai-solutions-showcase/solution-resource-handbook.html";
       return [
-        '<section class="pdf-backcover">',
+        '<section class="pdf-backcover" data-pdf-section id="pdf-backcover">',
           '<div class="pdf-backcover-inner">',
             '<header class="pdf-backcover-head">',
               '<div class="pdf-backcover-eyebrow">COLOPHON ｜ 版權與聲明</div>',
@@ -2169,16 +2245,10 @@
       const dateStr = today.getFullYear() + "/" + String(today.getMonth() + 1).padStart(2, "0") + "/" + String(today.getDate()).padStart(2, "0");
       const fileDateStr = today.getFullYear() + String(today.getMonth() + 1).padStart(2, "0") + String(today.getDate()).padStart(2, "0");
       const count = records.length;
-      const tocItems = records.map(record => {
-        const supplier = record.display_supplier || record.supplier_name || record.company || "";
-        return '<li>'
-          + '<span class="pdf-toc-no">方案 ' + solutionNo(record) + '</span>'
-          + '<span class="pdf-toc-title">' + esc(record.solution || "") + '</span>'
-          + '<span class="pdf-toc-supplier">' + esc(supplier) + '</span>'
-          + '</li>';
-      }).join("");
-      const quickRefHtml = buildAllQuickRef(records);
+      const tocHtml = buildToc(records);
       const solutionsHtml = records.map((record, i) => buildSolutionPage(record, i + 1, count)).join("");
+      const appendixIntroHtml = buildAppendixIntro();
+      const quickRefHtml = buildAllQuickRef(records);
       const backCoverHtml = buildBackCover(count, dateStr);
       const css = [
         '@page { size: A4; margin: 14mm 14mm 18mm 14mm; @bottom-center { content: "— " counter(page) " —"; color: #126b75; font-size: 9pt; font-weight: 700; letter-spacing: 6px; } }',
@@ -2202,20 +2272,46 @@
         '.pdf-cover .pdf-cover-meta { margin: 0 auto; padding-top: 12px; color: #5d6975; font-size: 11pt; line-height: 2; }',
         '.pdf-cover .pdf-cover-meta strong { color: #126b75; font-size: 14pt; }',
         '.pdf-cover .pdf-cover-credit { margin: 24px auto 0; padding: 12px 22px; display: inline-block; background: #dfeeed; color: #0f3f47; font-weight: 900; font-size: 12pt; }',
-        '.pdf-toc { padding-top: 4mm; page-break-before: always; break-before: page; page-break-after: always; break-after: page; }',
-        '.pdf-toc h2 { margin: 0 0 14px; padding-bottom: 8px; border-bottom: 3px solid #126b75; color: #0f3f47; font-size: 18pt; }',
-        '.pdf-toc ol, .pdf-toc ul { list-style: none; margin: 0; padding: 0; }',
-        '.pdf-toc li { display: grid; grid-template-columns: 72px 1fr auto; gap: 10px; padding: 5px 4px; border-bottom: 1px dotted #c8cfd4; font-size: 10pt; break-inside: avoid; align-items: baseline; }',
-        '.pdf-toc .pdf-toc-no { color: #b99024; font-weight: 900; }',
-        '.pdf-toc .pdf-toc-title { color: #1a2a32; font-weight: 700; }',
-        '.pdf-toc .pdf-toc-supplier { color: #5d6975; font-size: 9.5pt; white-space: nowrap; }',
+        '.pdf-toc { padding-top: 2mm; page-break-before: always; break-before: page; }',
+        '.pdf-toc-head { margin: 0 0 12px; padding-bottom: 10px; border-bottom: 3px solid #126b75; }',
+        '.pdf-toc-eyebrow { color: #b99024; font-size: 9pt; letter-spacing: 6px; font-weight: 700; }',
+        '.pdf-toc-head h2 { margin: 4px 0 0; color: #0f3f47; font-size: 20pt; font-weight: 900; }',
+        '.pdf-toc-group { margin: 12px 0 4px; }',
+        '.pdf-toc-group + .pdf-toc-group { margin-top: 16px; }',
+        '.pdf-toc-grouptitle { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; padding: 4px 0; color: #0f3f47; font-size: 12pt; font-weight: 900; page-break-after: avoid; break-after: avoid; }',
+        '.pdf-toc-groupbar { display: inline-block; width: 4px; height: 16px; background: #126b75; }',
+        '.pdf-toc-groupcount { color: #b99024; font-size: 10pt; font-weight: 700; margin-left: 4px; }',
+        '.pdf-toc-list { list-style: none; margin: 0; padding: 0; }',
+        '.pdf-toc-row { display: flex; align-items: baseline; gap: 6px; padding: 3px 4px; font-size: 10pt; break-inside: avoid; page-break-inside: avoid; line-height: 1.4; white-space: nowrap; }',
+        '.pdf-toc-row:nth-child(odd) { background: #fbfcfc; }',
+        '.pdf-toc-label { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; display: inline-flex; align-items: baseline; gap: 6px; }',
+        '.pdf-toc-tag { display: inline-block; min-width: 56px; padding: 1px 6px; background: #126b75; color: #fff; font-size: 9pt; font-weight: 900; letter-spacing: .5px; text-align: center; flex: none; }',
+        '.pdf-toc-tag-appendix { background: #b99024; min-width: 26px; }',
+        '.pdf-toc-tag-intro { background: #0f3f47; min-width: 26px; }',
+        '.pdf-toc-title-text { color: #1a2a32; font-weight: 700; overflow: hidden; text-overflow: ellipsis; }',
+        '.pdf-toc-supplier { color: #5d6975; font-size: 9pt; font-weight: 400; }',
+        '.pdf-toc-leader { flex: 1 1 auto; min-width: 18px; border-bottom: 1.5px dotted #c8cfd4; height: 14px; margin-bottom: 2px; }',
+        '.pdf-toc-page { flex: none; min-width: 32px; color: #126b75; font-weight: 900; font-size: 11pt; text-align: right; font-variant-numeric: tabular-nums; }',
+        '.pdf-appendix-intro { page-break-before: always; break-before: page; min-height: 245mm; padding: 30mm 8mm 20mm; display: flex; flex-direction: column; justify-content: center; border-top: 8px solid #b99024; border-bottom: 4px solid #126b75; text-align: center; }',
+        '.pdf-appendix-intro-inner { max-width: 160mm; margin: 0 auto; }',
+        '.pdf-appendix-eyebrow-top { color: #b99024; font-size: 11pt; letter-spacing: 8px; font-weight: 700; }',
+        '.pdf-appendix-intro h2 { margin: 12px 0 4px; color: #0f3f47; font-size: 28pt; font-weight: 900; }',
+        '.pdf-appendix-divider { width: 70px; height: 4px; margin: 14px auto 18px; background: #b99024; }',
+        '.pdf-appendix-lead { margin: 0 auto 24px; max-width: 130mm; color: #5d6975; font-size: 11pt; line-height: 1.7; }',
+        '.pdf-appendix-list { list-style: none; margin: 0; padding: 0; text-align: left; }',
+        '.pdf-appendix-item { display: grid; grid-template-columns: 36px 1fr; gap: 6px 12px; padding: 8px 10px; border-bottom: 1px dotted #d8dee2; }',
+        '.pdf-appendix-letter { grid-row: span 2; display: flex; align-items: center; justify-content: center; background: #b99024; color: #fff; font-size: 14pt; font-weight: 900; height: 36px; width: 36px; }',
+        '.pdf-appendix-title { color: #0f3f47; font-size: 12pt; font-weight: 900; }',
+        '.pdf-appendix-desc { color: #5d6975; font-size: 9.5pt; line-height: 1.5; }',
         '.pdf-quickref { page-break-before: always; break-before: page; padding-top: 4mm; padding-bottom: 4mm; }',
-        '.pdf-quickref-head { margin: 0 0 14px; padding: 8px 10px; background: linear-gradient(90deg, #126b75 0%, #0f3f47 100%); color: #fff; border-bottom: 4px solid #b99024; }',
+        '.pdf-quickref-head { margin: 0 0 14px; padding: 8px 10px; background: linear-gradient(90deg, #126b75 0%, #0f3f47 100%); color: #fff; border-bottom: 4px solid #b99024; page-break-after: avoid; break-after: avoid; }',
         '.pdf-quickref-eyebrow { color: #ffe8a9; letter-spacing: 5px; font-size: 9pt; font-weight: 700; }',
         '.pdf-quickref-head h2 { margin: 4px 0 2px; color: #fff; font-size: 18pt; font-weight: 900; }',
         '.pdf-quickref-hint { margin: 0; color: #dfeeed; font-size: 9.5pt; font-weight: 700; }',
-        '.pdf-quickref-body { display: flex; flex-direction: column; gap: 8px; }',
-        '.pdf-quickref-block { break-inside: avoid; page-break-inside: avoid; border: 1px solid #d8dee2; border-left: 4px solid #126b75; background: #fbfcfc; padding: 8px 12px; }',
+        '.pdf-quickref-body { display: block; }',
+        '.pdf-quickref-block { margin-bottom: 8px; border: 1px solid #d8dee2; border-left: 4px solid #126b75; background: #fbfcfc; padding: 8px 12px; }',
+        '.pdf-quickref-block:first-child .pdf-quickref-head-row { page-break-before: avoid; break-before: avoid; }',
+        '.pdf-quickref-block + .pdf-quickref-block .pdf-quickref-head-row { page-break-before: auto; }',
         '.pdf-quickref-head-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dotted #c8cfd4; }',
         '.pdf-quickref-option { color: #0f3f47; font-size: 11pt; font-weight: 900; line-height: 1.3; }',
         '.pdf-quickref-count { color: #b99024; font-size: 9.5pt; font-weight: 700; white-space: nowrap; padding-left: 8px; }',
@@ -2291,7 +2387,7 @@
         +   '<button onclick="window.print()">🖨️ 列印 / 儲存為 PDF</button>'
         +   '<button onclick="window.close()">關閉</button>'
         + '</div>\n'
-        + '<section class="pdf-cover pdf-no-number">'
+        + '<section class="pdf-cover pdf-no-number" data-pdf-section id="pdf-cover">'
         +   '<p class="pdf-cover-kicker">MANUFACTURING AI SOLUTION HANDBOOK</p>'
         +   '<h1>製造業 AI 解決方案<br>資源手冊</h1>'
         +   '<p class="pdf-cover-en">Manufacturing AI Solution Resource Handbook</p>'
@@ -2302,13 +2398,32 @@
         +   '</div>'
         +   '<div class="pdf-cover-credit">本手冊由「財團法人資訊工業策進會」整理編製</div>'
         + '</section>\n'
-        + '<section class="pdf-toc">'
-        +   '<h2>方案目錄</h2>'
-        +   '<ol>' + tocItems + '</ol>'
-        + '</section>\n'
-        + quickRefHtml
+        + tocHtml
         + solutionsHtml
+        + appendixIntroHtml
+        + quickRefHtml
         + backCoverHtml
+        + '<script>(function(){\n'
+        +   'function updateTocPageNumbers(){\n'
+        +     'var PX_PER_MM = 96 / 25.4;\n'
+        +     'var PAGE_HEIGHT_PX = 265 * PX_PER_MM;\n'
+        +     'var sections = document.querySelectorAll("[data-pdf-section]");\n'
+        +     'var pageMap = {};\n'
+        +     'var nextPage = 1;\n'
+        +     'sections.forEach(function(section){\n'
+        +       'pageMap[section.id] = nextPage;\n'
+        +       'var h = section.getBoundingClientRect().height;\n'
+        +       'var pagesUsed = Math.max(1, Math.ceil(h / PAGE_HEIGHT_PX - 0.05));\n'
+        +       'nextPage += pagesUsed;\n'
+        +     '});\n'
+        +     'document.querySelectorAll("[data-toc-target]").forEach(function(span){\n'
+        +       'var id = span.getAttribute("data-toc-target");\n'
+        +       'var page = pageMap[id];\n'
+        +       'if (page) span.textContent = page;\n'
+        +     '});\n'
+        +   '}\n'
+        +   'window.updateTocPageNumbers = updateTocPageNumbers;\n'
+        + '})();<\/script>\n'
         + '</body>\n</html>';
     }
     function exportHandbookToPdf(records) {
@@ -2326,13 +2441,16 @@
       w.document.write(html);
       w.document.close();
       const triggerPrint = () => {
+        try {
+          if (typeof w.updateTocPageNumbers === "function") w.updateTocPageNumbers();
+        } catch (e) {}
         try { w.focus(); } catch (e) {}
         try { w.print(); } catch (e) {}
       };
       if (w.document.readyState === "complete") {
-        setTimeout(triggerPrint, 700);
+        setTimeout(triggerPrint, 800);
       } else {
-        w.addEventListener("load", () => setTimeout(triggerPrint, 700));
+        w.addEventListener("load", () => setTimeout(triggerPrint, 800));
       }
     }
     function render() {
