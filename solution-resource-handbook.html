@@ -2152,18 +2152,10 @@
       const benefitHtml = record.benefit
         ? '<section class="pdf-section pdf-benefit"><h2>方案效益</h2><p>' + esc(record.benefit) + '</p></section>'
         : "";
-      const tagsHtml = [
-        pdfTagRow("可解決痛點", record.pain_tags),
-        pdfTagRow("AI 技術", record.tech_tags),
-        pdfTagRow("部署模式", record.deployment_tags),
-        pdfTagRow("所需資料", record.data_need_tags),
-        pdfTagRow("搭配設備", record.equipment_tags),
-        pdfTagRow("API 開放程度", record.api_tags),
-        pdfTagRow("導入時間", record.lead_time_tags),
-        pdfTagRow("適用產業", record.industry_tags)
-      ].filter(Boolean).join("");
-      const tagsSection = tagsHtml ? '<section class="pdf-section pdf-tags"><h2>方案標籤</h2>' + tagsHtml + '</section>' : "";
       const metaHtml = [
+        pdfMetaRow("可解決痛點", record.production_pain),
+        pdfMetaRow("AI 技術", record.tech),
+        pdfMetaRow("部署模式", record.deployment),
         pdfMetaRow("收費／計價模式", record.pricing),
         pdfMetaRow("導入預估時間", record.lead_time || record.lead_time_bucket),
         pdfMetaRow("適用產業", record.industries || record.best_fit),
@@ -2200,7 +2192,6 @@
             sessionsHtml,
           '</div>',
           benefitHtml,
-          tagsSection,
           metaSection,
           casesSection,
           urlSection,
