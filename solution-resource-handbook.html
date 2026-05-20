@@ -997,7 +997,7 @@
       <aside class="cover-panel" aria-label="資料平台摘要">
         <strong>資料群組</strong>
         <dl>
-          <div><dt>資源手冊</dt><dd><span id="coverHandbookTotal">載入中</span> 項</dd></div>
+          <div><dt>資源手冊</dt><dd id="coverHandbookTotal">載入中</dd></div>
           <div><dt>AI工具庫</dt><dd id="coverToolTotal">載入中</dd></div>
         </dl>
       </aside>
@@ -1081,7 +1081,7 @@
             </div>
           </div>
           <div class="filter-live-count filter-sticky-count" aria-live="polite">
-            <span>目前顯示</span><strong id="filterLiveCount">載入中</strong><span>/ <span id="handbookFilterTotal">載入中</span> 項</span>
+            <span>目前顯示</span><strong id="filterLiveCount">載入中</strong><span id="handbookFilterTotal"></span>
           </div>
           <div class="filter-groups">
             <div class="filter-group">
@@ -1131,7 +1131,7 @@
         <div class="result-note">
           <div class="result-note-text">
             <span class="result-note-hint">設定條件後按「套用篩選」再更新下方方案列表與比較表。</span>
-            <span class="result-note-count">顯示 <strong id="resultCountSub">載入中</strong> / <span id="handbookSubTotal">載入中</span> 項</span>
+            <span class="result-note-count">顯示 <strong id="resultCountSub">載入中</strong><span id="handbookSubTotal"></span></span>
           </div>
           <button id="exportHandbook" class="btn-export-handbook" type="button" aria-label="匯出目前顯示的方案為 PDF 手冊">
             <span class="btn-export-icon" aria-hidden="true">📕</span>
@@ -1664,16 +1664,16 @@
         solutions = parseGvizTable(data).map(normalizeSolutionSheetRecord);
         solutionsLoaded = true;
         const total = solutions.length;
-        if (els.coverHandbookTotal) els.coverHandbookTotal.textContent = total;
-        if (els.handbookFilterTotal) els.handbookFilterTotal.textContent = total;
-        if (els.handbookSubTotal) els.handbookSubTotal.textContent = total;
+        if (els.coverHandbookTotal) els.coverHandbookTotal.textContent = total + " 項";
+        if (els.handbookFilterTotal) els.handbookFilterTotal.textContent = " / " + total + " 項";
+        if (els.handbookSubTotal) els.handbookSubTotal.textContent = " / " + total + " 項";
         render();
         keepRootViewAtTop("auto");
       } catch (error) {
         solutions = [];
-        if (els.coverHandbookTotal) els.coverHandbookTotal.textContent = "0";
-        if (els.handbookFilterTotal) els.handbookFilterTotal.textContent = "0";
-        if (els.handbookSubTotal) els.handbookSubTotal.textContent = "0";
+        if (els.coverHandbookTotal) els.coverHandbookTotal.textContent = "0 項";
+        if (els.handbookFilterTotal) els.handbookFilterTotal.textContent = " / 0 項";
+        if (els.handbookSubTotal) els.handbookSubTotal.textContent = " / 0 項";
         els.count.textContent = "0";
         els.countSub.textContent = "0";
         els.filterLiveCount.textContent = "0";
