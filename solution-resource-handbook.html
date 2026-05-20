@@ -997,7 +997,7 @@
       <aside class="cover-panel" aria-label="資料平台摘要">
         <strong>資料群組</strong>
         <dl>
-          <div><dt>資源手冊</dt><dd>95 項</dd></div>
+          <div><dt>資源手冊</dt><dd><span id="coverHandbookTotal">載入中</span> 項</dd></div>
           <div><dt>AI工具庫</dt><dd id="coverToolTotal">載入中</dd></div>
         </dl>
       </aside>
@@ -1081,7 +1081,7 @@
             </div>
           </div>
           <div class="filter-live-count filter-sticky-count" aria-live="polite">
-            <span>目前顯示</span><strong id="filterLiveCount">95</strong><span>/ 95 項</span>
+            <span>目前顯示</span><strong id="filterLiveCount">載入中</strong><span>/ <span id="handbookFilterTotal">載入中</span> 項</span>
           </div>
           <div class="filter-groups">
             <div class="filter-group">
@@ -1131,7 +1131,7 @@
         <div class="result-note">
           <div class="result-note-text">
             <span class="result-note-hint">設定條件後按「套用篩選」再更新下方方案列表與比較表。</span>
-            <span class="result-note-count">顯示 <strong id="resultCountSub">95</strong> / 95 項</span>
+            <span class="result-note-count">顯示 <strong id="resultCountSub">載入中</strong> / <span id="handbookSubTotal">載入中</span> 項</span>
           </div>
           <button id="exportHandbook" class="btn-export-handbook" type="button" aria-label="匯出目前顯示的方案為 PDF 手冊">
             <span class="btn-export-icon" aria-hidden="true">📕</span>
@@ -1314,6 +1314,9 @@
       reset: document.querySelector("#reset"),
       exportHandbook: document.querySelector("#exportHandbook"),
       exportCount: document.querySelector("#exportCount"),
+      coverHandbookTotal: document.querySelector("#coverHandbookTotal"),
+      handbookFilterTotal: document.querySelector("#handbookFilterTotal"),
+      handbookSubTotal: document.querySelector("#handbookSubTotal"),
       list: document.querySelector("#solutionList"),
       compare: document.querySelector("#compareBody"),
       count: document.querySelector("#resultCount"),
@@ -1660,10 +1663,17 @@
         const data = await loadGvizData(solutionDataConfig, "解決方案資料");
         solutions = parseGvizTable(data).map(normalizeSolutionSheetRecord);
         solutionsLoaded = true;
+        const total = solutions.length;
+        if (els.coverHandbookTotal) els.coverHandbookTotal.textContent = total;
+        if (els.handbookFilterTotal) els.handbookFilterTotal.textContent = total;
+        if (els.handbookSubTotal) els.handbookSubTotal.textContent = total;
         render();
         keepRootViewAtTop("auto");
       } catch (error) {
         solutions = [];
+        if (els.coverHandbookTotal) els.coverHandbookTotal.textContent = "0";
+        if (els.handbookFilterTotal) els.handbookFilterTotal.textContent = "0";
+        if (els.handbookSubTotal) els.handbookSubTotal.textContent = "0";
         els.count.textContent = "0";
         els.countSub.textContent = "0";
         els.filterLiveCount.textContent = "0";
