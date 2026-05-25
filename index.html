@@ -202,11 +202,13 @@
 
     .eyebrow::before {
       content: "";
-      width: 12px;
+      width: 42px;
       height: 12px;
-      border-radius: 50%;
-      background: var(--yellow);
-      box-shadow: 18px 0 0 var(--teal);
+      flex: 0 0 42px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 6px 50%, var(--yellow) 0 6px, transparent 6.5px),
+        radial-gradient(circle at 30px 50%, var(--teal) 0 6px, transparent 6.5px);
     }
 
     h1 {
@@ -518,7 +520,8 @@
     .session-note {
       display: grid;
       gap: 8px;
-      max-width: 940px;
+      width: 100%;
+      max-width: none;
       margin: 22px 0 26px;
       padding: 18px 20px;
       border: 2px solid color-mix(in srgb, var(--session-accent) 68%, white);
@@ -1204,8 +1207,8 @@
         AI 工具媒合會
       </a>
       <div class="nav-links">
-        <a href="#solutions">第一場 8 家</a>
-        <a href="#second-solutions">第二場 6 家</a>
+        <a href="#solutions">5/19 8 家</a>
+        <a href="#second-solutions">6/23 6 家</a>
         <a class="nav-register" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199" target="_blank" rel="noreferrer">活動報名</a>
       </div>
     </nav>
@@ -1214,32 +1217,32 @@
   <section id="top" class="hero">
     <div class="hero-inner">
       <div class="hero-copy-block">
-        <p class="eyebrow">兩場次 AI 工具介紹入口</p>
+        <p class="eyebrow">AI 工具介紹入口</p>
         <h1>
           <span class="hero-title-main">製造業 AI 工具媒合會</span>
           <span class="hero-title-sub">解決方案展示</span>
         </h1>
-        <p class="hero-copy">第一場聚焦生產製程痛點，第二場銜接 AI 工具庫與輔導團資源。兩場次分開整理，方便企業先看需求情境，再找到適合洽談的供給端工具。</p>
+        <p class="hero-copy">整理製造業可落地的 AI 工具與導入情境，協助需求端快速掌握方案重點、資料串接條件與後續洽談方向。</p>
         <div class="hero-actions">
           <a class="accent-action" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199" target="_blank" rel="noreferrer">立即報名參加</a>
-          <a class="primary-action" href="#second-solutions">查看第二場 6 家</a>
-          <a class="secondary-action" href="#solutions">查看第一場 8 家</a>
+          <a class="primary-action" href="#second-solutions">查看 6/23 6 家</a>
+          <a class="secondary-action" href="#solutions">查看 5/19 8 家</a>
           <a class="secondary-action" href="#decision">導入評估重點</a>
         </div>
         <div class="hero-meta" aria-label="活動資訊">
-          <span><i class="dot" aria-hidden="true"></i>第一場 05 / 19｜生產製程方案</span>
-          <span><i class="dot" aria-hidden="true"></i>第二場 06 / 23｜工具庫銜接方案</span>
+          <span><i class="dot" aria-hidden="true"></i>05 / 19｜生產製程方案</span>
+          <span><i class="dot" aria-hidden="true"></i>06 / 23｜工具庫銜接方案</span>
           <span><i class="dot" aria-hidden="true"></i>digiBlock C 數位創新基地</span>
         </div>
       </div>
-      <div class="hero-board" aria-label="兩場次解決方案導覽">
+      <div class="hero-board" aria-label="解決方案導覽">
         <a class="session-tile tile-first" href="#solutions">
-          <small>第一場｜5/19</small>
+          <small>5/19｜生產製程</small>
           <strong>生產線的問題 AI 看得見、量得出</strong>
           <span class="tile-count"><b>8</b><span>家生產製程方案</span></span>
         </a>
         <a class="session-tile tile-second" href="#second-solutions">
-          <small>第二場｜6/23</small>
+          <small>6/23｜工具庫資源</small>
           <strong>AI 工具用得上 補助資源接得上</strong>
           <span class="tile-count"><b>6</b><span>家工具庫銜接方案</span></span>
         </a>
@@ -1249,19 +1252,19 @@
 
   <main>
     <section id="solutions" class="section first-session">
-      <span class="session-ribbon">第一場｜2026 / 05 / 19｜生產製程方案</span>
+      <span class="session-ribbon">2026 / 05 / 19｜生產製程方案</span>
       <div class="section-heading">
-        <h2>第一場｜5/19 生產製程 8 家方案</h2>
-        <p class="lead">第一場供給端聚焦製造現場痛點，包含排程、製程控制、視覺檢測、戰情室、設備維護與流程自動化。點擊卡片可查看完整問卷重點。</p>
+        <h2>5/19 生產製程 8 家方案</h2>
+        <p class="lead">供給端工具聚焦製造現場痛點，包含排程、製程控制、視覺檢測、戰情室、設備維護與流程自動化。點擊卡片可查看完整問卷重點。</p>
       </div>
       <div class="solution-grid first-grid" id="solutionGrid" aria-live="polite"></div>
     </section>
 
     <section id="second-solutions" class="section second-session">
-      <span class="session-ribbon">第二場｜2026 / 06 / 23｜供給端工具介紹</span>
+      <span class="session-ribbon">2026 / 06 / 23｜供給端工具介紹</span>
       <div class="section-heading">
-        <h2>第二場｜AI 工具庫與輔導團資源 6 家方案</h2>
-        <p class="lead">第二場改以工具理解、短講交流與桌邊洽談為主，收錄的 6 家供給端與第一場 8 家分開呈現，避免企業報名或選商時混淆。</p>
+        <h2>AI 工具庫與輔導團資源 6 家方案</h2>
+        <p class="lead">收錄 6 家供給端工具，涵蓋企業知識管理、射出機聯網、預知維護、智慧能源管理、AI 掃碼追溯與自然語言報表等應用。</p>
       </div>
       <div class="session-note">
         <strong>10 萬元 AI 工具補助並非單獨申請項目。</strong>
@@ -1274,19 +1277,19 @@
       <div class="compare-inner">
         <div class="metric">
           <strong>14</strong>
-          <span>兩場次供給端工具</span>
+          <span>收錄供給端工具</span>
         </div>
         <div class="metric">
           <strong>8</strong>
-          <span>第一場生產製程方案</span>
+          <span>生產製程方案</span>
         </div>
         <div class="metric">
           <strong>6</strong>
-          <span>第二場工具庫銜接方案</span>
+          <span>工具庫銜接方案</span>
         </div>
         <div class="metric">
-          <strong>2</strong>
-          <span>場次分流避免混淆</span>
+          <strong>3</strong>
+          <span>導入評估重點</span>
         </div>
       </div>
     </section>
@@ -1294,28 +1297,28 @@
     <section id="decision" class="section guide">
       <div>
         <p class="eyebrow">需求端評估</p>
-        <h2>先分清場次，再比較導入條件</h2>
+        <h2>先鎖定痛點，再比較導入條件</h2>
       </div>
       <ol class="guide-list">
         <li>
           <span class="step-no">1</span>
           <div>
-            <b>確認要看第一場或第二場</b>
-            <p>第一場偏製程現場應用，第二場偏 AI 工具庫銜接、知識管理、機聯網、能源與資料應用。</p>
+            <b>確認主要場景</b>
+            <p>排程、品質、設備、工安、報價或資料整合，先選定一個最急迫流程。</p>
           </div>
         </li>
         <li>
           <span class="step-no">2</span>
           <div>
-            <b>盤點資料與使用情境</b>
-            <p>確認是否已有 ERP、MES、SCADA、影像、PLC、IoT、Excel 或企業文件資料可供串接。</p>
+            <b>盤點資料與設備</b>
+            <p>確認是否已有 ERP、MES、SCADA、影像、PLC、IoT 或 Excel 資料可供串接。</p>
           </div>
         </li>
         <li>
           <span class="step-no">3</span>
           <div>
-            <b>同步看部署、預算與輔導團路徑</b>
-            <p>依雲端、本地端、混合部署、買斷或訂閱制，評估資安、導入時程，以及是否需要透過輔導團銜接補助資源。</p>
+            <b>比對部署與預算</b>
+            <p>依雲端、本地端、混合部署、買斷或訂閱制，評估資安、時程與內部維運量。</p>
           </div>
         </li>
       </ol>
@@ -1324,7 +1327,7 @@
 
   <footer class="footer">
     <strong>製造業 AI 工具媒合會</strong>
-    <p>第一場 8 家與第二場 6 家已分開整理。報名前可先確認想交流的場次與工具方向，主辦單位將依需求協助媒合。</p>
+    <p>已找到想洽談的工具商？回到活動報名頁填寫需求與希望交流的方案，主辦單位將依選擇優先安排現場媒合。</p>
     <a class="accent-action" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199" target="_blank" rel="noreferrer">前往 iEvents 報名頁</a>
   </footer>
 
