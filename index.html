@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>製造業生產製程 AI 解決方案展示</title>
+  <title>製造業 AI 工具媒合會解決方案展示</title>
   <style>
     :root {
       --mint: #c8e4e1;
@@ -316,6 +316,51 @@
       font-weight: 650;
     }
 
+    .session-ribbon {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 34px;
+      padding: 5px 12px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(35, 169, 165, 0.34);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--blue-dark);
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .session-note {
+      display: grid;
+      gap: 8px;
+      max-width: 940px;
+      margin: 22px 0 26px;
+      padding: 18px 20px;
+      border: 1px solid rgba(35, 169, 165, 0.28);
+      border-left: 6px solid var(--teal);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.74);
+      color: #284452;
+      font-weight: 700;
+    }
+
+    .session-note strong {
+      color: var(--blue-dark);
+      font-weight: 950;
+    }
+
+    .session-note a {
+      color: var(--blue);
+      font-weight: 950;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+    }
+
+    .second-session {
+      padding-top: 76px;
+    }
+
     .solution-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -370,6 +415,25 @@
       transform: translateX(24px);
       transition: transform 220ms ease;
       z-index: 0;
+    }
+
+    .second-grid .solution-card {
+      border-top-color: var(--teal);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(234, 245, 243, 0.96));
+    }
+
+    .second-grid .solution-card::after {
+      background:
+        linear-gradient(90deg, rgba(35, 169, 165, 0.16) 1px, transparent 1px) 0 0 / 16px 16px,
+        linear-gradient(0deg, rgba(35, 169, 165, 0.16) 1px, transparent 1px) 0 0 / 16px 16px;
+      height: 44px;
+      width: 120px;
+      top: 36px;
+    }
+
+    .second-grid .card-index {
+      color: var(--blue);
     }
 
     .solution-card:hover,
@@ -904,7 +968,8 @@
         AI 工具媒合會
       </a>
       <div class="nav-links">
-        <a href="#solutions">查看 8 家方案</a>
+        <a href="#solutions">第一場 8 家</a>
+        <a href="#second-solutions">第二場 6 家</a>
         <a class="nav-register" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199" target="_blank" rel="noreferrer">活動報名</a>
       </div>
     </nav>
@@ -912,16 +977,17 @@
 
   <section id="top" class="hero">
     <div class="hero-inner">
-      <h1>解決方案展示網頁</h1>
-      <p class="hero-copy">精選 8 家 AI 服務供應商，聚焦排程、製程控制、視覺檢測、戰情室、設備維護與流程自動化，協助需求端快速找到適合的導入方向。</p>
+      <h1>製造業 AI 工具媒合會｜解決方案展示</h1>
+      <p class="hero-copy">第一場聚焦生產製程痛點，第二場銜接 AI 工具庫與輔導團資源。兩場次分開整理，方便企業先看需求情境，再找到適合洽談的供給端工具。</p>
       <div class="hero-actions">
         <a class="accent-action" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199" target="_blank" rel="noreferrer">立即報名參加</a>
-        <a class="primary-action" href="#solutions">瀏覽方案卡片</a>
+        <a class="primary-action" href="#second-solutions">查看第二場 6 家</a>
+        <a class="secondary-action" href="#solutions">查看第一場 8 家</a>
         <a class="secondary-action" href="#decision">導入評估重點</a>
       </div>
       <div class="hero-meta" aria-label="活動資訊">
-        <span><i class="dot" aria-hidden="true"></i>2026 / 05 / 19</span>
-        <span><i class="dot" aria-hidden="true"></i>14:00 - 17:00</span>
+        <span><i class="dot" aria-hidden="true"></i>第一場 05 / 19｜生產製程方案</span>
+        <span><i class="dot" aria-hidden="true"></i>第二場 06 / 23｜工具庫銜接方案</span>
         <span><i class="dot" aria-hidden="true"></i>digiBlock C 數位創新基地</span>
       </div>
     </div>
@@ -930,29 +996,42 @@
   <main>
     <section id="solutions" class="section">
       <div class="section-heading">
-        <h2>8 家入選解決方案</h2>
-        <p class="lead">每張卡片整理方案定位、主要技術與導入情境。點擊卡片可查看完整問卷重點。</p>
+        <h2>第一場｜5/19 生產製程 8 家方案</h2>
+        <p class="lead">第一場供給端聚焦製造現場痛點，包含排程、製程控制、視覺檢測、戰情室、設備維護與流程自動化。點擊卡片可查看完整問卷重點。</p>
       </div>
       <div class="solution-grid" id="solutionGrid" aria-live="polite"></div>
+    </section>
+
+    <section id="second-solutions" class="section second-session">
+      <span class="session-ribbon">第二場｜2026 / 06 / 23｜供給端工具介紹</span>
+      <div class="section-heading">
+        <h2>第二場｜AI 工具庫與輔導團資源 6 家方案</h2>
+        <p class="lead">第二場改以工具理解、短講交流與桌邊洽談為主，收錄的 6 家供給端與第一場 8 家分開呈現，避免企業報名或選商時混淆。</p>
+      </div>
+      <div class="session-note">
+        <strong>10 萬元 AI 工具補助並非單獨申請項目。</strong>
+        <span>企業需先了解並參與產業競爭力輔導團診斷輔導，後續依輔導團機制銜接 AI 工具導入與補助資源。更多說明可參考 <a href="https://eii.nat.gov.tw/moeai-plus/" target="_blank" rel="noreferrer">產業競爭力輔導團官網</a>。</span>
+      </div>
+      <div class="solution-grid second-grid" id="secondSolutionGrid" aria-live="polite"></div>
     </section>
 
     <section class="compare-band" aria-label="方案概覽">
       <div class="compare-inner">
         <div class="metric">
+          <strong>14</strong>
+          <span>兩場次供給端工具</span>
+        </div>
+        <div class="metric">
           <strong>8</strong>
-          <span>家入選 AI 供應商</span>
+          <span>第一場生產製程方案</span>
         </div>
         <div class="metric">
           <strong>6</strong>
-          <span>類生產端痛點涵蓋</span>
+          <span>第二場工具庫銜接方案</span>
         </div>
         <div class="metric">
-          <strong>6</strong>
-          <span>家支援完整 API</span>
-        </div>
-        <div class="metric">
-          <strong>1-12</strong>
-          <span>個月常見導入週期區間</span>
+          <strong>2</strong>
+          <span>場次分流避免混淆</span>
         </div>
       </div>
     </section>
@@ -960,28 +1039,28 @@
     <section id="decision" class="section guide">
       <div>
         <p class="eyebrow">需求端評估</p>
-        <h2>先鎖定痛點，再比較導入條件</h2>
+        <h2>先分清場次，再比較導入條件</h2>
       </div>
       <ol class="guide-list">
         <li>
           <span class="step-no">1</span>
           <div>
-            <b>確認主要場景</b>
-            <p>排程、品質、設備、工安、報價或資料整合，先選定一個最急迫流程。</p>
+            <b>確認要看第一場或第二場</b>
+            <p>第一場偏製程現場應用，第二場偏 AI 工具庫銜接、知識管理、機聯網、能源與資料應用。</p>
           </div>
         </li>
         <li>
           <span class="step-no">2</span>
           <div>
-            <b>盤點資料與設備</b>
-            <p>確認是否已有 ERP、MES、SCADA、影像、PLC、IoT 或 Excel 資料可供串接。</p>
+            <b>盤點資料與使用情境</b>
+            <p>確認是否已有 ERP、MES、SCADA、影像、PLC、IoT、Excel 或企業文件資料可供串接。</p>
           </div>
         </li>
         <li>
           <span class="step-no">3</span>
           <div>
-            <b>比對部署與預算</b>
-            <p>依雲端、本地端、混合部署、買斷或訂閱制，評估資安、時程與內部維運量。</p>
+            <b>同步看部署、預算與輔導團路徑</b>
+            <p>依雲端、本地端、混合部署、買斷或訂閱制，評估資安、導入時程，以及是否需要透過輔導團銜接補助資源。</p>
           </div>
         </li>
       </ol>
@@ -990,7 +1069,7 @@
 
   <footer class="footer">
     <strong>製造業 AI 工具媒合會</strong>
-    <p>已找到想洽談的工具商？回到活動報名頁填寫需求與希望交流的方案，主辦單位將依選擇優先安排現場媒合。</p>
+    <p>第一場 8 家與第二場 6 家已分開整理。報名前可先確認想交流的場次與工具方向，主辦單位將依需求協助媒合。</p>
     <a class="accent-action" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3199" target="_blank" rel="noreferrer">前往 iEvents 報名頁</a>
   </footer>
 
@@ -1184,7 +1263,141 @@
       }
     ];
 
+    const secondSolutions = [
+      {
+        company: "智慧方案股份有限公司",
+        supplier: "智慧方案股份有限公司",
+        title: "EgentHub｜企業級 AI Agent 管理平台",
+        summary: "整合企業知識庫、資料來源與多模型 AI 助理，協助部門快速建立可控權限、可串資料的 AI Agent Hub。",
+        tags: ["第二場", "AI Agent", "知識管理", "MCP"],
+        tech: "AI Agent、多模型整合、MCP、權限控管",
+        maturity: "7 / 7",
+        deployment: "本地端部署、雲端 SaaS 部署、混合部署",
+        pricing: "訂閱制，24 萬/年，20 個帳號",
+        timeline: "SaaS 可立即開通；混合部署約 3 個月",
+        api: "有限 API（資料查詢／資料庫撈取）",
+        data: "手動輸入、批次匯入與即時資料皆可支援",
+        equipment: "ERP、MES、WMS 資料庫，以及 SOP、PDF、Excel、企業文件等知識資料",
+        fields: "人機協作與知識管理，並延伸至排程、設備、庫存、報價與戰情儀表板。",
+        industries: ["食品", "紡織", "橡膠塑膠", "金屬製品", "電子零組件", "機械設備", "汽車零件"],
+        scale: "10~200人、201~1000人",
+        cases: "旭榮集團、南緯實業、至興精機、新日興。",
+        details: "企業常見痛點包含文件與資料分散、AI 助理權限難控、資料串接成本高，以及不同模型選擇困難。EgentHub 協助企業建立 AI Agent Hub，集中管理 AI 助理、知識庫、資料來源與跨部門流程。\n\n系統可依角色控管資料存取，支援多模型選擇與 MCP 工具串接，適合想先把內部知識、作業問答與資料查詢流程收斂到同一平台的企業。",
+        url: ""
+      },
+      {
+        company: "型智聯網股份有限公司",
+        supplier: "型智聯網股份有限公司",
+        title: "MoldLink_射出機聯網",
+        summary: "即時擷取射出機生產資料，透過 AI 統計輔助分析週期穩定度，提供設備稼動、異常與產能透明化管理。",
+        tags: ["第二場", "機聯網", "射出成型", "即時看板"],
+        tech: "AI 統計分析、IoT 機聯網、即時資料看板",
+        maturity: "7 / 7",
+        deployment: "本地端部署、混合部署",
+        pricing: "訂閱制，10 萬/年",
+        timeline: "1 個月",
+        api: "完整 API（提供完整 API 文件，支援系統整合）",
+        data: "即時使用／自動更新資料",
+        equipment: "IoT 感測器、PLC、CNC、SCADA、機台訊號與手動輸入資料",
+        fields: "排程與達交、品質與良率、設備與維護、報價與營運成本、儀表板或戰情中心。",
+        industries: ["橡膠塑膠", "汽車零件", "運輸工具", "其他製造業"],
+        scale: "1~9人、10~200人",
+        cases: "近百家導入案例，成功案例可參考官網。",
+        details: "射出產線常見問題是機台資料分散、週期不穩、異常原因不容易即時掌握。MoldLink 透過機聯網蒐集射出機資料，並以 AI 統計方式輔助判斷生產週期穩定度。\n\n管理者可透過看板掌握設備稼動、異常通知與異常設備 TOP10，適合需要讓射出現場更透明、快速找出瓶頸與提升準交率的企業。",
+        url: "https://www.mold-link.com/successcasesite/index"
+      },
+      {
+        company: "研丞科技",
+        supplier: "研丞科技",
+        title: "預知維護 PdM - 韌性系統",
+        summary: "結合真數據採樣、大數據資料庫與數位孿生比對，提早掌握設備風險並提出維護與改善建議。",
+        tags: ["第二場", "預知維護", "數位孿生", "設備韌性"],
+        tech: "真數據採樣、大數據資料庫、數位孿生、AI 解方建議",
+        maturity: "7 / 7",
+        deployment: "雲端 SaaS 部署、混合部署",
+        pricing: "買斷制 50 萬，可依感測數與導入範圍調整",
+        timeline: "2 個月",
+        api: "有限 API（資料查詢／資料庫撈取）",
+        data: "即時使用／自動更新資料",
+        equipment: "IoT 感測器、影像與光學感測、識別設備、PLC、CNC、SCADA 與機台訊號",
+        fields: "設備與維護、品質與良率、ESG/廠務/工安、人機協作與知識、儀表板或戰情中心。",
+        industries: ["食品", "飲料", "石化", "橡膠塑膠", "金屬製品", "電子零組件", "機械設備", "汽車零件"],
+        scale: "10~200人、201~1000人、1001人以上",
+        cases: "台積電、日月光、中華汽車、順天堂、可口可樂。",
+        details: "設備維護常受限於資料不足、異常徵兆不易判讀與維修經驗難以沉澱。此方案透過真數據採樣建立設備狀態資料庫，再以數位孿生進行狀態比對，協助企業提前發現風險。\n\n適合已有關鍵設備、希望降低非預期停機，並將維護從事後搶修推進到預防與預知管理的製造場域。",
+        url: "https://ect.com.tw/demo-2/"
+      },
+      {
+        company: "睿德系統有限公司",
+        supplier: "睿德系統有限公司",
+        title: "睿德 AI 智慧能源管理系統",
+        summary: "以即時用電監測、機器學習負載預測與異常偵測，協助企業做能源管理、碳盤查資料與設備預防維護。",
+        tags: ["第二場", "能源管理", "ESG", "負載預測"],
+        tech: "Big Data Analytics、Machine Learning、時間序列預測、非監督式學習",
+        maturity: "6 / 7",
+        deployment: "本地端部署",
+        pricing: "買斷制 15 萬",
+        timeline: "1 個月",
+        api: "有限 API（資料查詢／資料庫撈取）",
+        data: "即時使用／自動更新資料",
+        equipment: "IoT 感測器、PLC、CNC、SCADA 與機台訊號",
+        fields: "設備與維護、ESG/廠務/工安、儀表板或戰情中心，並支援 ISO 50001、14064、14067 所需能源與碳排資料。",
+        industries: ["食品", "紡織", "橡膠塑膠", "金屬製品", "電子零組件", "電腦電子產品", "電力設備", "機械設備", "汽車零件"],
+        scale: "10~200人",
+        cases: "能源管理、異常用電偵測與碳排資料彙整場域。",
+        details: "企業在節能與碳管理上常缺乏即時、可信的能源資料。睿德 AI 智慧能源管理系統可蒐集設備用電資料，透過機器學習預測負載與偵測異常用電，協助管理者掌握高耗能設備與異常趨勢。\n\n適合正準備導入能源管理、碳盤查、設備預防維護或廠務戰情看板的中小型製造業。",
+        url: "https://www.youtube.com/watch?v=zb7O2BFtW0g"
+      },
+      {
+        company: "方碼科技",
+        supplier: "方碼科技",
+        title: "方碼 AI 行動多碼掃描 - Fun2D MultiScan Mobile",
+        summary: "以手機 App 進行多碼掃描與小尺寸 2D 條碼辨識，支援倉儲、出貨、製程追溯與品質紀錄。",
+        tags: ["第二場", "AI 掃碼", "物流追溯", "行動 App"],
+        tech: "AI 視覺辨識、多碼掃描、行動端影像處理",
+        maturity: "5 / 7",
+        deployment: "手機 App 形式",
+        pricing: "標準版 24,000 元/授權/年；專業版 59,000 元/授權/年，最低 5 授權",
+        timeline: "1 個月",
+        api: "完整 API（提供完整 API 文件，支援系統整合）",
+        data: "即時使用／自動更新資料",
+        equipment: "資訊系統與資料庫、手機相機與識別讀取設備",
+        fields: "品質與良率、設備與維護、庫存與供應鏈、ESG/廠務/工安、人機協作與知識；非生產端可延伸至營運管理與物流倉儲。",
+        industries: ["食品", "飲料", "紡織", "橡膠塑膠", "金屬製品", "電子零組件", "電腦電子產品", "機械設備", "汽車零件"],
+        scale: "1~9人、10~200人、201~1000人、1001人以上",
+        cases: "精誠資訊。",
+        details: "製造與物流場域常遇到條碼尺寸小、一次需要讀取多個碼、離線作業與資料回寫困難等問題。Fun2D MultiScan Mobile 以行動端 AI 視覺辨識提升掃描效率，可支援多碼讀取、追溯紀錄與資料串接。\n\n適合需要快速改善倉儲盤點、出貨核對、製程追溯、UDI 或品質紀錄流程的企業。",
+        url: ""
+      },
+      {
+        company: "精勁有限公司",
+        supplier: "精勁有限公司",
+        title: "AI 自然語言報表系統（PlainReport AI）",
+        summary: "以 LLM、NLP 與 RAG 讓使用者用自然語言查詢 ERP、Excel 與資料庫，快速產生報表、圖表與營運洞察。",
+        tags: ["第二場", "自然語言報表", "LLM", "RAG"],
+        tech: "LLM、NLP、RAG、自然語言資料查詢",
+        maturity: "4 / 7",
+        deployment: "本地端部署、雲端 SaaS 部署、混合部署",
+        pricing: "訂閱制／專案報價，約 24 萬元/年起",
+        timeline: "1 個月",
+        api: "有限 API（資料查詢／資料庫撈取）",
+        data: "批次更新與即時資料皆可支援",
+        equipment: "ERP、MES、WMS、資料庫、Excel 與企業文件，未來可延伸至 MES、PLC、IoT 資料",
+        fields: "人機協作與知識、報價與營運成本、儀表板或戰情中心；非生產端包含營運管理、業務開拓、客服與財務。",
+        industries: ["金屬製品", "電子零組件", "電腦電子產品", "機械設備", "汽車零件"],
+        scale: "10~200人、201~1000人",
+        cases: "製造業與專業服務業資料查詢場景驗證。",
+        details: "許多企業已有 ERP、Excel 或資料庫，卻仍仰賴少數人撈資料、做報表與解讀數字。PlainReport AI 讓使用者以自然語言提出問題，系統再透過 LLM、NLP 與 RAG 查詢資料並生成報表、圖表或摘要。\n\n適合想降低資料分析門檻、讓主管與一線人員更快取得營運資訊的企業，也可作為導入 AI 工具庫後的資料查詢入口。",
+        url: "https://plainreport.ai/"
+      }
+    ];
+
     const grid = document.querySelector("#solutionGrid");
+    const secondGrid = document.querySelector("#secondSolutionGrid");
+    const solutionSets = {
+      first: solutions,
+      second: secondSolutions
+    };
     const modal = document.querySelector("#detailModal");
     const modalPanel = modal.querySelector(".modal-panel");
     const modalCompany = document.querySelector("#modalCompany");
@@ -1208,10 +1421,10 @@
       return /^https?:\/\//i.test(url) ? url : `https://${url}`;
     }
 
-    function renderCards() {
-      grid.innerHTML = solutions.map((item, index) => `
-        <button class="solution-card" type="button" data-index="${index}" aria-label="查看 ${escapeHTML(item.company)} 詳細方案">
-          <span class="card-index">${String(index + 1).padStart(2, "0")} / 08</span>
+    function renderCards(targetGrid, list, session, totalLabel) {
+      targetGrid.innerHTML = list.map((item, index) => `
+        <button class="solution-card" type="button" data-session="${session}" data-index="${index}" aria-label="查看 ${escapeHTML(item.company)} 詳細方案">
+          <span class="card-index">${String(index + 1).padStart(2, "0")} / ${totalLabel}</span>
           <span>
             <h3 class="card-company">${escapeHTML(item.company)}</h3>
             <p class="card-title">${escapeHTML(item.title)}</p>
@@ -1248,8 +1461,9 @@
       `;
     }
 
-    function openDetail(index, trigger) {
-      const item = solutions[index];
+    function openDetail(session, index, trigger) {
+      const item = solutionSets[session]?.[index];
+      if (!item) return;
       activeCard = trigger;
       modalCompany.textContent = item.company;
       modalTitle.textContent = item.title;
@@ -1286,13 +1500,17 @@
       if (activeCard) activeCard.focus();
     }
 
-    renderCards();
+    renderCards(grid, solutions, "first", "08");
+    renderCards(secondGrid, secondSolutions, "second", "06");
 
-    grid.addEventListener("click", event => {
+    function handleGridClick(event) {
       const card = event.target.closest(".solution-card");
       if (!card) return;
-      openDetail(Number(card.dataset.index), card);
-    });
+      openDetail(card.dataset.session, Number(card.dataset.index), card);
+    }
+
+    grid.addEventListener("click", handleGridClick);
+    secondGrid.addEventListener("click", handleGridClick);
 
     closeModal.addEventListener("click", closeDetail);
 
