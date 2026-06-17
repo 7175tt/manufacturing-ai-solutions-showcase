@@ -27,6 +27,10 @@
       --second-dark: #062b57;
       --second-soft: #dff4ef;
       --second-accent: #f9c93b;
+      --third-main: #236f8e;
+      --third-dark: #12384f;
+      --third-soft: #e7f2f6;
+      --third-accent: #edae49;
     }
 
     * {
@@ -372,6 +376,13 @@
       --tile-accent: var(--second-accent);
     }
 
+    .tile-third {
+      --tile-main: var(--third-main);
+      --tile-dark: var(--third-dark);
+      --tile-soft: #f7fbfd;
+      --tile-accent: var(--third-accent);
+    }
+
     .session-tile small {
       color: var(--tile-main);
       font-size: 13px;
@@ -419,7 +430,8 @@
     }
 
     .first-session,
-    .second-session {
+    .second-session,
+    .third-session {
       --session-main: var(--blue);
       --session-dark: var(--blue-dark);
       --session-soft: var(--mint-soft);
@@ -442,8 +454,17 @@
       padding-top: 94px;
     }
 
+    .third-session {
+      --session-main: var(--third-main);
+      --session-dark: var(--third-dark);
+      --session-soft: var(--third-soft);
+      --session-accent: var(--third-accent);
+      padding-top: 94px;
+    }
+
     .first-session::before,
-    .second-session::before {
+    .second-session::before,
+    .third-session::before {
       content: "";
       position: absolute;
       inset: 0 calc(50% - 50vw);
@@ -465,6 +486,13 @@
       border-top: 1px solid rgba(7, 139, 124, 0.2);
     }
 
+    .third-session::before {
+      background:
+        linear-gradient(90deg, rgba(35, 111, 142, 0.07) 1px, transparent 1px) 0 0 / 56px 56px,
+        linear-gradient(180deg, #fbfdff 0%, #edf7fa 56%, rgba(231, 242, 246, 0.95) 100%);
+      border-top: 1px solid rgba(35, 111, 142, 0.2);
+    }
+
     .section-heading {
       display: grid;
       grid-template-columns: minmax(0, 0.9fr) minmax(260px, 0.55fr);
@@ -482,7 +510,8 @@
     }
 
     .first-session h2,
-    .second-session h2 {
+    .second-session h2,
+    .third-session h2 {
       color: var(--session-dark);
     }
 
@@ -498,7 +527,9 @@
     }
 
     .second-session .lead,
-    .second-session .session-note {
+    .second-session .session-note,
+    .third-session .lead,
+    .third-session .session-note {
       color: #355366;
     }
 
@@ -601,14 +632,16 @@
     }
 
     .first-grid .solution-card,
-    .second-grid .solution-card {
+    .second-grid .solution-card,
+    .third-grid .solution-card {
       border-color: color-mix(in srgb, var(--session-main) 26%, white);
       border-top-color: var(--session-main);
       background: rgba(255, 255, 255, 0.92);
     }
 
     .first-grid .solution-card:nth-child(even),
-    .second-grid .solution-card:nth-child(even) {
+    .second-grid .solution-card:nth-child(even),
+    .third-grid .solution-card:nth-child(even) {
       border-top-color: var(--session-accent);
     }
 
@@ -619,19 +652,23 @@
     .first-grid .card-index,
     .first-grid .card-foot,
     .second-grid .card-index,
-    .second-grid .card-foot {
+    .second-grid .card-foot,
+    .third-grid .card-index,
+    .third-grid .card-foot {
       color: var(--session-main);
     }
 
     .first-grid .tag,
-    .second-grid .tag {
+    .second-grid .tag,
+    .third-grid .tag {
       border-color: color-mix(in srgb, var(--session-main) 22%, white);
       background: color-mix(in srgb, var(--session-soft) 68%, white);
       color: var(--session-dark);
     }
 
     .first-grid .arrow,
-    .second-grid .arrow {
+    .second-grid .arrow,
+    .third-grid .arrow {
       background: var(--session-accent);
       color: var(--session-dark);
     }
@@ -653,6 +690,16 @@
 
     .second-grid .solution-card:nth-child(even) {
       border-top-color: var(--session-accent);
+    }
+
+    .third-grid .solution-card {
+      border-top-color: var(--session-main);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(247, 251, 253, 0.98));
+    }
+
+    .third-grid .solution-card::after {
+      background: linear-gradient(90deg, var(--third-accent), var(--third-main));
     }
 
     .solution-card:hover,
@@ -1209,6 +1256,7 @@
       <div class="nav-links">
         <a href="#solutions">第一場(5/19)</a>
         <a href="#second-solutions">第二場(6/23)</a>
+        <a href="#third-solutions">第三場(7/21)</a>
         <a class="nav-register" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3289" target="_blank" rel="noreferrer">活動報名</a>
       </div>
     </nav>
@@ -1225,13 +1273,15 @@
         <p class="hero-copy">整理製造業可落地的 AI 工具與導入情境，協助需求端快速掌握方案重點、資料串接條件與後續洽談方向。</p>
         <div class="hero-actions">
           <a class="accent-action" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3289" target="_blank" rel="noreferrer">立即報名參加</a>
-          <a class="primary-action" href="#second-solutions">查看第二場(6/23)</a>
+          <a class="primary-action" href="#third-solutions">查看第三場(7/21)</a>
+          <a class="secondary-action" href="#second-solutions">查看第二場(6/23)</a>
           <a class="secondary-action" href="#solutions">查看第一場(5/19)</a>
           <a class="secondary-action" href="#decision">導入評估重點</a>
         </div>
         <div class="hero-meta" aria-label="活動資訊">
           <span><i class="dot" aria-hidden="true"></i>05 / 19｜生產製程方案</span>
           <span><i class="dot" aria-hidden="true"></i>06 / 23｜工具庫銜接方案</span>
+          <span><i class="dot" aria-hidden="true"></i>07 / 21｜一日制一對一媒合</span>
           <span><i class="dot" aria-hidden="true"></i>digiBlock C 數位創新基地</span>
         </div>
       </div>
@@ -1245,6 +1295,11 @@
           <small>6/23｜工具庫資源</small>
           <strong>AI 工具用得上 補助資源接得上</strong>
           <span class="tile-count"><b>6</b><span>家工具庫銜接方案</span></span>
+        </a>
+        <a class="session-tile tile-third" href="#third-solutions">
+          <small>7/21｜一日制媒合</small>
+          <strong>8 家供應商 14 輪預約式媒合</strong>
+          <span class="tile-count"><b>8</b><span>家一對一媒合方案</span></span>
         </a>
       </div>
     </div>
@@ -1273,11 +1328,32 @@
       <div class="solution-grid second-grid" id="secondSolutionGrid" aria-live="polite"></div>
     </section>
 
+    <section id="third-solutions" class="section third-session">
+      <span class="session-ribbon">2026 / 07 / 21｜第三場</span>
+      <div class="section-heading">
+        <h2>7/21 一日制 8 家供應商方案</h2>
+        <p class="lead">第三場採上午方案快速介紹、下午預約式一對一媒合，聚焦生產製程、品質檢測、研發設計、營運管理與供應鏈管理等製造業導入需求。</p>
+      </div>
+      <div class="session-note">
+        <strong>供給端資料校對中。</strong>
+        <span>以下內容依既有問卷與第三場規劃先行整理，正式活動頁與易拉展資料將依供給端回覆修正。</span>
+      </div>
+      <div class="solution-grid third-grid" id="thirdSolutionGrid" aria-live="polite"></div>
+    </section>
+
     <section class="compare-band" aria-label="方案概覽">
       <div class="compare-inner">
         <div class="metric">
-          <strong>14</strong>
+          <strong>22</strong>
           <span>收錄供給端工具</span>
+        </div>
+        <div class="metric">
+          <strong>3</strong>
+          <span>場媒合會方案導覽</span>
+        </div>
+        <div class="metric">
+          <strong>112</strong>
+          <span>第三場理論媒合容量</span>
         </div>
         <div class="metric">
           <strong>3</strong>
@@ -1642,11 +1718,184 @@
       }
     ];
 
+    const thirdSolutions = [
+      {
+        company: "超數科技",
+        supplier: "超數科技",
+        title: "AI TWIN 企業 AI 知識庫",
+        summary: "以生成式 AI 與 RAG 知識庫協助企業整合文件、SOP、FAQ 與內部知識，讓使用者能以自然語言快速查詢與取得建議。",
+        tags: ["生成式 AI", "RAG", "知識管理"],
+        tech: "生成式 AI、RAG、文件語意檢索、FAQ 問答與企業知識庫",
+        maturity: "待供給端確認",
+        deployment: "待供給端確認",
+        pricing: "待供給端確認",
+        timeline: "待供給端確認",
+        api: "待供給端確認",
+        data: "企業文件、SOP、FAQ、技術資料、內部知識與客服紀錄等。",
+        equipment: "可先以文件與企業資料庫切入，後續依導入情境串接內部系統。",
+        fields: "營運管理、客服、文件查詢、知識傳承與跨部門知識平台。",
+        industries: ["製造業", "金屬製品", "電子零組件", "機械設備", "汽車零件"],
+        scale: "待供給端確認",
+        cases: "待供給端提供。",
+        details: "製造業常見的知識管理問題，是 SOP、規格書、技術文件、客訴紀錄與老師傅經驗分散在不同位置，導致查找與傳承成本高。AI TWIN 企業 AI 知識庫以生成式 AI 與 RAG 檢索協助企業建立內部知識問答入口，讓員工能用自然語言查詢文件、流程與經驗資料。\n\n適合想改善文件查找、內部客服、技術傳承與跨部門知識管理的企業，也可作為導入 AI 工具前的資料盤點起點。",
+        url: ""
+      },
+      {
+        company: "百加資通",
+        supplier: "百加資通",
+        title: "101ISO + xNinja AI / EcoPortal.AI",
+        summary: "結合 ISO 文件管理、流程表單、企業入口與生成式 AI 文件輔助，協助製造業改善品質系統、稽核準備與文件維護。",
+        tags: ["ISO 文件", "流程管理", "生成式 AI"],
+        tech: "ISO 文件管理、流程化表單、企業入口平台、生成式 AI 文件輔助",
+        maturity: "待供給端確認",
+        deployment: "待供給端確認",
+        pricing: "待供給端確認",
+        timeline: "待供給端確認",
+        api: "待供給端確認",
+        data: "ISO 文件、流程表單、稽核資料、品質紀錄與企業內部知識。",
+        equipment: "以企業文件、表單流程與管理系統資料為主，依導入需求串接既有系統。",
+        fields: "品質管理、內控稽核、文件管理、流程表單與企業入口整合。",
+        industries: ["製造業", "電子零組件", "機械設備", "金屬製品", "汽車零件"],
+        scale: "待供給端確認",
+        cases: "待供給端提供。",
+        details: "許多製造業在品質管理與 ISO 稽核上，常面臨文件版本分散、表單流程難追蹤、稽核準備耗時等問題。101ISO 與 xNinja AI / EcoPortal.AI 可協助企業整理品質文件、流程表單與內部規範，並透過 AI 輔助提升查找、撰寫與維護效率。\n\n適合重視 ISO、品質管理、文件治理與內控流程的企業，作為品質系統數位化與 AI 文件應用的切入點。",
+        url: ""
+      },
+      {
+        company: "慧通智聯",
+        supplier: "慧通智聯",
+        title: "Vision Master",
+        summary: "以機器視覺與影像辨識模型支援 AOI、瑕疵檢測與產線品質檢查，協助降低人工目檢負擔並提升檢測一致性。",
+        tags: ["機器視覺", "AOI", "品質檢測"],
+        tech: "機器視覺、AOI、瑕疵檢測、影像辨識模型與產線檢測整合",
+        maturity: "待供給端確認",
+        deployment: "待供給端確認",
+        pricing: "待供給端確認",
+        timeline: "待供給端確認",
+        api: "待供給端確認",
+        data: "產品影像、瑕疵樣本、標註資料與產線檢測紀錄。",
+        equipment: "影像/光學感測、相機、光源、AOI 設備與產線檢測站。",
+        fields: "品質檢測、瑕疵辨識、良率改善與檢測自動化。",
+        industries: ["電子零組件", "金屬製品", "機械設備", "塑膠製品", "汽車零件"],
+        scale: "待供給端確認",
+        cases: "待供給端提供。",
+        details: "品質檢測常見痛點包括人工目檢疲勞、判斷標準不一致、瑕疵樣本不易累積，以及既有 AOI 需再提升彈性。Vision Master 以機器視覺與影像辨識模型協助企業進行瑕疵檢測、品質檢查與產線檢測整合。\n\n適合有穩定影像來源、希望降低人工檢測負擔，或想將品質檢測資料化的製造場域。",
+        url: ""
+      },
+      {
+        company: "曜夆科技",
+        supplier: "曜夆科技",
+        title: "Vector AI MES/CRM/ERP",
+        summary: "整合 AI MES、CRM、ERP 與營運資料，協助製造業提升生產管理、流程追蹤與跨系統資料應用能力。",
+        tags: ["MES", "ERP", "營運管理"],
+        tech: "AI MES、CRM、ERP、跨系統資料串接與營運流程整合",
+        maturity: "待供給端確認",
+        deployment: "待供給端確認",
+        pricing: "待供給端確認",
+        timeline: "待供給端確認",
+        api: "待供給端確認",
+        data: "MES、ERP、CRM、生產紀錄、工單、庫存、訂單與營運資料。",
+        equipment: "資訊系統與資料庫，並可依現場需求串接設備或產線資料。",
+        fields: "生產管理、營運流程、供應鏈管理、跨系統資料整合與戰情看板。",
+        industries: ["製造業", "金屬製品", "電子零組件", "機械設備", "汽車零件"],
+        scale: "待供給端確認",
+        cases: "待供給端提供。",
+        details: "許多製造業已累積 ERP、MES、CRM 或 Excel 資料，但資料分散在不同流程與系統中，難以即時掌握生產、訂單與營運狀態。Vector AI MES/CRM/ERP 以製造營運與流程數位化為核心，協助企業整合跨系統資料並支援後續 AI 分析應用。\n\n適合想從生產管理、營運流程、供應鏈資訊與管理看板切入 AI 導入的企業。",
+        url: ""
+      },
+      {
+        company: "勝力數智",
+        supplier: "勝力數智",
+        title: "AI 製程老師傅",
+        summary: "將製程參數、現場經驗與異常處理知識模型化，協助新手判斷製程問題，降低技術傳承與調機經驗落差。",
+        tags: ["製程參數", "經驗傳承", "異常判斷"],
+        tech: "製程資料建模、參數分析、異常處理知識化與現場經驗輔助決策",
+        maturity: "待供給端確認",
+        deployment: "待供給端確認",
+        pricing: "待供給端確認",
+        timeline: "待供給端確認",
+        api: "待供給端確認",
+        data: "製程參數、設備狀態、異常紀錄、調機經驗、品檢結果與現場處置紀錄。",
+        equipment: "可依導入場域串接機台、PLC、MES、品檢資料與現場紀錄。",
+        fields: "生產製程、製程參數調整、異常處理、技術傳承與現場決策輔助。",
+        industries: ["製造業", "金屬製品", "塑膠製品", "機械設備", "電子零組件"],
+        scale: "待供給端確認",
+        cases: "待供給端提供。",
+        details: "製程調整與異常處理常依賴資深人員經驗，當人員流動或跨班交接時，容易產生判斷落差。AI 製程老師傅聚焦將製程參數、現場經驗與異常處理邏輯模型化，協助企業把老師傅 know-how 轉為可查詢、可分析、可輔助決策的工具。\n\n適合製程條件複雜、調機經驗重要，或希望降低新手學習曲線的製造業者。",
+        url: ""
+      },
+      {
+        company: "新漢",
+        supplier: "新漢",
+        title: "NexAI 助理：生產小達人",
+        summary: "結合工業電腦、邊緣運算與現場資料整合，協助製造現場把設備與產線資料轉為可查詢、可分析的生產助理應用。",
+        tags: ["邊緣運算", "工業電腦", "生產助理"],
+        tech: "邊緣運算、工業電腦、設備資料整合與生產助理應用",
+        maturity: "待供給端確認",
+        deployment: "待供給端確認",
+        pricing: "待供給端確認",
+        timeline: "待供給端確認",
+        api: "待供給端確認",
+        data: "設備資料、產線資料、OEE、異常紀錄、工單與現場營運資料。",
+        equipment: "工業電腦、邊緣運算設備、PLC、IoT、機台訊號與資訊系統。",
+        fields: "設備監控、產線資料整合、異常偵測、生產瓶頸分析與現場決策支援。",
+        industries: ["製造業", "電子零組件", "機械設備", "金屬製品", "汽車零件"],
+        scale: "待供給端確認",
+        cases: "待供給端提供。",
+        details: "製造現場常有設備與系統資料不連續、現場資訊不透明、產線瓶頸難以即時判斷等問題。NexAI 助理：生產小達人結合工業電腦與邊緣運算能力，協助企業整合設備與產線資料，並以生產助理方式支援查詢、分析與判斷。\n\n適合已有設備資料或希望從現場資料整合、OEE、異常偵測與生產監控切入 AI 應用的企業。",
+        url: ""
+      },
+      {
+        company: "慧穩科技",
+        supplier: "慧穩科技",
+        title: "WinHub.AI 融合式 AI 解決方案",
+        summary: "以企業資料整合、AI 應用平台、知識檢索與多系統串接為核心，協助跨部門資料與多場景 AI 應用整合。",
+        tags: ["AI 平台", "資料整合", "多系統串接"],
+        tech: "企業資料整合、AI 應用平台、知識檢索與多系統串接",
+        maturity: "待供給端確認",
+        deployment: "待供給端確認",
+        pricing: "待供給端確認",
+        timeline: "待供給端確認",
+        api: "待供給端確認",
+        data: "企業文件、資料庫、內部系統資料、流程資料與跨部門應用資料。",
+        equipment: "資訊系統與資料庫，可依需求串接現場資料或企業管理系統。",
+        fields: "資料整合、知識檢索、AI 應用平台、跨部門流程與多系統整合。",
+        industries: ["製造業", "電子零組件", "機械設備", "金屬製品", "汽車零件"],
+        scale: "待供給端確認",
+        cases: "待供給端提供。",
+        details: "企業導入 AI 時，常遇到資料來源分散、各部門各自導入工具、應用難以擴散等問題。WinHub.AI 融合式 AI 解決方案以資料整合、AI 應用平台、知識檢索與多系統串接為核心，協助企業建立可延伸的 AI 應用基礎。\n\n適合需要跨部門資料整合、知識檢索、多系統串接或希望把 AI 應用平台化的企業。",
+        url: ""
+      },
+      {
+        company: "詠鋐智能",
+        supplier: "詠鋐智能",
+        title: "Tukey AutoML / Tukey GPT",
+        summary: "支援自動建模、預測分析與生成式 AI 助理，協助企業將製程、品質與營運資料轉為預測模型與決策依據。",
+        tags: ["AutoML", "預測分析", "生成式 AI"],
+        tech: "AutoML、自動建模、預測分析與 Tukey GPT 生成式 AI 助理",
+        maturity: "待供給端確認",
+        deployment: "待供給端確認",
+        pricing: "待供給端確認",
+        timeline: "待供給端確認",
+        api: "待供給端確認",
+        data: "製程資料、品質資料、設備資料、營運資料、歷史紀錄與可建模資料表。",
+        equipment: "資訊系統與資料庫，可依需求串接 MES、ERP、設備資料或 Excel。",
+        fields: "品質預測、營運預測、製程參數分析、設備異常監診與資料建模。",
+        industries: ["製造業", "電子零組件", "機械設備", "金屬製品", "汽車零件"],
+        scale: "待供給端確認",
+        cases: "待供給端提供。",
+        details: "許多製造業已累積製程、品質、設備或營運資料，但缺乏資料科學人力將資料轉為可用模型。Tukey AutoML / Tukey GPT 支援自動建模、預測分析與生成式 AI 助理，可降低建模門檻，協助企業更快評估資料是否能用於品質預測、製程參數分析或營運預測。\n\n適合想以既有資料開始做預測建模、異常分析或資料驅動決策的企業。",
+        url: ""
+      }
+    ];
+
     const grid = document.querySelector("#solutionGrid");
     const secondGrid = document.querySelector("#secondSolutionGrid");
+    const thirdGrid = document.querySelector("#thirdSolutionGrid");
     const solutionSets = {
       first: solutions,
-      second: secondSolutions
+      second: secondSolutions,
+      third: thirdSolutions
     };
     const modal = document.querySelector("#detailModal");
     const modalPanel = modal.querySelector(".modal-panel");
@@ -1752,6 +2001,7 @@
 
     renderCards(grid, solutions, "first", "08");
     renderCards(secondGrid, secondSolutions, "second", "06");
+    renderCards(thirdGrid, thirdSolutions, "third", "08");
 
     function handleGridClick(event) {
       const card = event.target.closest(".solution-card");
@@ -1761,6 +2011,7 @@
 
     grid.addEventListener("click", handleGridClick);
     secondGrid.addEventListener("click", handleGridClick);
+    thirdGrid.addEventListener("click", handleGridClick);
 
     closeModal.addEventListener("click", closeDetail);
 
