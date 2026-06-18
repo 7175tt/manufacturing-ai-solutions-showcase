@@ -1113,7 +1113,7 @@
 
     .image-viewer-head {
       display: grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: 1fr auto auto auto;
       gap: 18px;
       align-items: center;
       padding: 18px 20px;
@@ -1148,6 +1148,63 @@
       border-color: var(--blue);
     }
 
+    .zoom-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid rgba(15, 53, 95, 0.14);
+      border-radius: 999px;
+      background: #ffffff;
+      box-shadow: 0 8px 22px rgba(15, 53, 95, 0.08);
+    }
+
+    .zoom-btn {
+      min-width: 38px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--blue-dark);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    .zoom-btn:hover,
+    .zoom-btn:focus-visible {
+      outline: 3px solid rgba(244, 212, 30, 0.55);
+      background: rgba(232, 246, 245, 0.86);
+    }
+
+    .zoom-btn:disabled {
+      cursor: default;
+      opacity: 0.42;
+    }
+
+    .zoom-btn:disabled:hover,
+    .zoom-btn:disabled:focus-visible {
+      outline: 0;
+      background: transparent;
+    }
+
+    .zoom-reset {
+      min-width: 54px;
+      padding: 0 10px;
+      font-size: 13px;
+    }
+
+    .zoom-level {
+      min-width: 54px;
+      color: #344754;
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+    }
+
     .image-viewer-canvas {
       min-height: 0;
       padding: 18px;
@@ -1161,12 +1218,13 @@
     .image-viewer-canvas img {
       display: block;
       width: auto;
-      max-width: min(100%, 760px);
-      max-height: calc(92svh - 118px);
+      max-width: none;
+      max-height: none;
       margin: 0 auto;
       border-radius: 8px;
       box-shadow: 0 22px 56px rgba(15, 53, 95, 0.22);
       background: white;
+      transition: width 120ms ease;
     }
 
     .chip-list {
@@ -1326,8 +1384,15 @@
 
       .viewer-back {
         grid-column: 1 / -1;
-        order: 3;
+        order: 4;
         justify-self: stretch;
+      }
+
+      .zoom-controls {
+        grid-column: 1 / -1;
+        order: 3;
+        justify-content: center;
+        width: 100%;
       }
 
       .modal {
@@ -1564,6 +1629,12 @@
     <div class="image-viewer-panel" tabindex="-1">
       <div class="image-viewer-head">
         <h3 id="imageViewerTitle">方案重點圖</h3>
+        <div class="zoom-controls" aria-label="圖片縮放控制">
+          <button class="zoom-btn" type="button" id="zoomOut" aria-label="縮小圖片">−</button>
+          <span class="zoom-level" id="zoomLevel" aria-live="polite">100%</span>
+          <button class="zoom-btn" type="button" id="zoomIn" aria-label="放大圖片">＋</button>
+          <button class="zoom-btn zoom-reset" type="button" id="zoomReset">重設</button>
+        </div>
         <button class="viewer-back" type="button" id="backToDetail">返回方案內容</button>
         <button class="close-btn" type="button" id="closeImageViewer" aria-label="回到方案詳細內容">×</button>
       </div>
@@ -2082,8 +2153,17 @@
     const imageViewerImg = document.querySelector("#imageViewerImg");
     const backToDetail = document.querySelector("#backToDetail");
     const closeImageViewer = document.querySelector("#closeImageViewer");
+    const imageViewerCanvas = imageViewer.querySelector(".image-viewer-canvas");
+    const zoomOut = document.querySelector("#zoomOut");
+    const zoomIn = document.querySelector("#zoomIn");
+    const zoomReset = document.querySelector("#zoomReset");
+    const zoomLevel = document.querySelector("#zoomLevel");
     let activeCard = null;
     let activeBannerButton = null;
+    let imageZoom = 1;
+    let imageFitWidth = 760;
+    const minImageZoom = 0.5;
+    const maxImageZoom = 3;
 
     function escapeHTML(value) {
       return String(value ?? "")
@@ -2160,18 +2240,61 @@
     function openImageViewer(src, title, trigger) {
       activeBannerButton = trigger;
       imageViewerTitle.textContent = title || "方案重點圖";
+      imageZoom = 1;
       imageViewerImg.src = src;
       imageViewerImg.alt = title || "方案重點圖";
       imageViewer.classList.add("is-open");
       imageViewer.setAttribute("aria-hidden", "false");
-      requestAnimationFrame(() => imageViewerPanel.focus());
+      imageViewerImg.onload = () => {
+        resetImageZoom();
+      };
+      requestAnimationFrame(() => {
+        imageViewerPanel.focus();
+        resetImageZoom();
+      });
+    }
+
+    function clampZoom(value) {
+      return Math.min(maxImageZoom, Math.max(minImageZoom, value));
+    }
+
+    function applyImageZoom(nextZoom, anchorCenter = false) {
+      imageZoom = clampZoom(nextZoom);
+      const nextWidth = Math.round(imageFitWidth * imageZoom);
+      if (anchorCenter) {
+        const centerX = imageViewerCanvas.scrollLeft + imageViewerCanvas.clientWidth / 2;
+        const centerY = imageViewerCanvas.scrollTop + imageViewerCanvas.clientHeight / 2;
+        const previousWidth = Math.max(1, imageViewerImg.clientWidth);
+        const ratio = nextWidth / previousWidth;
+        imageViewerImg.style.width = `${nextWidth}px`;
+        imageViewerCanvas.scrollLeft = centerX * ratio - imageViewerCanvas.clientWidth / 2;
+        imageViewerCanvas.scrollTop = centerY * ratio - imageViewerCanvas.clientHeight / 2;
+      } else {
+        imageViewerImg.style.width = `${nextWidth}px`;
+      }
+      zoomLevel.textContent = `${Math.round(imageZoom * 100)}%`;
+      zoomOut.disabled = imageZoom <= minImageZoom;
+      zoomIn.disabled = imageZoom >= maxImageZoom;
+    }
+
+    function resetImageZoom() {
+      const available = Math.max(260, imageViewerCanvas.clientWidth - 36);
+      const naturalWidth = imageViewerImg.naturalWidth || 1600;
+      imageFitWidth = Math.min(naturalWidth, available, 760);
+      imageViewerImg.style.width = `${Math.round(imageFitWidth)}px`;
+      imageViewerCanvas.scrollTop = 0;
+      imageViewerCanvas.scrollLeft = Math.max(0, (imageViewerImg.clientWidth - imageViewerCanvas.clientWidth) / 2);
+      applyImageZoom(1);
     }
 
     function closeImageViewerPanel() {
       imageViewer.classList.remove("is-open");
       imageViewer.setAttribute("aria-hidden", "true");
+      imageViewerImg.onload = null;
       imageViewerImg.removeAttribute("src");
       imageViewerImg.alt = "";
+      imageViewerImg.removeAttribute("style");
+      zoomLevel.textContent = "100%";
       if (activeBannerButton) activeBannerButton.focus();
     }
 
@@ -2239,6 +2362,17 @@
 
     closeImageViewer.addEventListener("click", closeImageViewerPanel);
     backToDetail.addEventListener("click", closeImageViewerPanel);
+    zoomOut.addEventListener("click", () => applyImageZoom(imageZoom - 0.25, true));
+    zoomIn.addEventListener("click", () => applyImageZoom(imageZoom + 0.25, true));
+    zoomReset.addEventListener("click", resetImageZoom);
+
+    imageViewerCanvas.addEventListener("wheel", event => {
+      if (!imageViewer.classList.contains("is-open")) return;
+      if (!event.ctrlKey) return;
+      event.preventDefault();
+      const direction = event.deltaY > 0 ? -0.15 : 0.15;
+      applyImageZoom(imageZoom + direction, true);
+    }, { passive: false });
 
     imageViewer.addEventListener("click", event => {
       if (event.target === imageViewer) closeImageViewerPanel();
