@@ -1077,6 +1077,98 @@
       font-weight: 650;
     }
 
+    .modal-link.button-link {
+      border: 0;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .image-viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(7, 25, 43, 0.78);
+      backdrop-filter: blur(10px);
+    }
+
+    .image-viewer.is-open {
+      display: flex;
+    }
+
+    .image-viewer-panel {
+      width: min(1040px, 100%);
+      max-height: min(92svh, 980px);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #fbfcfb;
+      box-shadow: 0 34px 90px rgba(0, 0, 0, 0.4);
+      animation: modalIn 180ms ease both;
+    }
+
+    .image-viewer-head {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 18px;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(15, 53, 95, 0.12);
+      background: rgba(251, 252, 251, 0.96);
+    }
+
+    .image-viewer-head h3 {
+      margin: 0;
+      color: var(--blue-dark);
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 950;
+    }
+
+    .viewer-back {
+      min-height: 40px;
+      padding: 0 15px;
+      border: 2px solid rgba(15, 53, 95, 0.18);
+      border-radius: 999px;
+      background: white;
+      color: var(--blue-dark);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .viewer-back:hover,
+    .viewer-back:focus-visible {
+      outline: 3px solid rgba(244, 212, 30, 0.55);
+      border-color: var(--blue);
+    }
+
+    .image-viewer-canvas {
+      min-height: 0;
+      padding: 18px;
+      overflow: auto;
+      background:
+        linear-gradient(45deg, rgba(15, 53, 95, 0.04) 25%, transparent 25%) 0 0 / 24px 24px,
+        linear-gradient(45deg, transparent 75%, rgba(15, 53, 95, 0.04) 75%) 0 0 / 24px 24px,
+        #eef6f7;
+    }
+
+    .image-viewer-canvas img {
+      display: block;
+      width: auto;
+      max-width: min(100%, 760px);
+      max-height: calc(92svh - 118px);
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 22px 56px rgba(15, 53, 95, 0.22);
+      background: white;
+    }
+
     .chip-list {
       display: flex;
       flex-wrap: wrap;
@@ -1217,6 +1309,25 @@
 
       .banner-preview img {
         max-width: 220px;
+      }
+
+      .image-viewer {
+        padding: 12px;
+      }
+
+      .image-viewer-head {
+        grid-template-columns: 1fr auto;
+        padding: 14px 16px;
+      }
+
+      .image-viewer-head h3 {
+        font-size: 17px;
+      }
+
+      .viewer-back {
+        grid-column: 1 / -1;
+        order: 3;
+        justify-self: stretch;
       }
 
       .modal {
@@ -1445,6 +1556,19 @@
       <div class="modal-body">
         <aside class="facts" id="modalFacts" aria-label="方案摘要"></aside>
         <div class="detail-content" id="modalDetails"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="image-viewer" id="imageViewer" role="dialog" aria-modal="true" aria-labelledby="imageViewerTitle" aria-hidden="true">
+    <div class="image-viewer-panel" tabindex="-1">
+      <div class="image-viewer-head">
+        <h3 id="imageViewerTitle">方案重點圖</h3>
+        <button class="viewer-back" type="button" id="backToDetail">返回方案內容</button>
+        <button class="close-btn" type="button" id="closeImageViewer" aria-label="回到方案詳細內容">×</button>
+      </div>
+      <div class="image-viewer-canvas">
+        <img id="imageViewerImg" src="" alt="">
       </div>
     </div>
   </div>
@@ -1952,7 +2076,14 @@
     const modalFacts = document.querySelector("#modalFacts");
     const modalDetails = document.querySelector("#modalDetails");
     const closeModal = document.querySelector("#closeModal");
+    const imageViewer = document.querySelector("#imageViewer");
+    const imageViewerPanel = imageViewer.querySelector(".image-viewer-panel");
+    const imageViewerTitle = document.querySelector("#imageViewerTitle");
+    const imageViewerImg = document.querySelector("#imageViewerImg");
+    const backToDetail = document.querySelector("#backToDetail");
+    const closeImageViewer = document.querySelector("#closeImageViewer");
     let activeCard = null;
+    let activeBannerButton = null;
 
     function escapeHTML(value) {
       return String(value ?? "")
@@ -2011,18 +2142,37 @@
     function bannerSection(item) {
       if (!item.banner) return "";
       const bannerUrl = escapeHTML(item.banner);
+      const imageTitle = `${escapeHTML(item.company)} 方案重點圖`;
       return `
         <section class="detail-section">
-          <h4>易拉展展示</h4>
+          <h4>方案重點圖</h4>
           <div class="banner-preview">
-            <img src="${bannerUrl}" alt="${escapeHTML(item.company)} 易拉展" loading="lazy">
+            <img src="${bannerUrl}" alt="${imageTitle}" loading="lazy">
             <div>
-              <p>此為活動現場使用之供給端易拉展，可搭配方案介紹內容一起參考。</p>
-              <a class="modal-link" href="${bannerUrl}" target="_blank" rel="noreferrer">開啟易拉展圖</a>
+              <p>這張圖整理方案價值、適用場域與導入案例，可搭配上方詳細內容快速瀏覽。</p>
+              <button class="modal-link button-link banner-open" type="button" data-banner="${bannerUrl}" data-title="${imageTitle}">放大查看</button>
             </div>
           </div>
         </section>
       `;
+    }
+
+    function openImageViewer(src, title, trigger) {
+      activeBannerButton = trigger;
+      imageViewerTitle.textContent = title || "方案重點圖";
+      imageViewerImg.src = src;
+      imageViewerImg.alt = title || "方案重點圖";
+      imageViewer.classList.add("is-open");
+      imageViewer.setAttribute("aria-hidden", "false");
+      requestAnimationFrame(() => imageViewerPanel.focus());
+    }
+
+    function closeImageViewerPanel() {
+      imageViewer.classList.remove("is-open");
+      imageViewer.setAttribute("aria-hidden", "true");
+      imageViewerImg.removeAttribute("src");
+      imageViewerImg.alt = "";
+      if (activeBannerButton) activeBannerButton.focus();
     }
 
     function openDetail(session, index, trigger) {
@@ -2081,12 +2231,30 @@
 
     closeModal.addEventListener("click", closeDetail);
 
+    modalDetails.addEventListener("click", event => {
+      const button = event.target.closest(".banner-open");
+      if (!button) return;
+      openImageViewer(button.dataset.banner, button.dataset.title, button);
+    });
+
+    closeImageViewer.addEventListener("click", closeImageViewerPanel);
+    backToDetail.addEventListener("click", closeImageViewerPanel);
+
+    imageViewer.addEventListener("click", event => {
+      if (event.target === imageViewer) closeImageViewerPanel();
+    });
+
     modal.addEventListener("click", event => {
       if (event.target === modal) closeDetail();
     });
 
     window.addEventListener("keydown", event => {
-      if (event.key === "Escape" && modal.classList.contains("is-open")) closeDetail();
+      if (event.key !== "Escape") return;
+      if (imageViewer.classList.contains("is-open")) {
+        closeImageViewerPanel();
+        return;
+      }
+      if (modal.classList.contains("is-open")) closeDetail();
     });
   </script>
 </body>
