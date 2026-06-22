@@ -733,17 +733,17 @@
     .subsidy-flow {
       position: relative;
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 10px;
       margin: 0 0 34px;
     }
 
     .subsidy-flow::before {
       content: "";
       position: absolute;
-      top: 44px;
-      left: 8%;
-      right: 8%;
+      top: 38px;
+      left: 5%;
+      right: 5%;
       height: 4px;
       background: var(--second-main);
       z-index: 0;
@@ -752,7 +752,7 @@
     .subsidy-flow-step {
       position: relative;
       z-index: 1;
-      padding-top: 106px;
+      padding-top: 96px;
     }
 
     .subsidy-flow-step b {
@@ -761,53 +761,42 @@
       left: 50%;
       display: grid;
       place-items: center;
-      width: 88px;
-      height: 88px;
+      width: 76px;
+      height: 76px;
       transform: translateX(-50%);
       border: 5px solid var(--second-dark);
       border-radius: 50%;
       background: var(--second-accent);
       color: var(--second-dark);
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 950;
       line-height: 1;
     }
 
     .subsidy-flow-step strong {
       display: block;
-      min-height: 56px;
+      min-height: 50px;
       color: var(--second-dark);
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.32;
       font-weight: 950;
       text-align: center;
     }
 
-    .subsidy-scope-grid,
-    .subsidy-clarify-grid {
+    .subsidy-scope-grid {
       display: grid;
       gap: 16px;
-      margin: 0 0 34px;
-    }
-
-    .subsidy-scope-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .subsidy-clarify-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       margin-bottom: 0;
     }
 
-    .subsidy-scope-item,
-    .subsidy-clarify-item {
+    .subsidy-scope-item {
       padding: 22px;
       border: 2px solid rgba(7, 139, 124, 0.24);
       background: rgba(255, 255, 255, 0.78);
     }
 
-    .subsidy-scope-item strong,
-    .subsidy-clarify-item strong {
+    .subsidy-scope-item strong {
       display: block;
       margin-bottom: 10px;
       color: var(--second-dark);
@@ -816,8 +805,7 @@
       font-weight: 950;
     }
 
-    .subsidy-scope-item span,
-    .subsidy-clarify-item span {
+    .subsidy-scope-item span {
       display: block;
       color: #466173;
       font-size: 15px;
@@ -825,8 +813,7 @@
       line-height: 1.65;
     }
 
-    .subsidy-scope-item a,
-    .subsidy-clarify-item a {
+    .subsidy-scope-item a {
       color: var(--second-main);
       font-weight: 950;
       text-underline-offset: 4px;
@@ -837,7 +824,7 @@
       display: block;
       margin-top: 8px;
       color: #466173;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 760;
       line-height: 1.6;
       text-align: center;
@@ -1694,8 +1681,7 @@
       }
 
       .subsidy-checklist,
-      .subsidy-scope-grid,
-      .subsidy-clarify-grid {
+      .subsidy-scope-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1712,7 +1698,7 @@
       .subsidy-flow::before {
         top: 0;
         bottom: 0;
-        left: 43px;
+        left: 36px;
         right: auto;
         width: 4px;
         height: auto;
@@ -1721,7 +1707,7 @@
       .subsidy-flow-step {
         min-height: 104px;
         padding-top: 0;
-        padding-left: 112px;
+        padding-left: 104px;
       }
 
       .subsidy-flow-step b {
@@ -1942,7 +1928,7 @@
             <p class="subsidy-kicker">經濟部產業競爭力輔導團｜AI 診斷輔導後續資源</p>
             <h3>10 萬元 AI 工具導入補助申請重點</h3>
           </div>
-          <p>本補助屬於經濟部產業競爭力輔導團 AI 診斷輔導後續資源。企業完成 AI 診斷與輔導後，依診斷建議導入 AI 工具，並備妥核銷文件，可依規定申請最高 10 萬元工具導入補助。</p>
+          <p>本補助屬於經濟部產業競爭力輔導團 AI 診斷輔導後續資源。企業完成 AI 診斷與輔導後，依診斷建議導入 AI 工具，並備妥工具導入驗收文件，可依規定申請最高 10 萬元工具導入補助。</p>
         </div>
         <div class="subsidy-section-title">
           <strong>申請資格</strong>
@@ -1953,16 +1939,10 @@
             依法辦理公司登記、商業登記或有限合夥登記之製造業。
           </li>
           <li>
-            須依法辦理工廠登記；依法免辦者應有主管機關證明文件。
-          </li>
-          <li>
             非外國來臺分公司，且非陸資投資企業。
           </li>
           <li>
             非銀行拒絕往來戶，營業狀況不得為解散或歇業。
-          </li>
-          <li>
-            同一申請事項內容未曾獲其他政府機關補助。
           </li>
           <li>
             近三年未有重大違反勞工、環境或身心障礙者權益保障法規情事。
@@ -1971,7 +1951,7 @@
 
         <div class="subsidy-section-title">
           <strong>申請流程</strong>
-          <p>流程以「先申請與審查、再診斷與導入、最後檢附文件核銷」為主軸。企業與供給端廠商可依此確認導入時程、採購安排與文件準備責任。</p>
+          <p>流程以「申請審查、繳交自籌款、診斷輔導、工具導入、驗收文件與補助撥款」為主軸。企業與供給端廠商可依此確認導入時程、導入安排與文件準備責任。</p>
         </div>
         <div class="subsidy-flow" aria-label="10 萬元 AI 工具導入補助申請流程">
           <div class="subsidy-flow-step">
@@ -1982,22 +1962,32 @@
           <div class="subsidy-flow-step">
             <b>2</b>
             <strong>資格審查</strong>
-            <span>確認製造業資格、登記狀態、工廠登記或免辦證明，以及相關排除條件。</span>
+            <span>確認製造業資格、登記狀態以及相關排除條件。</span>
           </div>
           <div class="subsidy-flow-step">
             <b>3</b>
+            <strong>繳交自籌款</strong>
+            <span>資格審查通過後，廠商需繳交 1 萬元自籌款。</span>
+          </div>
+          <div class="subsidy-flow-step">
+            <b>4</b>
             <strong>AI 診斷輔導</strong>
             <span>盤點痛點、資料、系統、AI 成熟度與導入方向，形成診斷報告與建議。</span>
           </div>
           <div class="subsidy-flow-step">
-            <b>4</b>
-            <strong>採購 AI 工具</strong>
-            <span>依診斷書建議，採購經濟部產業競爭力輔導團 AI 工具庫所列工具。</span>
+            <b>5</b>
+            <strong>導入 AI 工具</strong>
+            <span>依診斷書建議，導入經濟部產業競爭力輔導團 AI 工具庫所列工具。</span>
           </div>
           <div class="subsidy-flow-step">
-            <b>5</b>
-            <strong>檢附文件核銷</strong>
-            <span>提供發票、授權使用資料、補助證明單等文件，申請最高 10 萬元工具導入補助。</span>
+            <b>6</b>
+            <strong>準備工具導入驗收文件</strong>
+            <span>準備發票、授權使用資料、工具規格與導入成果等驗收文件。</span>
+          </div>
+          <div class="subsidy-flow-step">
+            <b>7</b>
+            <strong>撥付 10 萬元補助</strong>
+            <span>完成驗收後，依規定撥付 10 萬元工具導入補助給廠商。</span>
           </div>
         </div>
 
@@ -2007,39 +1997,12 @@
         </div>
         <div class="subsidy-scope-grid" aria-label="AI 工具選擇範圍">
           <div class="subsidy-scope-item">
-            <strong>診斷建議優先</strong>
-            <span>先依 AI/智慧化輔導診斷書所列建議，確認企業要導入的工具功能與應用場景。</span>
+            <strong>須列於診斷報告建議</strong>
+            <span>企業要導入的 AI 工具，必須明確寫在 AI/智慧化輔導診斷報告的建議內容中。</span>
           </div>
           <div class="subsidy-scope-item">
             <strong>須列於 AI 工具庫</strong>
             <span>導入與補助認列工具，須為<a href="https://eii.nat.gov.tw/moeai-plus/ai-tools" target="_blank" rel="noreferrer">經濟部產業競爭力輔導團 AI 工具庫</a>所列工具。</span>
-          </div>
-          <div class="subsidy-scope-item">
-            <strong>導入前先確認</strong>
-            <span>企業與供給端廠商應於採購前確認工具已列入工具庫，避免後續補助申請時不被認列。</span>
-          </div>
-          <div class="subsidy-scope-item">
-            <strong>未列入者不予認列</strong>
-            <span>未列入 AI 工具庫之工具，目前不得作為本補助之導入與核銷認列工具。</span>
-          </div>
-        </div>
-
-        <div class="subsidy-section-title">
-          <strong>常見釐清事項</strong>
-          <p>下列事項可協助企業與供給端廠商先釐清責任邊界，避免把媒合會、診斷輔導與工具補助混為同一程序。</p>
-        </div>
-        <div class="subsidy-clarify-grid" aria-label="10 萬元 AI 工具導入補助常見釐清事項">
-          <div class="subsidy-clarify-item">
-            <strong>媒合會與補助申請不同程序</strong>
-            <span>媒合會協助企業認識工具與資源；補助申請須依經濟部產業競爭力輔導團規定辦理。</span>
-          </div>
-          <div class="subsidy-clarify-item">
-            <strong>工具須同時符合兩項條件</strong>
-            <span>工具導入須符合診斷建議，且須為經濟部產業競爭力輔導團 AI 工具庫所列工具。</span>
-          </div>
-          <div class="subsidy-clarify-item">
-            <strong>文件保存影響核銷效率</strong>
-            <span>供給端廠商可協助企業保存報價、發票、授權或使用憑證、導入成果等資料，以利後續申請與查核。</span>
           </div>
         </div>
         <div class="subsidy-actions">
