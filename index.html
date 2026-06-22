@@ -577,7 +577,7 @@
 
     .subsidy-panel {
       margin: 0 auto;
-      padding: clamp(22px, 4vw, 34px);
+      padding: clamp(28px, 5vw, 48px);
       border: 2px solid rgba(7, 139, 124, 0.28);
       border-left: 10px solid var(--second-accent);
       background:
@@ -587,19 +587,31 @@
       color: var(--second-dark);
     }
 
+    .subsidy-kicker {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 0 14px;
+      padding: 6px 12px;
+      background: var(--second-main);
+      color: #ffffff !important;
+      font-size: 13px;
+      font-weight: 950;
+      line-height: 1.35;
+    }
+
     .subsidy-panel-head {
       display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(260px, 0.62fr);
+      grid-template-columns: minmax(0, 0.78fr) minmax(300px, 0.7fr);
       gap: 24px;
       align-items: end;
-      margin-bottom: 22px;
+      margin-bottom: 28px;
     }
 
     .subsidy-panel h3 {
       margin: 0;
       color: var(--second-dark);
-      font-size: clamp(26px, 3.2vw, 42px);
-      line-height: 1.18;
+      font-size: clamp(34px, 5vw, 60px);
+      line-height: 1.08;
       font-weight: 950;
     }
 
@@ -613,14 +625,14 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
-      margin: 0 0 18px;
+      margin: 0 0 34px;
       padding: 0;
       list-style: none;
     }
 
     .subsidy-steps li {
-      min-height: 150px;
-      padding: 18px;
+      min-height: 178px;
+      padding: 22px;
       border: 2px solid rgba(7, 139, 124, 0.34);
       background: rgba(255, 255, 255, 0.82);
     }
@@ -656,6 +668,92 @@
       line-height: 1.55;
     }
 
+    .subsidy-section-title {
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+      margin: 0 0 18px;
+      padding-top: 24px;
+      border-top: 2px solid rgba(7, 139, 124, 0.22);
+    }
+
+    .subsidy-section-title strong {
+      color: var(--second-dark);
+      font-size: 24px;
+      line-height: 1.25;
+      font-weight: 950;
+    }
+
+    .subsidy-section-title p {
+      color: #355366;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .subsidy-flow {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin: 0 0 34px;
+    }
+
+    .subsidy-flow::before {
+      content: "";
+      position: absolute;
+      top: 44px;
+      left: 8%;
+      right: 8%;
+      height: 4px;
+      background: var(--second-main);
+      z-index: 0;
+    }
+
+    .subsidy-flow-step {
+      position: relative;
+      z-index: 1;
+      padding-top: 106px;
+    }
+
+    .subsidy-flow-step b {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      display: grid;
+      place-items: center;
+      width: 88px;
+      height: 88px;
+      transform: translateX(-50%);
+      border: 5px solid var(--second-dark);
+      border-radius: 50%;
+      background: var(--second-accent);
+      color: var(--second-dark);
+      font-size: 28px;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .subsidy-flow-step strong {
+      display: block;
+      min-height: 56px;
+      color: var(--second-dark);
+      font-size: 20px;
+      line-height: 1.32;
+      font-weight: 950;
+      text-align: center;
+    }
+
+    .subsidy-flow-step span {
+      display: block;
+      margin-top: 8px;
+      color: #466173;
+      font-size: 14px;
+      font-weight: 760;
+      line-height: 1.6;
+      text-align: center;
+    }
+
     .subsidy-actions {
       display: flex;
       flex-wrap: wrap;
@@ -663,7 +761,8 @@
       align-items: center;
       justify-content: space-between;
       border-top: 2px solid rgba(7, 139, 124, 0.22);
-      padding-top: 16px;
+      margin-top: 26px;
+      padding-top: 18px;
     }
 
     .subsidy-actions p {
@@ -685,20 +784,20 @@
     .subsidy-detail-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 18px;
+      gap: 16px;
+      margin-top: 0;
     }
 
     .subsidy-detail {
-      padding: 18px;
+      padding: 22px;
       border: 2px solid rgba(7, 139, 124, 0.24);
       background: rgba(255, 255, 255, 0.78);
     }
 
     .subsidy-detail h4 {
-      margin: 0 0 10px;
+      margin: 0 0 12px;
       color: var(--second-dark);
-      font-size: 20px;
+      font-size: 24px;
       line-height: 1.35;
       font-weight: 950;
     }
@@ -710,6 +809,13 @@
       font-size: 15px;
       font-weight: 720;
       line-height: 1.65;
+    }
+
+    .subsidy-detail a {
+      color: var(--second-main);
+      font-weight: 950;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
     }
 
     .solution-grid {
@@ -1498,6 +1604,45 @@
         grid-template-columns: 1fr;
       }
 
+      .subsidy-section-title {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .subsidy-flow {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .subsidy-flow::before {
+        top: 0;
+        bottom: 0;
+        left: 43px;
+        right: auto;
+        width: 4px;
+        height: auto;
+      }
+
+      .subsidy-flow-step {
+        min-height: 104px;
+        padding-top: 0;
+        padding-left: 112px;
+      }
+
+      .subsidy-flow-step b {
+        left: 0;
+        transform: none;
+      }
+
+      .subsidy-flow-step strong,
+      .subsidy-flow-step span {
+        text-align: left;
+      }
+
+      .subsidy-flow-step strong {
+        min-height: 0;
+      }
+
       .subsidy-detail-grid {
         grid-template-columns: 1fr;
       }
@@ -1616,8 +1761,8 @@
       <div class="nav-links">
         <a href="#solutions">第一場(5/19)</a>
         <a href="#second-solutions">第二場(6/23)</a>
-        <a href="#ai-tool-subsidy">補助申請重點</a>
         <a href="#third-solutions">第三場(7/21)</a>
+        <a href="#ai-tool-subsidy">補助申請重點</a>
         <a class="nav-register" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3289" target="_blank" rel="noreferrer">活動報名</a>
       </div>
     </nav>
@@ -1634,10 +1779,10 @@
         <p class="hero-copy">整理製造業可落地的 AI 工具與導入情境，協助需求端快速掌握方案重點、資料串接條件與後續洽談方向。</p>
         <div class="hero-actions">
           <a class="accent-action" href="https://ievents.iii.org.tw/EventS.aspx?t=0&id=3289" target="_blank" rel="noreferrer">立即報名參加</a>
-          <a class="primary-action" href="#third-solutions">查看第三場(7/21)</a>
+          <a class="primary-action" href="#solutions">查看第一場(5/19)</a>
           <a class="secondary-action" href="#second-solutions">查看第二場(6/23)</a>
+          <a class="secondary-action" href="#third-solutions">查看第三場(7/21)</a>
           <a class="secondary-action" href="#ai-tool-subsidy">10 萬補助申請重點</a>
-          <a class="secondary-action" href="#solutions">查看第一場(5/19)</a>
           <a class="secondary-action" href="#decision">導入評估重點</a>
         </div>
         <div class="hero-meta" aria-label="活動資訊">
@@ -1698,33 +1843,76 @@
     <section id="ai-tool-subsidy" class="subsidy-section" aria-label="10 萬元 AI 工具導入補助說明">
       <div class="subsidy-panel">
         <div class="subsidy-panel-head">
-          <h3>10 萬元 AI 工具導入補助申請重點</h3>
-          <p>經濟部產業競爭力輔導團提供 AI 診斷輔導與後續工具導入補助資源；企業完成診斷輔導後，可依診斷建議導入工具，並檢附文件申請最高 10 萬元工具導入補助。</p>
+          <div>
+            <p class="subsidy-kicker">經濟部產業競爭力輔導團｜AI 診斷輔導後續資源</p>
+            <h3>10 萬元 AI 工具導入補助申請重點</h3>
+          </div>
+          <p>本補助屬於經濟部產業競爭力輔導團 AI 診斷輔導後續資源。企業完成 AI 診斷與輔導後，依診斷建議導入 AI 工具，並備妥核銷文件，可依規定申請最高 10 萬元工具導入補助。</p>
         </div>
-        <ol class="subsidy-steps" aria-label="10 萬 AI 工具補助流程">
+        <ol class="subsidy-steps" aria-label="10 萬 AI 工具補助核心原則">
           <li>
             <b>1</b>
-            <strong>確認申請資格</strong>
+            <strong>先確認企業身分</strong>
             <span>適用對象為依法登記之製造業，並須具備工廠登記或依法免辦工廠登記之證明文件。</span>
           </li>
           <li>
             <b>2</b>
-            <strong>完成 AI 診斷輔導</strong>
-            <span>輔導團盤點企業痛點、資料、系統、AI 成熟度與導入方向，形成診斷報告與建議。</span>
+            <strong>先完成 AI 診斷</strong>
+            <span>經濟部產業競爭力輔導團將盤點企業痛點、資料、系統、AI 成熟度與導入方向，形成診斷建議。</span>
           </li>
           <li>
             <b>3</b>
-            <strong>導入工具並申請補助</strong>
-            <span>依診斷建議導入 AI 工具，檢附發票、授權使用資料、補助證明單等文件辦理申請。</span>
+            <strong>再導入與申請補助</strong>
+            <span>依診斷建議採購或導入 AI 工具，並檢附發票、授權使用資料、補助證明單等文件辦理申請。</span>
           </li>
         </ol>
+
+        <div class="subsidy-section-title">
+          <strong>完整流程</strong>
+          <p>補助申請不是單一步驟，而是從企業資格確認、AI 診斷輔導、工具導入到文件核銷的連續流程。以下五個節點可作為企業與供給端廠商溝通導入時程與文件準備的共同基準。</p>
+        </div>
+        <div class="subsidy-flow" aria-label="10 萬元 AI 工具導入補助完整流程">
+          <div class="subsidy-flow-step">
+            <b>1</b>
+            <strong>線上申請</strong>
+            <span>填寫申請資料，備妥企業基本文件；年度經費用罄時將停止受理。</span>
+          </div>
+          <div class="subsidy-flow-step">
+            <b>2</b>
+            <strong>資格審查</strong>
+            <span>確認製造業資格、登記狀態、工廠登記或免辦證明，以及相關排除條件。</span>
+          </div>
+          <div class="subsidy-flow-step">
+            <b>3</b>
+            <strong>AI 診斷輔導</strong>
+            <span>盤點痛點、資料、系統、AI 成熟度與導入方向，形成診斷報告與建議。</span>
+          </div>
+          <div class="subsidy-flow-step">
+            <b>4</b>
+            <strong>採購 AI 工具</strong>
+            <span>依診斷書建議導入 AI 軟硬體工具；替代工具須依規定完成認定。</span>
+          </div>
+          <div class="subsidy-flow-step">
+            <b>5</b>
+            <strong>檢附文件核銷</strong>
+            <span>提供發票、授權使用資料、補助證明單等文件，申請最高 10 萬元工具導入補助。</span>
+          </div>
+        </div>
+
+        <div class="subsidy-section-title">
+          <strong>申請前應掌握的四件事</strong>
+          <p>企業可先依下列面向自我檢核；供給端廠商也可據此協助需求端預先確認文件、工具適配性與後續核銷準備。</p>
+        </div>
         <div class="subsidy-detail-grid">
           <div class="subsidy-detail">
             <h4>申請資格</h4>
             <ul>
               <li>依法辦理公司登記、商業登記或有限合夥登記之製造業。</li>
               <li>須依法辦理工廠登記；依法免辦者應有主管機關證明文件。</li>
-              <li>非外國來臺分公司、非陸資投資企業，且營業狀況不得為解散或歇業。</li>
+              <li>非外國來臺分公司，且非陸資投資企業。</li>
+              <li>非銀行拒絕往來戶，營業狀況不得為解散或歇業。</li>
+              <li>同一申請事項內容未曾獲其他政府機關補助。</li>
+              <li>近三年未有重大違反勞工、環境或身心障礙者權益保障法規情事。</li>
             </ul>
           </div>
           <div class="subsidy-detail">
@@ -1732,23 +1920,27 @@
             <ul>
               <li>線上申請並備妥企業基本文件。</li>
               <li>經資格審查後，進入 AI 診斷輔導流程。</li>
-              <li>依診斷建議導入工具，檢附文件申請工具導入補助。</li>
+              <li>輔導團依企業痛點、資料條件與導入成熟度提出診斷建議。</li>
+              <li>依診斷建議導入工具，並檢附規定文件申請工具導入補助。</li>
+              <li>補助核定與撥付依計畫受理、審查及核銷規定辦理。</li>
             </ul>
           </div>
           <div class="subsidy-detail">
             <h4>工具選擇範圍</h4>
             <ul>
               <li>優先依 AI/智慧化輔導診斷書所列建議採購相對應工具。</li>
-              <li><a href="https://eii.nat.gov.tw/moeai-plus/ai-tools" target="_blank" rel="noreferrer">AI 工具庫</a>所列工具可作為導入選項。</li>
-              <li>未列入工具庫者，請洽計畫窗口確認上架或認定方式。</li>
+              <li><a href="https://eii.nat.gov.tw/moeai-plus/ai-tools" target="_blank" rel="noreferrer">經濟部產業競爭力輔導團 AI 工具庫</a>所列工具可作為導入選項。</li>
+              <li>如需採用替代工具，應符合功能與規格相近原則，並依計畫規定完成認定。</li>
+              <li>未列入工具庫之工具，請洽計畫窗口確認上架或認定方式。</li>
             </ul>
           </div>
           <div class="subsidy-detail">
             <h4>常見釐清事項</h4>
             <ul>
-              <li>媒合會協助企業認識工具與資源；補助申請須依輔導團規定辦理。</li>
+              <li>媒合會協助企業認識工具與資源；補助申請須依經濟部產業競爭力輔導團規定辦理。</li>
               <li>工具導入須對應診斷建議，替代工具須依規定完成認定。</li>
-              <li>診斷輔導與工具導入補助分屬不同資源，10 萬元補助用於後續 AI 工具導入。</li>
+              <li>診斷輔導與工具導入補助分屬不同階段，10 萬元補助用於後續 AI 工具導入。</li>
+              <li>供給端廠商可協助企業保存報價、發票、授權或使用憑證、導入成果等資料，以利後續申請與查核。</li>
             </ul>
           </div>
         </div>
