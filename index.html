@@ -576,7 +576,7 @@
     }
 
     .subsidy-panel {
-      margin: 28px 0 34px;
+      margin: 0 auto;
       padding: clamp(22px, 4vw, 34px);
       border: 2px solid rgba(7, 139, 124, 0.28);
       border-left: 10px solid var(--second-accent);
@@ -671,6 +671,45 @@
       color: #355366;
       font-size: 15px;
       line-height: 1.6;
+    }
+
+    .subsidy-section {
+      width: min(var(--max), calc(100% - 44px));
+      margin: 0 auto;
+      padding: 86px 0;
+      position: relative;
+      isolation: isolate;
+      scroll-margin-top: 96px;
+    }
+
+    .subsidy-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .subsidy-detail {
+      padding: 18px;
+      border: 2px solid rgba(7, 139, 124, 0.24);
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .subsidy-detail h4 {
+      margin: 0 0 10px;
+      color: var(--second-dark);
+      font-size: 20px;
+      line-height: 1.35;
+      font-weight: 950;
+    }
+
+    .subsidy-detail ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #466173;
+      font-size: 15px;
+      font-weight: 720;
+      line-height: 1.65;
     }
 
     .solution-grid {
@@ -1459,6 +1498,10 @@
         grid-template-columns: 1fr;
       }
 
+      .subsidy-detail-grid {
+        grid-template-columns: 1fr;
+      }
+
       .facts {
         border-right: 0;
         padding-right: 0;
@@ -1640,7 +1683,20 @@
         <h2>6/23 製造業AI工具6家方案</h2>
         <p class="lead">收錄 6 家供給端工具，涵蓋企業知識管理、射出機聯網、預知維護、AIoT 設備資料串接、能源管理、AI 掃碼追溯與自然語言報表等應用。</p>
       </div>
-      <div class="subsidy-panel" id="ai-tool-subsidy">
+      <div class="solution-grid second-grid" id="secondSolutionGrid" aria-live="polite"></div>
+    </section>
+
+    <section id="third-solutions" class="section third-session">
+      <span class="session-ribbon">2026 / 07 / 21｜第三場</span>
+      <div class="section-heading">
+        <h2>7/21 製造業AI工具8家供應商解決方案</h2>
+        <p class="lead">上午方案快速介紹、下午預約式一對一媒合，聚焦生產製程、品質檢測、研發設計、營運管理與供應鏈管理等製造業導入需求。</p>
+      </div>
+      <div class="solution-grid third-grid" id="thirdSolutionGrid" aria-live="polite"></div>
+    </section>
+
+    <section id="ai-tool-subsidy" class="subsidy-section" aria-label="10 萬元 AI 工具導入補助說明">
+      <div class="subsidy-panel">
         <div class="subsidy-panel-head">
           <h3>10 萬元 AI 工具導入補助申請重點</h3>
           <p>經濟部產業競爭力輔導團提供 AI 診斷輔導與後續工具導入補助資源；企業完成診斷輔導後，可依診斷建議導入工具，並檢附文件申請最高 10 萬元工具導入補助。</p>
@@ -1662,22 +1718,46 @@
             <span>依診斷建議導入 AI 工具，檢附發票、授權使用資料、補助證明單等文件辦理申請。</span>
           </li>
         </ol>
+        <div class="subsidy-detail-grid">
+          <div class="subsidy-detail">
+            <h4>申請資格</h4>
+            <ul>
+              <li>依法辦理公司登記、商業登記或有限合夥登記之製造業。</li>
+              <li>須依法辦理工廠登記；依法免辦者應有主管機關證明文件。</li>
+              <li>非外國來臺分公司、非陸資投資企業，且營業狀況不得為解散或歇業。</li>
+            </ul>
+          </div>
+          <div class="subsidy-detail">
+            <h4>申請流程</h4>
+            <ul>
+              <li>線上申請並備妥企業基本文件。</li>
+              <li>經資格審查後，進入 AI 診斷輔導流程。</li>
+              <li>依診斷建議導入工具，檢附文件申請工具導入補助。</li>
+            </ul>
+          </div>
+          <div class="subsidy-detail">
+            <h4>工具選擇範圍</h4>
+            <ul>
+              <li>優先依 AI/智慧化輔導診斷書所列建議採購相對應工具。</li>
+              <li><a href="https://eii.nat.gov.tw/moeai-plus/ai-tools" target="_blank" rel="noreferrer">AI 工具庫</a>所列工具可作為導入選項。</li>
+              <li>未列入工具庫者，請洽計畫窗口確認上架或認定方式。</li>
+            </ul>
+          </div>
+          <div class="subsidy-detail">
+            <h4>常見釐清事項</h4>
+            <ul>
+              <li>媒合會協助企業認識工具與資源；補助申請須依輔導團規定辦理。</li>
+              <li>工具導入須對應診斷建議，替代工具須依規定完成認定。</li>
+              <li>診斷輔導與工具導入補助分屬不同資源，10 萬元補助用於後續 AI 工具導入。</li>
+            </ul>
+          </div>
+        </div>
         <div class="subsidy-actions">
-          <p>AI 工具庫所列工具可作為導入選項；未列入工具庫者，請洽計畫窗口確認上架或認定方式。</p>
+          <p>工具導入與補助申請需保留報價、發票、授權或使用憑證、導入成果等資料，有助於後續文件查核。</p>
           <a class="primary-action" href="https://eii.nat.gov.tw/moeai-plus/ai-tools" target="_blank" rel="noreferrer">前往 AI 工具庫</a>
           <a class="secondary-action" href="https://eii.nat.gov.tw/moeai-plus/" target="_blank" rel="noreferrer">前往計畫網站</a>
         </div>
       </div>
-      <div class="solution-grid second-grid" id="secondSolutionGrid" aria-live="polite"></div>
-    </section>
-
-    <section id="third-solutions" class="section third-session">
-      <span class="session-ribbon">2026 / 07 / 21｜第三場</span>
-      <div class="section-heading">
-        <h2>7/21 製造業AI工具8家供應商解決方案</h2>
-        <p class="lead">上午方案快速介紹、下午預約式一對一媒合，聚焦生產製程、品質檢測、研發設計、營運管理與供應鏈管理等製造業導入需求。</p>
-      </div>
-      <div class="solution-grid third-grid" id="thirdSolutionGrid" aria-live="polite"></div>
     </section>
 
     <section class="compare-band" aria-label="方案概覽">
