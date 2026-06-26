@@ -463,19 +463,7 @@
       --session-accent: var(--third-accent);
       --session-teal: var(--third-teal);
       --session-line: var(--third-line);
-      width: min(var(--max), calc(100% - 44px));
-      margin-top: 72px;
-      margin-bottom: 72px;
-      padding: clamp(34px, 5vw, 62px);
-      border: clamp(8px, 1.4vw, 14px) solid var(--third-main);
-      background:
-        radial-gradient(circle at 88% 8%, rgba(191, 226, 240, 0.86) 0 54px, transparent 55px),
-        radial-gradient(circle at 100% 96%, rgba(9, 156, 162, 0.18) 0 92px, transparent 93px),
-        linear-gradient(90deg, rgba(0, 63, 143, 0.05) 1px, transparent 1px) 0 0 / 68px 68px,
-        linear-gradient(180deg, rgba(0, 63, 143, 0.04) 1px, transparent 1px) 0 0 / 68px 68px,
-        #ffffff;
-      box-shadow: 0 24px 54px rgba(0, 63, 143, 0.16);
-      overflow: hidden;
+      padding-top: 94px;
     }
 
     .first-session::before,
@@ -504,11 +492,12 @@
 
     .third-session::before {
       background:
-        linear-gradient(180deg, #003f8f 0%, #0063b7 100%);
-      inset: 0 auto 0 calc(50% - 50vw);
-      width: max(88px, calc(50vw - 548px));
-      border-top: 0;
-      opacity: 0.98;
+        radial-gradient(circle at 88% 10%, rgba(191, 226, 240, 0.82) 0 62px, transparent 63px),
+        radial-gradient(circle at 98% 88%, rgba(9, 156, 162, 0.16) 0 110px, transparent 111px),
+        linear-gradient(90deg, rgba(0, 63, 143, 0.065) 1px, transparent 1px) 0 0 / 56px 56px,
+        linear-gradient(180deg, rgba(0, 63, 143, 0.05) 1px, transparent 1px) 0 0 / 56px 56px,
+        linear-gradient(180deg, #fbfdff 0%, #eff9fc 55%, rgba(244, 251, 255, 0.96) 100%);
+      border-top: 1px solid rgba(0, 63, 143, 0.18);
     }
 
     .third-session::after {
@@ -565,7 +554,7 @@
     }
 
     .third-session h2::first-letter {
-      color: var(--third-accent);
+      color: inherit;
     }
 
     .lead {
@@ -1803,11 +1792,7 @@
       }
 
       .third-session {
-        width: min(100% - 24px, var(--max));
-        margin-top: 48px;
-        margin-bottom: 48px;
-        padding: 30px 18px;
-        border-width: 8px;
+        padding-top: 66px;
       }
 
       .third-session::after {
