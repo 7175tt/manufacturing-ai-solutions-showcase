@@ -1083,7 +1083,9 @@
     }
 
     .third-grid .solution-card {
+      display: grid;
       min-height: 338px;
+      grid-template-rows: auto 1fr auto;
       border: 2px solid var(--third-line);
       border-top: 7px solid var(--third-main);
       border-radius: 8px;
@@ -1120,12 +1122,40 @@
       letter-spacing: 0.08em;
     }
 
+    .third-grid .card-body {
+      display: grid;
+      grid-template-rows: 32px 52px 88px 62px;
+      gap: 10px;
+      align-content: start;
+    }
+
     .third-grid .card-company {
       color: var(--third-main);
+      display: flex;
+      align-items: end;
+      min-height: 32px;
+      margin: 0;
     }
 
     .third-grid .card-title {
       color: #132f4b;
+      min-height: 52px;
+      margin: 0;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+
+    .third-grid .card-summary {
+      min-height: 88px;
+      margin: 0;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      line-clamp: 4;
     }
 
     .third-grid .card-foot {
@@ -1137,6 +1167,12 @@
       border-color: rgba(9, 156, 162, 0.28);
       background: #eefbfc;
       color: #075f68;
+    }
+
+    .third-grid .tags {
+      min-height: 62px;
+      margin-top: 0;
+      align-content: start;
     }
 
     .third-grid .arrow {
@@ -2793,7 +2829,7 @@
       targetGrid.innerHTML = list.map((item, index) => `
         <button class="solution-card" type="button" data-session="${session}" data-index="${index}" aria-label="查看 ${escapeHTML(item.company)} 詳細方案">
           <span class="card-index">${String(index + 1).padStart(2, "0")} / ${totalLabel}</span>
-          <span>
+          <span class="card-body">
             <h3 class="card-company">${escapeHTML(item.company)}</h3>
             <p class="card-title">${escapeHTML(item.title)}</p>
             <p class="card-summary">${escapeHTML(item.summary)}</p>
