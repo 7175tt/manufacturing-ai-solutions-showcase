@@ -1855,12 +1855,63 @@
         font-size: 15px;
       }
 
+      .third-session h2 {
+        font-size: clamp(28px, 8.4vw, 36px);
+        line-height: 1.18;
+      }
+
+      .third-session .lead {
+        padding: 14px 16px;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
       .solution-grid {
         grid-template-columns: 1fr;
       }
 
       .solution-card {
         min-height: 286px;
+      }
+
+      .third-grid .solution-card {
+        display: flex;
+        min-height: 0;
+        gap: 14px;
+        padding: 20px;
+      }
+
+      .third-grid .card-body {
+        display: block;
+      }
+
+      .third-grid .card-company {
+        min-height: 0;
+        align-items: flex-start;
+        margin-bottom: 6px;
+        font-size: 20px;
+        line-height: 1.25;
+      }
+
+      .third-grid .card-title {
+        min-height: 0;
+        display: block;
+        overflow: visible;
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .third-grid .card-summary {
+        min-height: 0;
+        display: block;
+        overflow: visible;
+        margin-top: 12px;
+        line-height: 1.65;
+      }
+
+      .third-grid .tags {
+        min-height: 0;
+        margin-top: 14px;
       }
 
       .subsidy-steps {
