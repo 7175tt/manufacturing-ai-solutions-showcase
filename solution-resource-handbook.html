@@ -607,6 +607,8 @@
       border-bottom: 1px solid var(--line);
       background: #fff;
       scroll-margin-top: var(--anchor-offset);
+      content-visibility: auto;
+      contain-intrinsic-size: 420px;
     }
     .solution:hover { background: #fbfdfd; }
     .supplier,
@@ -816,6 +818,8 @@
       padding: 26px 28px;
       border-bottom: 1px solid var(--line);
       scroll-margin-top: var(--anchor-offset);
+      content-visibility: auto;
+      contain-intrinsic-size: 360px;
     }
     .tool-card:hover { background: #fbfdfd; }
     .tool-code {
@@ -998,7 +1002,7 @@
         <strong>資料群組</strong>
         <dl>
           <div><dt>資源手冊</dt><dd id="coverHandbookTotal">載入中</dd></div>
-          <div><dt>AI工具庫</dt><dd id="coverToolTotal">載入中</dd></div>
+          <div><dt>AI工具庫</dt><dd id="coverToolTotal">切換後載入</dd></div>
         </dl>
       </aside>
     </div>
@@ -1303,6 +1307,10 @@
     let industryToolsLoaded = false;
     let industryToolsLoading = false;
     let industryFilterOptionsReady = false;
+    const solutionBlobCache = new WeakMap();
+    const industryToolBlobCache = new WeakMap();
+    let solutionRenderJob = 0;
+    let toolRenderJob = 0;
 
     const els = {
       viewTabs: document.querySelectorAll("[data-view-target]"),
@@ -1485,6 +1493,27 @@
       const content = options.map(item => `<span class="tag ${active.has(item) ? "is-present" : "is-absent"}">${esc(item)}</span>`).join("");
       return `<div class="tag-row"><strong>${esc(label)}</strong><div class="tags">${content}</div></div>`;
     }
+    function deferWork(callback) {
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(callback, { timeout: 160 });
+      } else {
+        window.setTimeout(callback, 0);
+      }
+    }
+    function renderChunked(container, rows, renderItem, batchSize, currentJob, latestJob) {
+      if (!container) return;
+      container.innerHTML = "";
+      let index = 0;
+      function step() {
+        if (currentJob !== latestJob()) return;
+        const html = [];
+        const end = Math.min(index + batchSize, rows.length);
+        for (; index < end; index += 1) html.push(renderItem(rows[index]));
+        if (html.length) container.insertAdjacentHTML("beforeend", html.join(""));
+        if (index < rows.length) deferWork(step);
+      }
+      deferWork(step);
+    }
     function link(url) {
       if (!url) return "";
       return `<a href="${esc(url)}" target="_blank" rel="noopener">開啟連結</a>`;
@@ -1522,13 +1551,16 @@
       `;
     }
     function textBlob(record) {
-      return [
+      if (solutionBlobCache.has(record)) return solutionBlobCache.get(record);
+      const blob = [
         record.display_supplier, record.company, record.supplier_name, record.solution, record.tech,
         record.benefit, record.production_pain, record.non_production, record.industries,
         record.deployment, record.lead_time, record.lead_time_bucket, record.api, record.data_need,
         record.equipment, record.cases, record.best_fit, record.contact_name,
         record.contact_email, record.contact_phone
       ].join(" ").toLowerCase();
+      solutionBlobCache.set(record, blob);
+      return blob;
     }
     function filtered() {
       const terms = keywordTerms(els.search.value);
@@ -1818,10 +1850,13 @@
       return String(record.id || "").padStart(3, "0");
     }
     function industryToolBlob(record) {
-      return [
+      if (industryToolBlobCache.has(record)) return industryToolBlobCache.get(record);
+      const blob = [
         record.category, record.source, record.supplier, record.name,
         record.price, (record.priceBuckets || []).join(" "), record.summary, record.contact, record.contactInfo
       ].join(" ").toLowerCase();
+      industryToolBlobCache.set(record, blob);
+      return blob;
     }
     function matchesToolPrice(record) {
       const { lower, upper } = currentToolPriceBounds();
@@ -1841,15 +1876,8 @@
         return true;
       });
     }
-    function renderIndustryTools() {
-      const rows = filteredIndustryTools();
-      els.toolEmpty.style.display = rows.length ? "none" : "block";
-      els.toolShown.textContent = rows.length;
-      els.toolMatched.textContent = rows.length;
-      els.toolLiveCount.textContent = rows.length;
-      els.toolLiveTotal.textContent = industryTools.length;
-      els.toolStatus.textContent = "已載入全部資料；關鍵字輸入完成或點選分類、金額條件後，結果會自動更新。";
-      els.toolList.innerHTML = rows.map(record => `
+    function industryToolCard(record) {
+      return `
         <article class="tool-card" id="tool-${record.id}">
           <div>
             <div class="tool-code">工具 ${industryToolNo(record)}</div>
@@ -1868,20 +1896,32 @@
             </div>
           </div>
         </article>
-      `).join("");
-      if (els.toolCompare) {
-        els.toolCompare.innerHTML = rows.map(record => `
-          <tr>
-            <td data-label="編號">${industryToolNo(record)}</td>
-            <td data-label="工具分類">${esc(record.category || "")}</td>
-            <td data-label="供應商">${esc(record.supplier || "")}</td>
-            <td data-label="工具名稱">${esc(record.name || "未命名工具")}</td>
-            <td data-label="金額範圍">${esc(compactList(record.priceBuckets || [], "", 4))}</td>
-            <td data-label="價格">${esc(record.price || "")}</td>
-            <td data-label="聯絡資訊">${esc([record.contact, record.contactInfo].filter(Boolean).join("／"))}</td>
-          </tr>
-        `).join("");
-      }
+      `;
+    }
+    function industryToolCompareRow(record) {
+      return `
+        <tr>
+          <td data-label="編號">${industryToolNo(record)}</td>
+          <td data-label="工具分類">${esc(record.category || "")}</td>
+          <td data-label="供應商">${esc(record.supplier || "")}</td>
+          <td data-label="工具名稱">${esc(record.name || "未命名工具")}</td>
+          <td data-label="金額範圍">${esc(compactList(record.priceBuckets || [], "", 4))}</td>
+          <td data-label="價格">${esc(record.price || "")}</td>
+          <td data-label="聯絡資訊">${esc([record.contact, record.contactInfo].filter(Boolean).join("／"))}</td>
+        </tr>
+      `;
+    }
+    function renderIndustryTools() {
+      const rows = filteredIndustryTools();
+      els.toolEmpty.style.display = rows.length ? "none" : "block";
+      els.toolShown.textContent = rows.length;
+      els.toolMatched.textContent = rows.length;
+      els.toolLiveCount.textContent = rows.length;
+      els.toolLiveTotal.textContent = industryTools.length;
+      els.toolStatus.textContent = "已載入全部資料；關鍵字輸入完成或點選分類、金額條件後，結果會自動更新。";
+      const job = ++toolRenderJob;
+      renderChunked(els.toolList, rows, industryToolCard, 18, job, () => toolRenderJob);
+      renderChunked(els.toolCompare, rows, industryToolCompareRow, 36, job, () => toolRenderJob);
     }
     async function loadIndustryTools() {
       if (industryToolsLoaded || industryToolsLoading) return;
@@ -1982,7 +2022,7 @@
     function applyToolFilters() {
       syncToolPriceInputs();
       ensureIndustryTools();
-      renderIndustryTools();
+      if (industryToolsLoaded) renderIndustryTools();
     }
     function pdfGroupByOptions(records, options, getTagsFn) {
       return options.map(option => ({
@@ -2454,15 +2494,8 @@
         w.addEventListener("load", () => setTimeout(triggerPrint, 800));
       }
     }
-    function render() {
-      const rows = filtered();
-      els.count.textContent = rows.length;
-      els.countSub.textContent = rows.length;
-      els.filterLiveCount.textContent = rows.length;
-      if (els.exportCount) els.exportCount.textContent = rows.length;
-      if (els.exportHandbook) els.exportHandbook.disabled = rows.length === 0;
-      els.empty.style.display = rows.length ? "none" : "block";
-      els.list.innerHTML = rows.map(record => `
+    function solutionCard(record) {
+      return `
         <article class="solution" id="solution-${record.id}">
           <div>
             <div class="solution-code">方案 ${solutionNo(record)}</div>
@@ -2501,8 +2534,10 @@
             </details>
           </div>
         </article>
-      `).join("");
-      els.compare.innerHTML = rows.map(record => `
+      `;
+    }
+    function solutionCompareRow(record) {
+      return `
         <tr>
           <td data-label="編號">${solutionNo(record)}</td>
           <td data-label="供應商">${esc(record.display_supplier)}</td>
@@ -2513,7 +2548,19 @@
           <td data-label="聯絡窗口">${esc(record.contact_name || "")}<br>${mail(record.contact_email)}</td>
           <td data-label="連結">${compareLink(record.url)}</td>
         </tr>
-      `).join("");
+      `;
+    }
+    function render() {
+      const rows = filtered();
+      els.count.textContent = rows.length;
+      els.countSub.textContent = rows.length;
+      els.filterLiveCount.textContent = rows.length;
+      if (els.exportCount) els.exportCount.textContent = rows.length;
+      if (els.exportHandbook) els.exportHandbook.disabled = rows.length === 0;
+      els.empty.style.display = rows.length ? "none" : "block";
+      const job = ++solutionRenderJob;
+      renderChunked(els.list, rows, solutionCard, 10, job, () => solutionRenderJob);
+      renderChunked(els.compare, rows, solutionCompareRow, 28, job, () => solutionRenderJob);
     }
 
     renderClouds();
@@ -2537,7 +2584,7 @@
       if (els.toolPriceMinInput) els.toolPriceMinInput.value = "";
       if (els.toolPriceMaxInput) els.toolPriceMaxInput.value = "";
       renderIndustryToolClouds();
-      renderIndustryTools();
+      applyToolFilters();
     });
     if (els.search) {
       els.search.addEventListener("keydown", event => {
@@ -2584,7 +2631,6 @@
     loadSolutionsFromSheet();
     setActiveView(viewFromHash());
     keepRootViewAtTop("auto");
-    loadIndustryTools();
   </script>
 </body>
 </html>
