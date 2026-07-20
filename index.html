@@ -2124,8 +2124,8 @@
         </a>
         <a class="session-tile tile-third" href="#third-solutions">
           <small>7/21｜一日制媒合</small>
-          <strong>8 家供應商 14 輪預約式媒合</strong>
-          <span class="tile-count"><b>8</b><span>家一對一媒合方案</span></span>
+          <strong>9 家供應商 一對一媒合</strong>
+          <span class="tile-count"><b>9</b><span>家一對一媒合方案</span></span>
         </a>
       </div>
     </div>
@@ -2153,7 +2153,7 @@
     <section id="third-solutions" class="section third-session">
       <span class="session-ribbon">2026 / 07 / 21｜第三場</span>
       <div class="section-heading">
-        <h2>7/21 製造業AI工具8家供應商解決方案</h2>
+        <h2>7/21 製造業AI工具9家供應商解決方案</h2>
         <p class="lead">上午方案快速介紹、下午預約式一對一媒合，聚焦生產製程、品質檢測、研發設計、營運管理與供應鏈管理等製造業導入需求。</p>
       </div>
       <div class="solution-grid third-grid" id="thirdSolutionGrid" aria-live="polite"></div>
@@ -2251,7 +2251,7 @@
     <section class="compare-band" aria-label="方案概覽">
       <div class="compare-inner">
         <div class="metric">
-          <strong>22</strong>
+          <strong>23</strong>
           <span>收錄供給端工具</span>
         </div>
         <div class="metric">
@@ -2826,6 +2826,27 @@
         cases: "涵蓋半導體、石化、電子、鋼鐵、能源等大型龍頭知名實業，落地設備異常預警、製程研發優化與節能減碳。",
         details: "此方案可分析鍋爐運轉效率、燃氣比與蒸氣需求，協助企業在不大幅整改硬體設備的前提下找出更佳的單機操作參數與多機運轉組合，達成穩定供蒸、降低天然氣成本與減碳效益。也可協助食品企業將配方、原料比例、製程條件、感官評測與品質檢測資料轉換為 AI 模型，讓研發人員快速篩選高潛力方案，降低試錯成本、縮短新品開發時程並提升品質穩定性。",
         url: "https://chimes.ai/"
+      },
+      {
+        company: "紫式大數據",
+        supplier: "紫式大數據決策股份有限公司",
+        title: "工業級冰水系統數據異常AI偵測系統",
+        summary: "專為製造業廠務場景設計，針對 SCADA 感測資料進行異常偵測與資料淨化，輸出異常報表、時序圖與可建模的乾淨數據集。",
+        tags: ["異常偵測", "SCADA", "廠務節能"],
+        tech: "兩階段解耦偵測架構：以 K-Means、KNN 等非監督式學習進行空間異常偵測，搭配 EMA 指數加權移動平均進行時序基準演進。",
+        maturity: "5 / 7",
+        deployment: "本地端部署（On-premise）：系統安裝於需求公司內部伺服器",
+        pricing: "方案定價 NT$300,000（含稅）/ 12 個月，附贈 1 次節電效益報告",
+        timeline: "1 個月",
+        api: "封閉系統（不提供 API）",
+        data: "手動輸入或批次更新資料；可匯入每日或每週整理之 SCADA 原始感測數據、Excel 報表、PDF 或人工輸入資料。",
+        equipment: "IoT 物理訊號感測、PLC / CNC / SCADA 控制器與機台訊號、Excel 報表與手動輸入資料。",
+        fields: "ESG、廠務與工安管理；協助處理能耗高、設備數據異常、資料品質不足、節能虛擬運轉模擬前置資料淨化等場景。",
+        industries: ["石油及煤製品", "藥品及醫用化學品", "塑膠製品", "基本金屬", "金屬製品", "電子零組件", "電腦電子光學", "機械設備", "汽車零件", "運輸工具零件"],
+        scale: "10人~200人（中小企業）",
+        cases: "未提供代表性導入實績。",
+        details: "本工具專為製造業廠務場景設計，解決工業 4.0 導入 AI 的核心前提：數據品質可信度。使用者上傳 SCADA 原始感測數據並設定設備物理限制與相依規則後，工具即可自動執行物理約束校驗、特徵分群與離群值標記，輸出各點位異常比例報表、時序視覺化圖表及可直接用於建模的乾淨數據集。\n\n解耦式架構讓異常偵測與後端建模分離，廠務人員可獨立操作工具進行日常監控，無需等待 AI 工程師介入。乾淨數據集也可延伸用於節能虛擬運轉模擬，作為後續 AI 節能系統建置的可靠資料基礎。",
+        url: "https://www.dalabx.com.tw/"
       }
     ];
 
@@ -3037,7 +3058,7 @@
 
     renderCards(grid, solutions, "first", "08");
     renderCards(secondGrid, secondSolutions, "second", "06");
-    renderCards(thirdGrid, thirdSolutions, "third", "08");
+    renderCards(thirdGrid, thirdSolutions, "third", "09");
 
     function handleGridClick(event) {
       const card = event.target.closest(".solution-card");
