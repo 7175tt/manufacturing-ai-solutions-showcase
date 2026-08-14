@@ -470,6 +470,37 @@
     }
     .result-note-hint { font-size: 13px; font-weight: 700; color: var(--muted); }
     .result-note-count { font-size: 14px; }
+    .selection-status {
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .result-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-clear-selection {
+      min-height: 42px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .btn-clear-selection:hover {
+      border-color: var(--accent);
+      background: var(--soft);
+    }
+    .btn-clear-selection:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+      background: #f5f7f8;
+    }
     .btn-export-handbook {
       width: auto;
       min-height: 56px;
@@ -527,6 +558,8 @@
     .btn-export-handbook:hover .btn-export-arrow { transform: translateX(3px); }
     @media (max-width: 720px) {
       .result-note { flex-direction: column; align-items: stretch; }
+      .result-actions { justify-content: stretch; }
+      .btn-clear-selection { width: 100%; }
       .btn-export-handbook { width: 100%; justify-content: center; }
     }
     .category-map {
@@ -609,6 +642,36 @@
       scroll-margin-top: var(--anchor-offset);
     }
     .solution:hover { background: #fbfdfd; }
+    .solution.is-selected,
+    .tool-card.is-selected {
+      background: #f4faf9;
+      box-shadow: inset 4px 0 0 var(--accent);
+    }
+    .record-select {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 10px;
+      padding: 5px 9px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      user-select: none;
+    }
+    .record-select:hover {
+      border-color: var(--accent);
+      background: var(--soft);
+    }
+    .record-select input {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
     .supplier,
     .tool-supplier {
       margin-bottom: 6px;
@@ -1132,15 +1195,19 @@
           <div class="result-note-text">
             <span class="result-note-hint">設定條件後按「套用篩選」再更新下方方案列表與比較表。</span>
             <span class="result-note-count">顯示 <strong id="resultCountSub">載入中</strong><span id="handbookSubTotal"></span></span>
+            <span class="selection-status">已選 <strong id="selectedSolutionCount">0</strong> 項；有勾選時只匯出已選項目。</span>
           </div>
-          <button id="exportHandbook" class="btn-export-handbook" type="button" aria-label="匯出目前顯示的方案為 PDF 手冊">
-            <span class="btn-export-icon" aria-hidden="true">📕</span>
-            <span class="btn-export-body">
-              <span class="btn-export-title">匯出 PDF 手冊</span>
-              <span class="btn-export-sub">將目前 <strong id="exportCount">95</strong> 項方案打包成單一檔案</span>
-            </span>
-            <span class="btn-export-arrow" aria-hidden="true">→</span>
-          </button>
+          <div class="result-actions">
+            <button id="clearSelectedSolutions" class="btn-clear-selection" type="button" disabled>清除選取</button>
+            <button id="exportHandbook" class="btn-export-handbook" type="button" aria-label="匯出目前顯示的方案為 PDF 手冊">
+              <span class="btn-export-icon" aria-hidden="true">📕</span>
+              <span class="btn-export-body">
+                <span class="btn-export-title">匯出 PDF 手冊</span>
+                <span class="btn-export-sub"><span id="exportScopeLabel">將目前</span> <strong id="exportCount">95</strong> 項方案打包成單一檔案</span>
+              </span>
+              <span class="btn-export-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
         </div>
         <div id="solutionList" class="solution-list"></div>
         <div id="empty" class="empty">沒有符合條件的解決方案，請調整篩選條件。</div>
@@ -1241,15 +1308,19 @@
           <div class="result-note-text">
             <span id="industryToolStatus">資料載入中，請稍候。</span>
             <span class="result-note-count">顯示 <strong id="industryToolShown">0</strong> / <strong id="industryToolMatched">0</strong> 筆</span>
+            <span class="selection-status">已選 <strong id="selectedToolCount">0</strong> 項；有勾選時只匯出已選項目。</span>
           </div>
-          <button id="exportIndustryTools" class="btn-export-handbook" type="button" aria-label="匯出目前顯示的 AI 工具為 PDF 手冊" disabled>
-            <span class="btn-export-icon" aria-hidden="true">📘</span>
-            <span class="btn-export-body">
-              <span class="btn-export-title">匯出 PDF 手冊</span>
-              <span class="btn-export-sub">將目前 <strong id="exportToolCount">0</strong> 項工具打包成單一檔案</span>
-            </span>
-            <span class="btn-export-arrow" aria-hidden="true">→</span>
-          </button>
+          <div class="result-actions">
+            <button id="clearSelectedTools" class="btn-clear-selection" type="button" disabled>清除選取</button>
+            <button id="exportIndustryTools" class="btn-export-handbook" type="button" aria-label="匯出目前顯示的 AI 工具為 PDF 手冊" disabled>
+              <span class="btn-export-icon" aria-hidden="true">📘</span>
+              <span class="btn-export-body">
+                <span class="btn-export-title">匯出 PDF 手冊</span>
+                <span class="btn-export-sub"><span id="exportToolScopeLabel">將目前</span> <strong id="exportToolCount">0</strong> 項工具打包成單一檔案</span>
+              </span>
+              <span class="btn-export-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
         </div>
         <div id="industryToolCards" class="tool-list"></div>
         <div id="industryToolEmpty" class="empty">沒有符合條件的 AI 工具，請調整搜尋或分類。</div>
@@ -1324,8 +1395,14 @@
       reset: document.querySelector("#reset"),
       exportHandbook: document.querySelector("#exportHandbook"),
       exportCount: document.querySelector("#exportCount"),
+      exportScopeLabel: document.querySelector("#exportScopeLabel"),
+      selectedSolutionCount: document.querySelector("#selectedSolutionCount"),
+      clearSelectedSolutions: document.querySelector("#clearSelectedSolutions"),
       exportIndustryTools: document.querySelector("#exportIndustryTools"),
       exportToolCount: document.querySelector("#exportToolCount"),
+      exportToolScopeLabel: document.querySelector("#exportToolScopeLabel"),
+      selectedToolCount: document.querySelector("#selectedToolCount"),
+      clearSelectedTools: document.querySelector("#clearSelectedTools"),
       coverHandbookTotal: document.querySelector("#coverHandbookTotal"),
       handbookFilterTotal: document.querySelector("#handbookFilterTotal"),
       handbookSubTotal: document.querySelector("#handbookSubTotal"),
@@ -1375,6 +1452,8 @@
       category: new Set(),
       price: new Set()
     };
+    const selectedSolutions = new Set();
+    const selectedTools = new Set();
     const filterOptions = {
       pain: painOptions,
       deployment: deploymentOptions,
@@ -1437,6 +1516,44 @@
     }
     function solutionNo(record) {
       return String(record.id || "").padStart(2, "0");
+    }
+    function recordKey(record) {
+      return String(record.id || "");
+    }
+    function selectedRecordsFrom(records, selectedSet) {
+      return records.filter(record => selectedSet.has(recordKey(record)));
+    }
+    function selectedSolutionRecords() {
+      return selectedRecordsFrom(solutions, selectedSolutions);
+    }
+    function selectedToolRecords() {
+      return selectedRecordsFrom(industryTools, selectedTools);
+    }
+    function handbookExportRows() {
+      const selected = selectedSolutionRecords();
+      return selected.length ? selected : filtered();
+    }
+    function industryToolExportRows() {
+      const selected = selectedToolRecords();
+      return selected.length ? selected : filteredIndustryTools();
+    }
+    function updateHandbookSelectionState(rows = filtered()) {
+      const selectedCount = selectedSolutionRecords().length;
+      const exportCount = selectedCount || rows.length;
+      if (els.selectedSolutionCount) els.selectedSolutionCount.textContent = selectedCount;
+      if (els.exportScopeLabel) els.exportScopeLabel.textContent = selectedCount ? "將已選" : "將目前";
+      if (els.exportCount) els.exportCount.textContent = exportCount;
+      if (els.exportHandbook) els.exportHandbook.disabled = exportCount === 0;
+      if (els.clearSelectedSolutions) els.clearSelectedSolutions.disabled = selectedCount === 0;
+    }
+    function updateToolSelectionState(rows = filteredIndustryTools()) {
+      const selectedCount = selectedToolRecords().length;
+      const exportCount = selectedCount || rows.length;
+      if (els.selectedToolCount) els.selectedToolCount.textContent = selectedCount;
+      if (els.exportToolScopeLabel) els.exportToolScopeLabel.textContent = selectedCount ? "將已選" : "將目前";
+      if (els.exportToolCount) els.exportToolCount.textContent = exportCount;
+      if (els.exportIndustryTools) els.exportIndustryTools.disabled = exportCount === 0;
+      if (els.clearSelectedTools) els.clearSelectedTools.disabled = selectedCount === 0;
     }
     function compactLabel(value) {
       let text = String(value || "").replace(/（.*$/g, "").replace(/\(.*$/g, "").replace(/：.*$/g, "").trim();
@@ -1860,12 +1977,15 @@
       els.toolMatched.textContent = rows.length;
       els.toolLiveCount.textContent = rows.length;
       els.toolLiveTotal.textContent = industryTools.length;
-      if (els.exportToolCount) els.exportToolCount.textContent = rows.length;
-      if (els.exportIndustryTools) els.exportIndustryTools.disabled = rows.length === 0;
+      updateToolSelectionState(rows);
       els.toolStatus.textContent = "已載入全部資料；關鍵字輸入完成或點選分類、金額條件後，結果會自動更新。";
       els.toolList.innerHTML = rows.map(record => `
-        <article class="tool-card" id="tool-${record.id}">
+        <article class="tool-card ${selectedTools.has(recordKey(record)) ? "is-selected" : ""}" id="tool-${record.id}">
           <div>
+            <label class="record-select">
+              <input type="checkbox" data-tool-select="${esc(recordKey(record))}" ${selectedTools.has(recordKey(record)) ? "checked" : ""}>
+              <span>選取此工具</span>
+            </label>
             <div class="tool-code">工具 ${industryToolNo(record)}</div>
             <div class="supplier">${esc(record.supplier || "")}</div>
             <h3>${esc(record.name || "未命名工具")}</h3>
@@ -2862,12 +2982,15 @@
       els.count.textContent = rows.length;
       els.countSub.textContent = rows.length;
       els.filterLiveCount.textContent = rows.length;
-      if (els.exportCount) els.exportCount.textContent = rows.length;
-      if (els.exportHandbook) els.exportHandbook.disabled = rows.length === 0;
+      updateHandbookSelectionState(rows);
       els.empty.style.display = rows.length ? "none" : "block";
       els.list.innerHTML = rows.map(record => `
-        <article class="solution" id="solution-${record.id}">
+        <article class="solution ${selectedSolutions.has(recordKey(record)) ? "is-selected" : ""}" id="solution-${record.id}">
           <div>
+            <label class="record-select">
+              <input type="checkbox" data-solution-select="${esc(recordKey(record))}" ${selectedSolutions.has(recordKey(record)) ? "checked" : ""}>
+              <span>選取此方案</span>
+            </label>
             <div class="solution-code">方案 ${solutionNo(record)}</div>
             <div class="supplier">${esc(record.display_supplier)}</div>
             <h3>${esc(record.solution)}</h3>
@@ -2930,12 +3053,54 @@
     });
     if (els.exportHandbook) {
       els.exportHandbook.addEventListener("click", () => {
-        exportHandbookToPdf(filtered());
+        exportHandbookToPdf(handbookExportRows());
       });
     }
     if (els.exportIndustryTools) {
       els.exportIndustryTools.addEventListener("click", () => {
-        exportIndustryToolsToPdf(filteredIndustryTools());
+        exportIndustryToolsToPdf(industryToolExportRows());
+      });
+    }
+    if (els.list) {
+      els.list.addEventListener("change", event => {
+        const input = event.target.closest("[data-solution-select]");
+        if (!input) return;
+        const key = input.dataset.solutionSelect;
+        if (input.checked) {
+          selectedSolutions.add(key);
+        } else {
+          selectedSolutions.delete(key);
+        }
+        const card = input.closest(".solution");
+        if (card) card.classList.toggle("is-selected", input.checked);
+        updateHandbookSelectionState(filtered());
+      });
+    }
+    if (els.toolList) {
+      els.toolList.addEventListener("change", event => {
+        const input = event.target.closest("[data-tool-select]");
+        if (!input) return;
+        const key = input.dataset.toolSelect;
+        if (input.checked) {
+          selectedTools.add(key);
+        } else {
+          selectedTools.delete(key);
+        }
+        const card = input.closest(".tool-card");
+        if (card) card.classList.toggle("is-selected", input.checked);
+        updateToolSelectionState(filteredIndustryTools());
+      });
+    }
+    if (els.clearSelectedSolutions) {
+      els.clearSelectedSolutions.addEventListener("click", () => {
+        selectedSolutions.clear();
+        render();
+      });
+    }
+    if (els.clearSelectedTools) {
+      els.clearSelectedTools.addEventListener("click", () => {
+        selectedTools.clear();
+        renderIndustryTools();
       });
     }
     els.toolReset.addEventListener("click", () => {
