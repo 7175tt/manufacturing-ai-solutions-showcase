@@ -647,17 +647,27 @@
       background: #f4faf9;
       box-shadow: inset 4px 0 0 var(--accent);
     }
+    .record-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 10px;
+    }
     .record-select {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      margin: 0 0 10px;
-      padding: 5px 9px;
+      flex: none;
+      gap: 6px;
+      margin: 0;
+      min-height: 28px;
+      padding: 3px 8px;
       border: 1px solid var(--line);
       background: #fff;
       color: var(--accent-dark);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
+      line-height: 1;
       cursor: pointer;
       user-select: none;
     }
@@ -666,8 +676,8 @@
       background: var(--soft);
     }
     .record-select input {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       margin: 0;
       accent-color: var(--accent);
       cursor: pointer;
@@ -689,6 +699,10 @@
       font-size: 12px;
       font-weight: 950;
       letter-spacing: .02em;
+    }
+    .record-card-head .solution-code,
+    .record-card-head .tool-code {
+      margin: 0;
     }
     .solution h3,
     .tool-card h3 {
@@ -1982,11 +1996,13 @@
       els.toolList.innerHTML = rows.map(record => `
         <article class="tool-card ${selectedTools.has(recordKey(record)) ? "is-selected" : ""}" id="tool-${record.id}">
           <div>
-            <label class="record-select">
-              <input type="checkbox" data-tool-select="${esc(recordKey(record))}" ${selectedTools.has(recordKey(record)) ? "checked" : ""}>
-              <span>選取此工具</span>
-            </label>
-            <div class="tool-code">工具 ${industryToolNo(record)}</div>
+            <div class="record-card-head">
+              <div class="tool-code">工具 ${industryToolNo(record)}</div>
+              <label class="record-select" aria-label="選取此工具">
+                <input type="checkbox" data-tool-select="${esc(recordKey(record))}" ${selectedTools.has(recordKey(record)) ? "checked" : ""}>
+                <span>選取</span>
+              </label>
+            </div>
             <div class="supplier">${esc(record.supplier || "")}</div>
             <h3>${esc(record.name || "未命名工具")}</h3>
             ${toolContact(record)}
@@ -2987,11 +3003,13 @@
       els.list.innerHTML = rows.map(record => `
         <article class="solution ${selectedSolutions.has(recordKey(record)) ? "is-selected" : ""}" id="solution-${record.id}">
           <div>
-            <label class="record-select">
-              <input type="checkbox" data-solution-select="${esc(recordKey(record))}" ${selectedSolutions.has(recordKey(record)) ? "checked" : ""}>
-              <span>選取此方案</span>
-            </label>
-            <div class="solution-code">方案 ${solutionNo(record)}</div>
+            <div class="record-card-head">
+              <div class="solution-code">方案 ${solutionNo(record)}</div>
+              <label class="record-select" aria-label="選取此方案">
+                <input type="checkbox" data-solution-select="${esc(recordKey(record))}" ${selectedSolutions.has(recordKey(record)) ? "checked" : ""}>
+                <span>選取</span>
+              </label>
+            </div>
             <div class="supplier">${esc(record.display_supplier)}</div>
             <h3>${esc(record.solution)}</h3>
             <div class="tags">${tags(record.sessions, 3)}</div>
